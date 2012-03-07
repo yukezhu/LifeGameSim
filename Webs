@@ -1,5 +1,4 @@
 Must-Read:
-
 http://blog.csdn.net/wfeng007/article/details/5308666
 http://regular.iteye.com/blog/653936
 http://www.oschina.net/question/54100_33531
@@ -8,4 +7,5 @@ NIO Data Transfer (!Important)
 http://lcllcl987.iteye.com/blog/67964
 http://hi.baidu.com/starsecond/blog/item/8d3538b287175db5d9335ace.html
 
-Note: For this project, if you use linux, it may make your life easier.
+Note:
+Don't use Windows to do anything serious when developing.
