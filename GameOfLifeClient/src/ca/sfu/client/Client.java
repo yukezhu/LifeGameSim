@@ -3,8 +3,10 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Random;
 
-import ca.sfu.cmpt431.message.join.JoinRequestMsg;
+import ca.sfu.cmpt431.facility.Comrade;
+import ca.sfu.cmpt431.facility.Outfits;
 import ca.sfu.cmpt431.message.join.JoinConfirmMsg;
+import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.regular.ConfirmMsg;
 import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
@@ -19,10 +21,13 @@ public class Client {
 	private String direction;
 	private int[] border;
 	private ConfirmMsg confirm;
+	private Outfits outfit;
+	
 
 	public MessageReceiver Receiver; 
 	public MessageSender Sender1;
 	public MessageSender Sender2;
+	public Comrade comrade1 = new Comrade(-1, Sender1);
 	public int port;
 	
 	public Client() throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException
@@ -41,9 +46,9 @@ public class Client {
 			}
 		
 		}
-		Sender1 = new MessageSender("142.58.35.71", SERVER_PORT);
+		comrade1.sender = new MessageSender("142.58.35.71", SERVER_PORT);
 		JoinRequestMsg Request = new JoinRequestMsg(port);
-		Sender1.sendMsg(Request);
+		comrade1.sender.sendMsg(Request);
 		status = 0;
 	}
 	
@@ -55,17 +60,20 @@ public class Client {
 				switch(status) {
 					case 0:	
 						cid = ((JoinConfirmMsg)Receiver.getNextMessageWithIp().extracMessage()).getMyId();					
-						Sender1.sendMsg(confirm);						
+						comrade1.sender.sendMsg(confirm);						
 						status = 1;
 						break;
 					case 1:
-						Receiver.getNextMessageWithIp().extracMessage();
-						if(){
-							Sender1.sendMsg(confirm);
+						outfit = (Outfits)Receiver.getNextMessageWithIp().extracMessage();
+						int pair_id = ;
+						if(pair_id == -1){
+							comrade1.sender.sendMsg(confirm);
 						}
 						else{
-							String pair_ip = (String)Receiver.getNextMessageWithIp().getIp();
-							Sender2 = new MessageSender(pair_ip, );
+							String pair_ip = outfit.
+							Comrade comrade2 = new Comrade(pair_id, Sender2);
+							comrade2.sender = new MessageSender(pair_ip, );							
+							comrade2.sender.sendMsg(confirm);
 						}
 							
 						}
