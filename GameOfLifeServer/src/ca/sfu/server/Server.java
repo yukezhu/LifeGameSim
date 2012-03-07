@@ -24,6 +24,7 @@ public class Server{
 	private ArrayList<MessageSender> newClientSender = new ArrayList();
 	private ArrayList<Comrade>  regedClientSender = new ArrayList();
 	private int waiting4confirm = 0;
+	private int nextClock = 0;
 	
 	private int status;
 	
