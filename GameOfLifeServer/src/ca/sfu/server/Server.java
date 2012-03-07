@@ -1,8 +1,12 @@
 package ca.sfu.server;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import ca.sfu.cmpt431.message.Message;
+import ca.sfu.cmpt431.message.MessageCodeDictionary;
+import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
@@ -17,6 +21,7 @@ public class Server{
 	private MessageSender Sender2;
 	private String client1_ip;
 	private String client2_ip;
+	private ArrayList newClientSender = new ArrayList();
 	
 	private int status;
 	
@@ -145,7 +150,13 @@ public class Server{
 		}
 	}
 	
-	protected void checkNewAdding(MessageWithIp m){
+	protected void handleNewAdding(MessageWithIp m) throws IOException{
 		//check if m is a new adding request message
+		Message msg = (Message) m.extracMessage();
+		if(msg.getMessageCode()==MessageCodeDictionary.JOIN_REQUEST){
+			JoinRequestMsg msg1 = (JoinRequestMsg)m.extracMessage();
+			newClientSender.add(new MessageSender(m.getIp(), msg1.getClientPort()));
+		}
+		return;
 	}
 }
