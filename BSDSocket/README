@@ -1,0 +1,4 @@
+BSD Socket Communication Demo
+
+client [ip] [port] [filename]
+server [port]
