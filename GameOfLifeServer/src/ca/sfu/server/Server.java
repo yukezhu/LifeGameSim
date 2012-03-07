@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import ca.sfu.cmpt431.message.Message;
-import ca.sfu.cmpt431.message.MessageCodeDictionary;
-import ca.sfu.cmpt431.message.join.JoinRequestMsg;
-import ca.sfu.cmpt431.message.regular.ConfirmMsg;
+import ca.sfu.cmpt431.message.*;
+import ca.sfu.cmpt431.message.join.*;
 import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
@@ -50,7 +48,7 @@ public class Server{
 		
 		while(true) {
 			if(!Receiver.isEmpty()) {
-//				System.out.println(status);
+				System.out.println(status);
 				m = Receiver.getNextMessageWithIp();
 				switch(status) {
 					//waiting for adding
@@ -61,7 +59,7 @@ public class Server{
 						break;
 					//waiting for confirm
 					case 1:
-						handleConfirm(m, 2);
+						handleConfirm(m, 1);
 						break;
 					case -1:
 						client1_ip = m.getIp();
@@ -168,6 +166,7 @@ public class Server{
 		if(msg.getMessageCode()==MessageCodeDictionary.JOIN_REQUEST){
 			JoinRequestMsg join = (JoinRequestMsg)m.extracMessage();
 			newClientSender.add(new MessageSender(m.getIp(), join.getClientPort()));
+			System.out.println("adding new to pending");
 		}
 		return;
 	}
@@ -178,14 +177,16 @@ public class Server{
 			int cid = regedClientSender.size();
 			regedClientSender.add(newClientSender.get(0));
 			newClientSender.remove(0);
-			regedClientSender.get(cid).sendMsg(new ConfirmMsg(cid));
+			regedClientSender.get(cid).sendMsg(new JoinConfirmMsg(cid));
 			waiting4confirm++;
+			System.out.println("register a new client");
 		}
 	}
 	
 	//getting a new confirm message, if there is no waiting confirm, go to nextStatus
 	protected void handleConfirm(MessageWithIp m, int nextStatus){
 		waiting4confirm--;
+		System.out.println("getting a confirm");
 		if(waiting4confirm==0)
 			status = nextStatus;
 	}
