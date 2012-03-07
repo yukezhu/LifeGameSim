@@ -42,29 +42,32 @@ public class Server{
 		
 		while(true) {
 			if(!Receiver.isEmpty()) {
-				System.out.println(status);
+//				System.out.println(status);
+				m = Receiver.getNextMessageWithIp();
 				switch(status) {
+					case -1:
+						m.extracMessage();
 					case 0:
-						client1_ip = Receiver.getNextMessageWithIp().getIp();
+						client1_ip = m.getIp();
 						Sender1 = new MessageSender(client1_ip, LISTEN_PORT);
 						System.out.println(client1_ip + "connected!!!");
 						status = 1;
 						break;
 					case 1:
-						client2_ip = Receiver.getNextMessageWithIp().getIp();
+						client2_ip = m.getIp();
 						Sender2 = new MessageSender(client2_ip, LISTEN_PORT);
 						System.out.println(client2_ip + "connected!!!");
 						Sender1.sendMsg(client2_ip);
 						status = 2;
 						break;
 					case 2:
-						if(!Receiver.getNextMessageWithIp().getIp().equals(client1_ip))
+						if(!m.getIp().equals(client1_ip))
 							System.out.println("Error!");
 						Sender2.sendMsg(client1_ip);
 						status = 3;
 						break;
 					case 3:
-						if(!Receiver.getNextMessageWithIp().getIp().equals(client2_ip))
+						if(!m.getIp().equals(client2_ip))
 							System.out.println("Error!");
 						System.out.println("before");
 						Sender1.sendMsg(auto.left());
@@ -75,43 +78,42 @@ public class Server{
 						status = 4;
 						break;
 					case 4:
-						if(!Receiver.getNextMessageWithIp().getIp().equals(client1_ip))
+						if(!m.getIp().equals(client1_ip))
 							System.out.println("Error!");
 						Sender2.sendMsg(auto.right());
 						status = 5;
 						break;
 					case 5:
-						if(!Receiver.getNextMessageWithIp().getIp().equals(client2_ip))
+						if(!m.getIp().equals(client2_ip))
 							System.out.println("Error!");
 						Sender1.sendMsg("left");
 						status = 6;
 						break;
 					case 6:
-						if(!Receiver.getNextMessageWithIp().getIp().equals(client1_ip))
+						if(!m.getIp().equals(client1_ip))
 							System.out.println("Error!");
 						Sender2.sendMsg("right");
 						status = 7;
 						break;
 					case 7:
-						if(!Receiver.getNextMessageWithIp().getIp().equals(client2_ip))
+						if(!m.getIp().equals(client2_ip))
 							System.out.println("Error!");
 						Sender1.sendMsg("start");
 						status = 8;
 						break;
 					case 8:
-						if(!Receiver.getNextMessageWithIp().getIp().equals(client1_ip))
+						if(!m.getIp().equals(client1_ip))
 							System.out.println("Error!");
 						Sender2.sendMsg("start");
 						status = 9;
 						break;
 					case 9:
-						if(!Receiver.getNextMessageWithIp().getIp().equals(client2_ip))
+						if(!m.getIp().equals(client2_ip))
 							System.out.println("Error!");
 						status = 10;
 						break;
 					case 10:
-						m = Receiver.getNextMessageWithIp();
-						if(m == null) System.out.println("null");
+//						if(m == null) System.out.println("null");
 						if(m.getIp().equals(client1_ip)){
 							auto.mergeLeft((AutomataMsg)m.extracMessage());
 							//Sender1.sendMsg("OK");
@@ -123,7 +125,6 @@ public class Server{
 						status = 11;
 						break;
 					case 11:
-						m = Receiver.getNextMessageWithIp();
 						if(m.getIp().equals(client1_ip)){
 							auto.mergeLeft((AutomataMsg)m.extracMessage());
 							//Sender1.sendMsg("OK");
@@ -143,5 +144,8 @@ public class Server{
 			}
 		}
 	}
-
+	
+	protected void checkNewAdding(MessageWithIp m){
+		//check if m is a new adding request message
+	}
 }
