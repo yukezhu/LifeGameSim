@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import ca.sfu.cmpt431.facility.*;
 import ca.sfu.cmpt431.message.*;
 import ca.sfu.cmpt431.message.join.*;
 import ca.sfu.message.AutomataMsg;
@@ -21,7 +22,7 @@ public class Server{
 	private String client1_ip;
 	private String client2_ip;
 	private ArrayList<MessageSender> newClientSender = new ArrayList();
-	private ArrayList<MessageSender>  regedClientSender = new ArrayList();
+	private ArrayList<Comrade>  regedClientSender = new ArrayList();
 	private int waiting4confirm = 0;
 	
 	private int status;
@@ -175,9 +176,9 @@ public class Server{
 	protected void handlePending() throws IOException{
 		while(!newClientSender.isEmpty()){
 			int cid = regedClientSender.size();
-			regedClientSender.add(newClientSender.get(0));
+			regedClientSender.add(new Comrade(cid, newClientSender.get(0)));
 			newClientSender.remove(0);
-			regedClientSender.get(cid).sendMsg(new JoinConfirmMsg(cid));
+			regedClientSender.get(cid).sender.sendMsg(new JoinConfirmMsg(cid));
 			waiting4confirm++;
 			System.out.println("register a new client");
 		}
