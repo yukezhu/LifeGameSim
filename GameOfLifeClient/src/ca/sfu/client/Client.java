@@ -23,7 +23,7 @@ public class Client {
 	public Client() throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException
 	{	
 		Receiver = new MessageReceiver(LISTEN_PORT);
-		Sender1 = new MessageSender("142.58.35.26", LISTEN_PORT);
+		Sender1 = new MessageSender("142.58.35.71", LISTEN_PORT);
 		String s = "Ok";
 		Sender1.sendMsg(s);
 		
