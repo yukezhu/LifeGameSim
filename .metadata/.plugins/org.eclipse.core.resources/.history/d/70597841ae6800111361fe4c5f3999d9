@@ -6,7 +6,8 @@ public class Outfits {
 	public int top;
 	public int left;
 	public Board myBoard;
-	public Comrade [] neighbours;
-	public Comrade pair;
+	
+//	public Node
+	
 	
 }
