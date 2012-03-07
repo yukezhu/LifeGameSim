@@ -59,7 +59,7 @@ public class Server{
 						break;
 					//waiting for confirm
 					case 1:
-						handleConfirm(m, 1);
+						handleConfirm(m, 0);
 						break;
 					case -1:
 						client1_ip = m.getIp();
