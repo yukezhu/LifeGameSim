@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import ca.sfu.cmpt431.facility.*;
 import ca.sfu.cmpt431.message.*;
 import ca.sfu.cmpt431.message.join.*;
 import ca.sfu.message.AutomataMsg;
@@ -21,8 +22,9 @@ public class Server{
 	private String client1_ip;
 	private String client2_ip;
 	private ArrayList<MessageSender> newClientSender = new ArrayList();
-	private ArrayList<MessageSender>  regedClientSender = new ArrayList();
+	private ArrayList<Comrade>  regedClientSender = new ArrayList();
 	private int waiting4confirm = 0;
+	private int nextClock = 0;
 	
 	private int status;
 	
@@ -51,15 +53,16 @@ public class Server{
 				System.out.println(status);
 				m = Receiver.getNextMessageWithIp();
 				switch(status) {
-					//waiting for adding
+					//waiting for first client
 					case 0:
-						handleNewAdding(m);
+						handleNewAdding(m,1);
 						handlePending();
 						status = 1;
 						break;
-					//waiting for confirm
+					//waiting for confirm from first client
+					//send it the outfit
 					case 1:
-						handleConfirm(m, 1);
+						handleConfirm(m, 0);
 						break;
 					case -1:
 						client1_ip = m.getIp();
@@ -160,24 +163,37 @@ public class Server{
 	}
 	
 	//store all the adding request into an array
-	protected void handleNewAdding(MessageWithIp m) throws IOException{
+	protected boolean handleNewAdding(MessageWithIp m, int nextStatus) throws IOException{
 		//check if m is a new adding request message
 		Message msg = (Message) m.extracMessage();
 		if(msg.getMessageCode()==MessageCodeDictionary.JOIN_REQUEST){
 			JoinRequestMsg join = (JoinRequestMsg)m.extracMessage();
 			newClientSender.add(new MessageSender(m.getIp(), join.getClientPort()));
 			System.out.println("adding new to pending");
+			//if it is a new adding request, we need to go to nextStatus
+			//most time it should be the same status
+			status = nextStatus;
+			return true;
 		}
-		return;
+		return false;
 	}
 	
-	
+	//deal with the pending adding request
+	//manage the heap
 	protected void handlePending() throws IOException{
 		while(!newClientSender.isEmpty()){
 			int cid = regedClientSender.size();
-			regedClientSender.add(newClientSender.get(0));
+			//manage the heap
+			if(cid!=0){ //not the first client
+				Comrade c = regedClientSender.get(0); //get it down one level
+				regedClientSender.remove(0);
+				regedClientSender.add(c);
+			}
+			regedClientSender.add(new Comrade(cid, newClientSender.get(0)));
+			
+			//remove the pending one
 			newClientSender.remove(0);
-			regedClientSender.get(cid).sendMsg(new JoinConfirmMsg(cid));
+			regedClientSender.get(cid).sender.sendMsg(new JoinConfirmMsg(cid));
 			waiting4confirm++;
 			System.out.println("register a new client");
 		}
