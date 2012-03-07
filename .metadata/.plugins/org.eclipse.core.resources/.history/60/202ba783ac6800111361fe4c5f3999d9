@@ -2,12 +2,11 @@ package ca.sfu.cmpt431.facility;
 
 public class Size {
 	
-	public int height;
 	public int width;
+	public int height;
 	
-	public Size(int h, int w) {
-		this.height = h;
+	public Size(int w, int h) {
 		this.width = w;
+		this.height = h;
 	}
-	
 }

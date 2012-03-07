@@ -1,0 +1,12 @@
+package ca.sfu.cmpt431.facility;
+
+public class NodeInfo {
+	
+	public int id;
+	public String ip;
+	
+	public NodeInfo(int id, String ip) {
+		this.id = id;
+		this.ip = ip;
+	}
+}
