@@ -45,6 +45,8 @@ public class Server{
 //				System.out.println(status);
 				m = Receiver.getNextMessageWithIp();
 				switch(status) {
+					case -1:
+						m.extracMessage();
 					case 0:
 						client1_ip = m.getIp();
 						Sender1 = new MessageSender(client1_ip, LISTEN_PORT);
@@ -142,5 +144,8 @@ public class Server{
 			}
 		}
 	}
-
+	
+	protected void checkNewAdding(MessageWithIp m){
+		//check if m is a new adding request message
+	}
 }
