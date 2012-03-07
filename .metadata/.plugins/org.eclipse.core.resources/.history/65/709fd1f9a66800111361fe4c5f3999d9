@@ -9,8 +9,8 @@ public class JoinRequestMsg extends Message {
 	
 	private int clientPort;
 	
-	public JoinRequestMsg(int port) {
-		super(-1, MessageCodeDictionary.JOIN_REQUEST);
+	public JoinRequestMsg(int cid, int port) {
+		super(cid, MessageCodeDictionary.JOIN_REQUEST);
 		clientPort = port;
 	}
 	
