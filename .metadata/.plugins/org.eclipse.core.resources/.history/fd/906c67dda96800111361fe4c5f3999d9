@@ -10,7 +10,7 @@ public class JoinConfirmMsg extends Message {
 	private int myId;
 
 	public JoinConfirmMsg(int newId) {
-		super(-1, MessageCodeDictionary.JOIN_CONFIRM);
+		super(-2, MessageCodeDictionary.JOIN_CONFIRM);
 		this.myId = newId;
 	}
 	

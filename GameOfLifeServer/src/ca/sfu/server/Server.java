@@ -1,8 +1,11 @@
 package ca.sfu.server;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import ca.sfu.cmpt431.message.*;
+import ca.sfu.cmpt431.message.join.*;
 import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
@@ -17,6 +20,9 @@ public class Server{
 	private MessageSender Sender2;
 	private String client1_ip;
 	private String client2_ip;
+	private ArrayList<MessageSender> newClientSender = new ArrayList();
+	private ArrayList<MessageSender>  regedClientSender = new ArrayList();
+	private int waiting4confirm = 0;
 	
 	private int status;
 	
@@ -42,18 +48,26 @@ public class Server{
 		
 		while(true) {
 			if(!Receiver.isEmpty()) {
-//				System.out.println(status);
+				System.out.println(status);
 				m = Receiver.getNextMessageWithIp();
 				switch(status) {
-					case -1:
-						m.extracMessage();
+					//waiting for adding
 					case 0:
+						handleNewAdding(m);
+						handlePending();
+						status = 1;
+						break;
+					//waiting for confirm
+					case 1:
+						handleConfirm(m, 1);
+						break;
+					case -1:
 						client1_ip = m.getIp();
 						Sender1 = new MessageSender(client1_ip, LISTEN_PORT);
 						System.out.println(client1_ip + "connected!!!");
 						status = 1;
 						break;
-					case 1:
+					case -2:
 						client2_ip = m.getIp();
 						Sender2 = new MessageSender(client2_ip, LISTEN_PORT);
 						System.out.println(client2_ip + "connected!!!");
@@ -145,7 +159,35 @@ public class Server{
 		}
 	}
 	
-	protected void checkNewAdding(MessageWithIp m){
+	//store all the adding request into an array
+	protected void handleNewAdding(MessageWithIp m) throws IOException{
 		//check if m is a new adding request message
+		Message msg = (Message) m.extracMessage();
+		if(msg.getMessageCode()==MessageCodeDictionary.JOIN_REQUEST){
+			JoinRequestMsg join = (JoinRequestMsg)m.extracMessage();
+			newClientSender.add(new MessageSender(m.getIp(), join.getClientPort()));
+			System.out.println("adding new to pending");
+		}
+		return;
+	}
+	
+	
+	protected void handlePending() throws IOException{
+		while(!newClientSender.isEmpty()){
+			int cid = regedClientSender.size();
+			regedClientSender.add(newClientSender.get(0));
+			newClientSender.remove(0);
+			regedClientSender.get(cid).sendMsg(new JoinConfirmMsg(cid));
+			waiting4confirm++;
+			System.out.println("register a new client");
+		}
+	}
+	
+	//getting a new confirm message, if there is no waiting confirm, go to nextStatus
+	protected void handleConfirm(MessageWithIp m, int nextStatus){
+		waiting4confirm--;
+		System.out.println("getting a confirm");
+		if(waiting4confirm==0)
+			status = nextStatus;
 	}
 }
