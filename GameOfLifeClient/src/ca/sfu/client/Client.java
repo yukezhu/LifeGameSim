@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Random;
 
+import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
@@ -51,8 +52,10 @@ public class Client {
 				System.out.println(status);
 				switch(status) {
 					case 0:	
+						JoinRequestMsg Request = new JoinRequestMsg(port);
+						
 						Sender1 = new MessageSender("142.58.35.71", SERVER_PORT);
-						Sender1.sendMsg(port);
+						Sender1.sendMsg(Request);
 						status = 1;
 						break;
 //					case 0:
