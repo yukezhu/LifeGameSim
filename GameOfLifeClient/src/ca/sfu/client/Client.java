@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 import java.util.Random;
 
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
+import ca.sfu.cmpt431.message.regular.ConfirmMsg;
 import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
@@ -13,9 +14,11 @@ public class Client {
 	protected static final int SERVER_PORT = 6560;
 	
 	private int status;
+	private int cid;
 	private AutomataMsg auto;
 	private String direction;
 	private int[] border;
+	private ComfirmMsg confirm;
 
 	public MessageReceiver Receiver; 
 	public MessageSender Sender1;
@@ -55,9 +58,12 @@ public class Client {
 						JoinRequestMsg Request = new JoinRequestMsg(port);
 						
 						Sender1 = new MessageSender("142.58.35.71", SERVER_PORT);
-						Sender1.sendMsg(Request);
+						Sender1.sendMsg(Request);						
 						status = 1;
 						break;
+					case 1:
+						cid = (Integer)Receiver.getNextMessageWithIp().extracMessage();
+						Sender1.sendMsg();
 //					case 0:
 //						String pair_ip = (String)Receiver.getNextMessageWithIp().extracMessage();
 //						Sender1.sendMsg("OK");
