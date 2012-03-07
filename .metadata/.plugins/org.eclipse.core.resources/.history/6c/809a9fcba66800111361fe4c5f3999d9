@@ -9,6 +9,11 @@ public class Message implements Serializable{
 	private int clientId;
 	private int messageCode;
 	
+	public Message() {
+		clientId = -1;
+		messageCode = MessageCodeDictionary.SB_MESSAGE;
+	}
+	
 	public Message(int cid, int mcode) {
 		clientId = cid;
 		messageCode = mcode;
