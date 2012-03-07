@@ -4,18 +4,14 @@ public class Outfits {
 	
 	public static int NUM_NEIBOURS;
 	
-	public int myId;
 	public int nextClock;
-	
 	public int top;
 	public int left;
 	public Board myBoard;
-	
 	public Comrade [] neighbour;
 	public Comrade pair;
 	
-	public Outfits(int id, int clk, int t, int l, int h, int w) {
-		myId = id;
+	public Outfits(int clk, int t, int l, int h, int w) {
 		myBoard = new Board(h, w);
 		neighbour = new Comrade[NUM_NEIBOURS];
 		for(int i = 0; i < NUM_NEIBOURS; i++)
