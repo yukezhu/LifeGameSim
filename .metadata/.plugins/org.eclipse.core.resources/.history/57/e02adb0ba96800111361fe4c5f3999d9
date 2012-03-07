@@ -1,0 +1,5 @@
+package ca.sfu.cmpt431.message.join;
+
+public class JoinConfirmMsg {
+
+}

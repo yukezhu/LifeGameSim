@@ -7,6 +7,5 @@ public class MessageCodeDictionary {
 	public final static int REGULAR_REQUEST = 2;
 	
 	public final static int JOIN_REQUEST = 41;
-	public final static int JOIN_CONFIRM = 42;
 	
 }
