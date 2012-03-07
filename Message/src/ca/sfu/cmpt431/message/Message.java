@@ -5,6 +5,6 @@ import java.io.Serializable;
 public class Message implements Serializable{
 	
 	private int clientId;
-	private int MessageCode;
+	private int messageCode;
 
 }
