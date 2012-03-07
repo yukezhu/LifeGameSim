@@ -4,11 +4,11 @@ import java.net.UnknownHostException;
 import java.util.Random;
 
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
+import ca.sfu.cmpt431.message.join.JoinConfirmMsg;
 import ca.sfu.cmpt431.message.regular.ConfirmMsg;
 import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
-
 public class Client {
 	
 	protected static final int SERVER_PORT = 6560;
@@ -18,7 +18,7 @@ public class Client {
 	private AutomataMsg auto;
 	private String direction;
 	private int[] border;
-	private ComfirmMsg confirm;
+	private ConfirmMsg confirm;
 
 	public MessageReceiver Receiver; 
 	public MessageSender Sender1;
@@ -39,12 +39,11 @@ public class Client {
 			catch(Exception e){
 				continue;
 			}
+		
 		}
-		
-		
-		
-		
-		
+		Sender1 = new MessageSender("142.58.35.71", SERVER_PORT);
+		JoinRequestMsg Request = new JoinRequestMsg(port);
+		Sender1.sendMsg(Request);
 		status = 0;
 	}
 	
@@ -55,15 +54,23 @@ public class Client {
 				System.out.println(status);
 				switch(status) {
 					case 0:	
-						JoinRequestMsg Request = new JoinRequestMsg(port);
-						
-						Sender1 = new MessageSender("142.58.35.71", SERVER_PORT);
-						Sender1.sendMsg(Request);						
+						cid = ((JoinConfirmMsg)Receiver.getNextMessageWithIp().extracMessage()).getMyId();					
+						Sender1.sendMsg(confirm);						
 						status = 1;
 						break;
 					case 1:
-						cid = (Integer)Receiver.getNextMessageWithIp().extracMessage();
-						Sender1.sendMsg();
+						Receiver.getNextMessageWithIp().extracMessage();
+						if(){
+							Sender1.sendMsg(confirm);
+						}
+						else{
+							String pair_ip = (String)Receiver.getNextMessageWithIp().getIp();
+							Sender2 = new MessageSender(pair_ip, );
+						}
+							
+						}
+						status = 2;
+						break;
 //					case 0:
 //						String pair_ip = (String)Receiver.getNextMessageWithIp().extracMessage();
 //						Sender1.sendMsg("OK");
