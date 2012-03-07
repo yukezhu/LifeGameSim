@@ -1,0 +1,15 @@
+package ca.sfu.cmpt431.message.join;
+
+import ca.sfu.cmpt431.message.Message;
+
+public class JoinRequestMsg extends Message {
+
+	private static final long serialVersionUID = 1L;
+	
+	public int clientPort;
+	
+	public int getClientPort() {
+		return clientPort;
+	}
+
+}
