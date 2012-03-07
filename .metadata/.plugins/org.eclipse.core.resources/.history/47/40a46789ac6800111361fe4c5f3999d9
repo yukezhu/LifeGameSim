@@ -1,0 +1,13 @@
+package ca.sfu.cmpt431.facility;
+
+public class Board extends Size{
+
+	public boolean [][] bitmap;
+	
+	public Board(int w, int h) {
+		super(w, h);
+		bitmap = new boolean[h][w];
+	}
+	
+	
+}

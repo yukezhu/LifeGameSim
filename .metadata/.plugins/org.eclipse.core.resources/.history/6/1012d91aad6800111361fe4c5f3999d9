@@ -1,0 +1,12 @@
+package ca.sfu.cmpt431.facility;
+
+public class ColleagueInfo {
+	
+	public int id;
+	public String ip;
+	
+	public ColleagueInfo(int id, String ip) {
+		this.id = id;
+		this.ip = ip;
+	}
+}
