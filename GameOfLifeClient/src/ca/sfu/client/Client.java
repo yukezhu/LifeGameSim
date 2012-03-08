@@ -1,17 +1,19 @@
 package ca.sfu.client;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Random;
 
 import ca.sfu.cmpt431.facility.Board;
 import ca.sfu.cmpt431.facility.BoardOperation;
 import ca.sfu.cmpt431.facility.Comrade;
 import ca.sfu.cmpt431.facility.Outfits;
+import ca.sfu.cmpt431.message.Message;
 import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
+import ca.sfu.cmpt431.message.join.JoinSplitMsg;
 import ca.sfu.cmpt431.message.regular.RegularConfirmMsg;
 import ca.sfu.cmpt431.message.regular.RegularNextClockMsg;
-import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
 import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
@@ -23,7 +25,7 @@ public class Client {
 	
 	private int status;
 	private int cid;
-	private AutomataMsg auto;
+//	private AutomataMsg auto;
 	private String direction;
 	private int[] border;
 	private RegularConfirmMsg confirm = new RegularConfirmMsg(-10);
@@ -40,6 +42,8 @@ public class Client {
 //	public MessageSender Sender2;
 //	public Comrade comrade1 = new Comrade(-1, Sender1);
 	public int port;
+	public MessageWithIp msgIp;
+	public Board myboard;
 	
 	public Client() throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException
 	{	
@@ -79,7 +83,7 @@ public class Client {
 						status = 1;
 						break;
 					case 1:
-						MessageWithIp msgIp;
+						
 						JoinOutfitsMsg ob;
 						JoinOutfitsMsg joinmsg;
 						msgIp = Receiver.getNextMessageWithIp();
@@ -105,11 +109,20 @@ public class Client {
 						}
 						status = 2;
 						break;
-					case 2:
-						MessageWithIp msgIp2;
-						msgIp2 = Receiver.getNextMessageWithIp();
-						RegularNextClockMsg clock = (RegularNextClockMsg)msgIp2.extracMessage();
-						Board myboard = new Board(outfit.myBoard.height,outfit.myBoard.width);
+					case 2:			
+//						MessageWithIp msgIp2;						
+						msgIp = Receiver.getNextMessageWithIp();
+						Message msg = (Message)msgIp.extracMessage();
+						int msg_type;
+						msg_type = msg.getMessageCode();
+						if(msg_type == 1)
+							status = 3;
+						else 
+							status = 4;
+						break;
+					case 3:
+						RegularNextClockMsg clock = (RegularNextClockMsg)msgIp.extracMessage();
+						myboard = new Board(outfit.myBoard.height,outfit.myBoard.width);
 //						int down = outfit.top+outfit.myBoard.height;
 //						int right = outfit.left+outfit.myBoard.width;
 						boolean[] up = new boolean[] {false,false,false,false,false,false,false,false,false,false};
@@ -124,7 +137,15 @@ public class Client {
 						server.sender.sendMsg(myboard);
 //						status = 3;
 						break;
-					case 3:
+					case 4:
+						JoinSplitMsg joinsplitmsg = (JoinSplitMsg)msgIp.extracMessage();
+						List<Board> board;
+						
+						myboard = verticalCut(myboard);
+						MessageSender Sender3 = new MessageSender(joinsplitmsg.newcomerIp, joinsplitmsg.newcomerPort);
+						comrade[joinsplitmsg.newcomerId] = new Comrade(joinsplitmsg.newcomerId, Sender3);
+						comrade[joinsplitmsg.newcomerId].sender.sendMsg(new JoinOutfitsMsg(cid, port, ));
+						
 						break;
 //					case 0:
 //						String pair_ip = (String)Receiver.getNextMessageWithIp().extracMessage();
