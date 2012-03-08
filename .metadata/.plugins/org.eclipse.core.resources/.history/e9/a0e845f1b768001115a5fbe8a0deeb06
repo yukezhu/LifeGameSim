@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 public class Outfits implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
-
 	public static int NUM_NEIBOURS;
 	
 	public int myId;
