@@ -10,13 +10,14 @@ import ca.sfu.cmpt431.facility.Board;
 public class AutomataPanel extends JPanel  {
 	
 	private static final long serialVersionUID = 1L;
-
-	//AutomataMsg auto = null;
+	private int cellSize; 
+	
 	Board b = null;
 	
 	public AutomataPanel()
 	{
 		this.setBackground(Color.WHITE);
+		cellSize = 10;
 	}
 
 	public void setBoard(Board board)
@@ -38,7 +39,7 @@ public class AutomataPanel extends JPanel  {
 					if(bitmap[i][j])
 					{
 						g.setColor(Color.BLACK);
-						g.fillRect(10 * j, 10 * i, 10, 10);
+						g.fillRect(cellSize * j, cellSize * i, cellSize, cellSize);
 					}
 				}
 		}
