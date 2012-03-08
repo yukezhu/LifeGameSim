@@ -91,18 +91,48 @@ public class Server{
 						status = 3;
 						break;
 					//waiting for the client to send the result back
+					//handle new adding or
 					//restart next cycle
 					case 3:
-						handleNewBoard(m,b,3);
+						if(handleNewAdding(m,2))
+							break;
+						
+						handleNewBoardInfo(m,b,3);
 						frame.repaint();
 						BoardOperation.Print(b);
 						
+						//handle adding
+						if(handlePending()){
+							status = 4;
+							break;
+						}
+						
+						//start
 						if(waiting4confirm==0){
 							for (Comrade var : regedClientSender) {
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
 							}
 						}
+						break;
+					//new addings (not the first client)
+					case 4:
+						if(handleNewAdding(m,4))
+							break;
+						
+						handleConfirm(m,-1);
+						
+						if(waiting4confirm!=0) //still need waiting for confirmation
+							break;
+						
+						//start
+						if(waiting4confirm==0){
+							for (Comrade var : regedClientSender) {
+								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
+								waiting4confirm++;
+							}
+						}
+						status = 3;
 						break;
 						
 					case -1:
@@ -135,7 +165,7 @@ public class Server{
 						System.out.println("after");
 						status = 4;
 						break;
-					case 4:
+					case -5:
 						if(!m.getIp().equals(client1_ip))
 							System.out.println("Error!");
 						//Sender2.sendMsg(auto.right());
@@ -221,7 +251,7 @@ public class Server{
 	
 	//deal with the pending adding request
 	//manage the heap
-	protected void handlePending() throws IOException{
+	protected boolean handlePending() throws IOException{
 		while(!newClientSender.isEmpty()){
 			int cid = regedClientSender.size();
 			//manage the heap
@@ -229,25 +259,32 @@ public class Server{
 				Comrade c = regedClientSender.get(0); //get it down one level
 				regedClientSender.remove(0);
 				regedClientSender.add(c);
+				//c is the pair
+				c.sender.sendMsg(new JoinSplitMsg(cid, c.sender.hostListenningPort, c.sender.hostIp, MessageCodeDictionary.SPLIT_MODE_HORIZONTAL));
 			}
-			regedClientSender.add(new Comrade(cid, newClientSender.get(0)));
+			else{
+				regedClientSender.add(new Comrade(cid, newClientSender.get(0)));
+				regedClientSender.get(cid).sender.sendMsg(new RegularConfirmMsg(-1));
+			}
 			
 			//remove the pending one
 			newClientSender.remove(0);
-			regedClientSender.get(cid).sender.sendMsg(new RegularConfirmMsg(-1));
+			
 			waiting4confirm++;
 			System.out.println("register a new client");
+			return true;
 		}
+		return false;
 	}
 	
-	protected void handleNewBoard(MessageWithIp m, Board b, int nextStatus){
+	protected void handleNewBoardInfo(MessageWithIp m, Board b, int nextStatus){
 		waiting4confirm--;
 		System.out.println("getting a result");
 		
 		if(waiting4confirm==0)
 			status = nextStatus;
 		
-		BoardOperation.merge(b, (Board)m.extracMessage(), 0, 0);
+		BoardOperation.Merge(b, (Board)m.extracMessage(), 0, 0);
 //		b = (Board)m.extracMessage();
 	}
 	
