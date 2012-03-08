@@ -95,9 +95,17 @@ public class Client {
 					case 2:
 						int clock = (Integer)Receiver.getNextMessageWithIp().extracMessage();
 						Board myboard = new Board(outfit.myBoard.height,outfit.myBoard.width);
-						int down = outfit.top+outfit.myBoard.height;
-						int right = outfit.left+outfit.myBoard.width;
-						myboard = BoardOperation.NextMoment(outfit.myBoard, outfit.top, down, outfit.left, right); 
+//						int down = outfit.top+outfit.myBoard.height;
+//						int right = outfit.left+outfit.myBoard.width;
+						boolean[] up = new boolean[] {false,false,false,false,false,false,false,false,false,false};
+						boolean[] down= new boolean[] {false,false,false,false,false,false,false,false,false,false};
+						boolean[] left= new boolean[] {false,false,false,false,false,false,false,false,false,false};
+						boolean[] right= new boolean[] {false,false,false,false,false,false,false,false,false,false};
+						boolean upperLeft = false;
+						boolean upperRight = false;
+						boolean lowerLeft = false;
+						boolean lowerRight = false;
+						myboard = BoardOperation.NextMoment(outfit.myBoard, up, down, left, right, upperLeft, upperDown, lowerLeft, lowerDown); 
 						break;
 //					case 0:
 //						String pair_ip = (String)Receiver.getNextMessageWithIp().extracMessage();
