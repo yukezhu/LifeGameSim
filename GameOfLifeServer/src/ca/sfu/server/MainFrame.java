@@ -45,15 +45,16 @@ public class MainFrame extends JFrame {
 		
 		Timer timer = new Timer(0, new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				automataPanel.setBoard(board);
-				BoardOperation.NextMoment(automataPanel.getBoard(), null, null, null, null, false, upperRight, lowerLeft, lowerRight);
-				
+				BoardOperation.NextMoment(board, null, null, null, null, false, false, false, false);;
+				automataPanel.repaint();
 			}
-			
 		});
+		
+		timer.setDelay(50);
+		timer.start();
 		
 		addWindowListener(windowAdapter);
 	}
