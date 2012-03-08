@@ -76,11 +76,11 @@ public class Client {
 						JoinOutfitsMsg joinmsg;
 						msgIp = Receiver.getNextMessageWithIp();
 						ob = (JoinOutfitsMsg)msgIp.extracMessage();
-						outfit = ob.getMyOutFits();
+						outfit = ob.yourOutfits;
 						joinmsg = (JoinOutfitsMsg)ob;
 						cid = outfit.myId;
 						int pair_id = ob.getClientId();
-						int pair_port = joinmsg.getYourPort();
+						int pair_port = joinmsg.myPort;
 						if(pair_port <0){
 							comrade1.sender.sendMsg(confirm);
 							System.out.println(pair_id);

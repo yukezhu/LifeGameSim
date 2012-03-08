@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="13" version="2.0">
+<workbench progressCount="20" version="2.0">
 <workbenchAdvisor/>
 <window height="769" maximized="true" width="1020" x="49" y="45">
 <fastViewData fastViewLocation="1024"/>
@@ -34,17 +34,47 @@
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
 <part id="1"/>
+<part id="2"/>
+<part id="3"/>
+<part id="4"/>
+<part id="5"/>
+<part id="6"/>
+<part id="7"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MessageCodeDictionary.java" partName="MessageCodeDictionary.java" path="/home/xieyaox/sfuhome/SFU Courses/CMPT431/LifeGameSim/Message/src/ca/sfu/cmpt431/message/MessageCodeDictionary.java" title="MessageCodeDictionary.java" tooltip="Message/src/ca/sfu/cmpt431/message/MessageCodeDictionary.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Message/src/ca/sfu/cmpt431/message/MessageCodeDictionary.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="246" selectionTopPixel="0"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="297" selectionTopPixel="0"/>
 </editor>
-<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="NextClockMsg.java" partName="NextClockMsg.java" path="/home/xieyaox/sfuhome/SFU Courses/CMPT431/LifeGameSim/Message/src/ca/sfu/cmpt431/message/regular/NextClockMsg.java" title="NextClockMsg.java" tooltip="Message/src/ca/sfu/cmpt431/message/regular/NextClockMsg.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Message/src/ca/sfu/cmpt431/message/regular/NextClockMsg.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="403" selectionTopPixel="0"/>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Comrade.java" partName="Comrade.java" path="/home/xieyaox/sfuhome/SFU Courses/CMPT431/LifeGameSim/Message/src/ca/sfu/cmpt431/facility/Comrade.java" title="Comrade.java" tooltip="Message/src/ca/sfu/cmpt431/facility/Comrade.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Message/src/ca/sfu/cmpt431/facility/Comrade.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="346" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RegularConfirmMsg.java" partName="RegularConfirmMsg.java" path="/home/xieyaox/sfuhome/SFU Courses/CMPT431/LifeGameSim/Message/src/ca/sfu/cmpt431/message/regular/RegularConfirmMsg.java" title="RegularConfirmMsg.java" tooltip="Message/src/ca/sfu/cmpt431/message/regular/RegularConfirmMsg.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Message/src/ca/sfu/cmpt431/message/regular/RegularConfirmMsg.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MessageSender.java" partName="MessageSender.java" path="/home/xieyaox/sfuhome/SFU Courses/CMPT431/LifeGameSim/Message/src/ca/sfu/network/MessageSender.java" title="MessageSender.java" tooltip="Message/src/ca/sfu/network/MessageSender.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Message/src/ca/sfu/network/MessageSender.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1094" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BoardOperation.java" partName="BoardOperation.java" path="/home/xieyaox/sfuhome/SFU Courses/CMPT431/LifeGameSim/Message/src/ca/sfu/cmpt431/facility/BoardOperation.java" title="BoardOperation.java" tooltip="Message/src/ca/sfu/cmpt431/facility/BoardOperation.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Message/src/ca/sfu/cmpt431/facility/BoardOperation.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2888" selectionTopPixel="1419"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BoardCut.java" partName="BoardCut.java" path="/home/xieyaox/sfuhome/SFU Courses/CMPT431/LifeGameSim/Message/src/ca/sfu/cmpt431/facility/BoardCut.java" title="BoardCut.java" tooltip="Message/src/ca/sfu/cmpt431/facility/BoardCut.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Message/src/ca/sfu/cmpt431/facility/BoardCut.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="960"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JoinOutfitsMsg.java" partName="JoinOutfitsMsg.java" path="/home/xieyaox/sfuhome/SFU Courses/CMPT431/LifeGameSim/Message/src/ca/sfu/cmpt431/message/join/JoinOutfitsMsg.java" title="JoinOutfitsMsg.java" tooltip="Message/src/ca/sfu/cmpt431/message/join/JoinOutfitsMsg.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Message/src/ca/sfu/cmpt431/message/join/JoinOutfitsMsg.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="116" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Message.java" partName="Message.java" path="/home/xieyaox/sfuhome/SFU Courses/CMPT431/LifeGameSim/Message/src/ca/sfu/cmpt431/message/Message.java" title="Message.java" tooltip="Message/src/ca/sfu/cmpt431/message/Message.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Message/src/ca/sfu/cmpt431/message/Message.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
@@ -52,11 +82,10 @@
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
 <expanded>
-<category IMemento.internal.id="Warnings (3 items)"/>
-<category IMemento.internal.id="Errors"/>
 <category IMemento.internal.id="Warnings"/>
+<category IMemento.internal.id="Errors"/>
 </expanded>
-<columnWidths org.eclipse.ui.ide.locationField="73" org.eclipse.ui.ide.markerType="108" org.eclipse.ui.ide.pathField="143" org.eclipse.ui.ide.resourceField="108" org.eclipse.ui.ide.severityAndDescriptionField="350"/>
+<columnWidths org.eclipse.ui.ide.locationField="0" org.eclipse.ui.ide.markerType="0" org.eclipse.ui.ide.pathField="0" org.eclipse.ui.ide.resourceField="0" org.eclipse.ui.ide.severityAndDescriptionField="0"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
@@ -102,7 +131,7 @@
 <view id="org.eclipse.jdt.ui.SourceView" partName="Declaration"/>
 <view id="org.eclipse.jdt.ui.JavadocView" partName="Javadoc"/>
 </views>
-<perspectives activePart="org.eclipse.jdt.ui.PackageExplorer" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspectives activePart="org.eclipse.jdt.ui.CompilationUnitEditor" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.jdt.internal.ui.JavaPerspectiveFactory" id="org.eclipse.jdt.ui.JavaPerspective" label="Java"/>
 <alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
@@ -227,167 +256,179 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/join/JoinOutfitsMsg.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/MessageCodeDictionary.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/regular/NewClockMsg.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/Message.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/join/JoinOutfitsMsg.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/join/JoinSplitMsg.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/regular/RegularNextClockMsg.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/regular/RegularConfirmMsg.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/facility/Comrade.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/regular/RegularBoardReturnMsg.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/join/JoinRequestMsg.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/regular/ConfirmMsg.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/join/JoinOutfitsMsg.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/GameOfLifeClient/src/ca/sfu/network/MessageSender.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/network/MessageReceiver.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/network/MessageSender.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/network/SynchronizedMsgQueue.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/regular/NextClockMsg.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/GameOfLifeServer/src/ca/sfu/network/SynchronizedMsgQueue.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/GameOfLifeServer/src/ca/sfu/network/MessageSender.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/network/MessageReceiver.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/facility/Comrade.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/GameOfLifeServer/src/ca/sfu/server/Server.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/network/MessageSender.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/GameOfLifeServer/src/ca/sfu/server/LifeGameServer.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/GameOfLifeServer/src/ca/sfu/network/MessageSender.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/facility/BoardOperation.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/facility/Board.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/facility/BoardCut.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Message/src/ca/sfu/cmpt431/message/Message.java"/>
 </editors>
-<item historyLabel="JoinOutfitsMsg.java" index="0">
-<position info="not_deleted" x="385" y="0"/>
+<item historyLabel="JoinOutfitsMsg.java" index="7">
+<position info="not_deleted" x="503" y="0"/>
 </item>
-<item historyLabel="MessageCodeDictionary.java" index="1">
-<position info="not_deleted" x="330" y="0"/>
+<item historyLabel="JoinRequestMsg.java" index="6">
+<position info="not_deleted" x="253" y="0"/>
 </item>
-<item historyLabel="JoinOutfitsMsg.java" index="0">
-<position info="not_deleted" x="385" y="0"/>
+<item historyLabel="JoinSplitMsg.java" index="1">
+<position info="not_deleted" x="540" y="0"/>
 </item>
-<item historyLabel="MessageCodeDictionary.java" index="1">
-<position info="not_deleted" x="46" y="21"/>
-</item>
-<item historyLabel="JoinOutfitsMsg.java" index="0">
-<position info="not_deleted" x="385" y="0"/>
-</item>
-<item historyLabel="JoinOutfitsMsg.java" index="0">
-<position info="not_deleted" x="532" y="0"/>
-</item>
-<item historyLabel="JoinOutfitsMsg.java" index="0">
-<position info="not_deleted" x="562" y="0"/>
-</item>
-<item historyLabel="NewClockMsg.java" index="2">
+<item historyLabel="RegularBoardReturnMsg.java" index="5">
 <position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position info="not_deleted" x="81" y="0"/>
+<item historyLabel="JoinSplitMsg.java" index="1">
+<position info="not_deleted" x="540" y="0"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position info="not_deleted" x="94" y="11"/>
+<item historyLabel="RegularConfirmMsg.java" index="3">
+<position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
+<item historyLabel="JoinSplitMsg.java" index="1">
+<position info="not_deleted" x="540" y="0"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
+<item historyLabel="RegularNextClockMsg.java" index="2">
+<position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="MessageCodeDictionary.java" index="1">
-<position info="not_deleted" x="151" y="0"/>
+<item historyLabel="JoinSplitMsg.java" index="1">
+<position info="not_deleted" x="540" y="0"/>
 </item>
-<item historyLabel="Message.java" index="3">
+<item historyLabel="MessageCodeDictionary.java" index="0">
 <position info="not_deleted" x="297" y="0"/>
 </item>
-<item historyLabel="JoinOutfitsMsg.java" index="4">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="MessageSender.java" index="8">
+<position info="not_deleted" x="457" y="0"/>
 </item>
-<item historyLabel="JoinRequestMsg.java" index="5">
-<position/>
+<item historyLabel="MessageReceiver.java" index="9">
+<position info="not_deleted" x="746" y="0"/>
 </item>
-<item historyLabel="ConfirmMsg.java" index="6">
-<position/>
+<item historyLabel="MessageSender.java" index="10">
+<position info="not_deleted" x="422" y="0"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
+<item historyLabel="Comrade.java" index="4">
+<position info="not_deleted" x="277" y="0"/>
 </item>
-<item historyLabel="MessageReceiver.java" index="7">
+<item historyLabel="MessageSender.java" index="8">
+<position info="not_deleted" x="790" y="0"/>
+</item>
+<item historyLabel="SynchronizedMsgQueue.java" index="11">
+<position info="not_deleted" x="250" y="0"/>
+</item>
+<item historyLabel="MessageSender.java" index="12">
+<position info="not_deleted" x="456" y="0"/>
+</item>
+<item historyLabel="MessageSender.java" index="8">
+<position info="not_deleted" x="635" y="0"/>
+</item>
+<item historyLabel="MessageReceiver.java" index="13">
 <position info="not_deleted" x="0" y="0"/>
 </item>
 <item historyLabel="MessageSender.java" index="8">
+<position info="not_deleted" x="635" y="0"/>
+</item>
+<item historyLabel="Comrade.java" index="14">
+<position info="not_deleted" x="346" y="0"/>
+</item>
+<item historyLabel="Server.java" index="15">
 <position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="SynchronizedMsgQueue.java" index="9">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="Server.java" index="15">
+<position info="not_deleted" x="949" y="0"/>
+</item>
+<item historyLabel="Comrade.java" index="14">
+<position info="not_deleted" x="346" y="0"/>
 </item>
 <item historyLabel="MessageSender.java" index="8">
-<position info="not_deleted" x="0" y="0"/>
+<position info="not_deleted" x="635" y="0"/>
 </item>
-<item historyLabel="MessageReceiver.java" index="7">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
-</item>
-<item historyLabel="ConfirmMsg.java" index="6">
-<position/>
-</item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
-</item>
-<item historyLabel="JoinRequestMsg.java" index="5">
-<position/>
-</item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
-</item>
-<item historyLabel="JoinOutfitsMsg.java" index="4">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
-</item>
-<item historyLabel="Message.java" index="3">
+<item historyLabel="MessageCodeDictionary.java" index="0">
 <position info="not_deleted" x="297" y="0"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
+<item historyLabel="Comrade.java" index="14">
+<position info="not_deleted" x="346" y="0"/>
+</item>
+<item historyLabel="RegularConfirmMsg.java" index="3">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="MessageSender.java" index="16">
+<position info="not_deleted" x="1094" y="0"/>
+</item>
+<item historyLabel="LifeGameServer.java" index="17">
+<position info="not_deleted" x="294" y="0"/>
+</item>
+<item historyLabel="MessageSender.java" index="16">
+<position info="not_deleted" x="1094" y="0"/>
+</item>
+<item historyLabel="MessageSender.java" index="18">
+<position info="not_deleted" x="457" y="0"/>
+</item>
+<item historyLabel="MessageSender.java" index="16">
+<position info="not_deleted" x="1094" y="0"/>
+</item>
+<item historyLabel="BoardOperation.java" index="19">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="Board.java" index="20">
 <position/>
 </item>
-<item historyLabel="MessageCodeDictionary.java" index="1">
-<position info="not_deleted" x="46" y="21"/>
+<item historyLabel="BoardOperation.java" index="19">
+<position info="not_deleted" x="1125" y="0"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
+<item historyLabel="BoardCut.java" index="21">
+<position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="JoinRequestMsg.java" index="5">
-<position info="not_deleted" x="291" y="0"/>
+<item historyLabel="BoardOperation.java" index="19">
+<position info="not_deleted" x="106" y="5"/>
 </item>
-<item historyLabel="ConfirmMsg.java" index="6">
-<position info="not_deleted" x="319" y="0"/>
+<item historyLabel="Board.java" index="20">
+<position info="not_deleted" x="83" y="0"/>
 </item>
-<item historyLabel="JoinRequestMsg.java" index="5">
-<position info="not_deleted" x="291" y="0"/>
+<item historyLabel="BoardOperation.java" index="19">
+<position info="not_deleted" x="106" y="5"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
+<item historyLabel="BoardCut.java" index="21">
+<position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="MessageCodeDictionary.java" index="1">
-<position info="not_deleted" x="200" y="0"/>
+<item historyLabel="BoardOperation.java" index="19">
+<position info="not_deleted" x="1085" y="0"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
+<item historyLabel="Board.java" index="20">
+<position info="not_deleted" x="82" y="0"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
+<item historyLabel="BoardOperation.java" index="19">
+<position info="not_deleted" x="2888" y="0"/>
 </item>
-<item historyLabel="NewClockMsg.java" index="2">
-<position/>
+<item historyLabel="JoinOutfitsMsg.java" index="7">
+<position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="NextClockMsg.java" index="10">
-<position info="not_deleted" x="398" y="0"/>
+<item historyLabel="JoinOutfitsMsg.java" index="7">
+<position info="not_deleted" x="117" y="0"/>
 </item>
-<item historyLabel="MessageCodeDictionary.java" index="1">
-<position info="not_deleted" x="246" y="0"/>
+<item historyLabel="JoinOutfitsMsg.java" index="7">
+<position info="not_deleted" x="167" y="0"/>
 </item>
-<item historyLabel="NextClockMsg.java" index="10">
-<position info="not_deleted" x="398" y="0"/>
+<item historyLabel="JoinOutfitsMsg.java" index="7">
+<position info="not_deleted" x="116" y="0"/>
 </item>
-<item historyLabel="MessageCodeDictionary.java" index="1">
-<position info="not_deleted" x="246" y="0"/>
+<item historyLabel="Message.java" index="22">
+<position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="NextClockMsg.java" index="10">
-<position info="not_deleted" x="398" y="0"/>
-</item>
-<item historyLabel="MessageCodeDictionary.java" index="1">
-<position info="not_deleted" x="246" y="0"/>
-</item>
-<item historyLabel="NextClockMsg.java" index="10">
-<position info="not_deleted" x="398" y="0"/>
-</item>
-<item active="true" historyLabel="NextClockMsg.java" index="10">
-<position info="not_deleted" x="428" y="0"/>
+<item active="true" historyLabel="JoinOutfitsMsg.java" index="7">
+<position info="not_deleted" x="116" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -402,55 +443,54 @@
 <trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
 <trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
-<trimItem IMemento.internal.id="org.eclipse.ui.internal.intro.impl.presentations.IntroLaunchBar"/>
 </trimArea>
 </trimLayout>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ConfirmMsg.java" tooltip="Message/src/ca/sfu/cmpt431/message/regular/ConfirmMsg.java">
-<persistable path="/Message/src/ca/sfu/cmpt431/message/regular/ConfirmMsg.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JoinRequestMsg.java" tooltip="Message/src/ca/sfu/cmpt431/message/join/JoinRequestMsg.java">
-<persistable path="/Message/src/ca/sfu/cmpt431/message/join/JoinRequestMsg.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SynchronizedMsgQueue.java" tooltip="Message/src/ca/sfu/network/SynchronizedMsgQueue.java">
-<persistable path="/Message/src/ca/sfu/network/SynchronizedMsgQueue.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MessageSender.java" tooltip="Message/src/ca/sfu/network/MessageSender.java">
-<persistable path="/Message/src/ca/sfu/network/MessageSender.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MessageReceiver.java" tooltip="Message/src/ca/sfu/network/MessageReceiver.java">
-<persistable path="/Message/src/ca/sfu/network/MessageReceiver.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Message.java" tooltip="Message/src/ca/sfu/cmpt431/message/Message.java">
+<persistable path="/Message/src/ca/sfu/cmpt431/message/Message.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JoinOutfitsMsg.java" tooltip="Message/src/ca/sfu/cmpt431/message/join/JoinOutfitsMsg.java">
 <persistable path="/Message/src/ca/sfu/cmpt431/message/join/JoinOutfitsMsg.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Message.java" tooltip="Message/src/ca/sfu/cmpt431/message/Message.java">
-<persistable path="/Message/src/ca/sfu/cmpt431/message/Message.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="NewClockMsg.java" tooltip="Message/src/ca/sfu/cmpt431/message/regular/NewClockMsg.java">
-<persistable path="/Message/src/ca/sfu/cmpt431/message/regular/NewClockMsg.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MessageCodeDictionary.java" tooltip="Message/src/ca/sfu/cmpt431/message/MessageCodeDictionary.java">
-<persistable path="/Message/src/ca/sfu/cmpt431/message/MessageCodeDictionary.java"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Board.java" tooltip="Message/src/ca/sfu/cmpt431/facility/Board.java">
 <persistable path="/Message/src/ca/sfu/cmpt431/facility/Board.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Size.java" tooltip="Message/src/ca/sfu/cmpt431/facility/Size.java">
-<persistable path="/Message/src/ca/sfu/cmpt431/facility/Size.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BoardCut.java" tooltip="Message/src/ca/sfu/cmpt431/facility/BoardCut.java">
+<persistable path="/Message/src/ca/sfu/cmpt431/facility/BoardCut.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BoardOperation.java" tooltip="Message/src/ca/sfu/cmpt431/facility/BoardOperation.java">
+<persistable path="/Message/src/ca/sfu/cmpt431/facility/BoardOperation.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MessageSender.java" tooltip="GameOfLifeServer/src/ca/sfu/network/MessageSender.java">
+<persistable path="/GameOfLifeServer/src/ca/sfu/network/MessageSender.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="LifeGameServer.java" tooltip="GameOfLifeServer/src/ca/sfu/server/LifeGameServer.java">
+<persistable path="/GameOfLifeServer/src/ca/sfu/server/LifeGameServer.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MessageSender.java" tooltip="Message/src/ca/sfu/network/MessageSender.java">
+<persistable path="/Message/src/ca/sfu/network/MessageSender.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RegularConfirmMsg.java" tooltip="Message/src/ca/sfu/cmpt431/message/regular/RegularConfirmMsg.java">
+<persistable path="/Message/src/ca/sfu/cmpt431/message/regular/RegularConfirmMsg.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Comrade.java" tooltip="Message/src/ca/sfu/cmpt431/facility/Comrade.java">
 <persistable path="/Message/src/ca/sfu/cmpt431/facility/Comrade.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Colleague.java" tooltip="Message/src/ca/sfu/cmpt431/facility/Colleague.java">
-<persistable path="/Message/src/ca/sfu/cmpt431/facility/Colleague.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Server.java" tooltip="GameOfLifeServer/src/ca/sfu/server/Server.java">
+<persistable path="/GameOfLifeServer/src/ca/sfu/server/Server.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="NodeInfo.java" tooltip="Message/src/ca/sfu/cmpt431/facility/NodeInfo.java">
-<persistable path="/Message/src/ca/sfu/cmpt431/facility/NodeInfo.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MessageReceiver.java" tooltip="Message/src/ca/sfu/network/MessageReceiver.java">
+<persistable path="/Message/src/ca/sfu/network/MessageReceiver.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="AreaSize.java" tooltip="Message/src/ca/sfu/cmpt431/facility/AreaSize.java">
-<persistable path="/Message/src/ca/sfu/cmpt431/facility/AreaSize.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SynchronizedMsgQueue.java" tooltip="GameOfLifeServer/src/ca/sfu/network/SynchronizedMsgQueue.java">
+<persistable path="/GameOfLifeServer/src/ca/sfu/network/SynchronizedMsgQueue.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MessageSender.java" tooltip="GameOfLifeClient/src/ca/sfu/network/MessageSender.java">
+<persistable path="/GameOfLifeClient/src/ca/sfu/network/MessageSender.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JoinRequestMsg.java" tooltip="Message/src/ca/sfu/cmpt431/message/join/JoinRequestMsg.java">
+<persistable path="/Message/src/ca/sfu/cmpt431/message/join/JoinRequestMsg.java"/>
 </file>
 </mruList>
 </workbench>
