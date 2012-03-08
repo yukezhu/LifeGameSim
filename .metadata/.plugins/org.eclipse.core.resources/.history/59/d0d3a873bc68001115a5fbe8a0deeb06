@@ -7,17 +7,11 @@ public class JoinSplitMsg extends Message {
 
 	private static final long serialVersionUID = 1L;
 	
-	public int newcomerId;
-	public int newcomerPort;
-	public String newcomerIp;
-	public int splitMode;
+	private int newcomerId;
+	private int splitDirection;
 	
-	public JoinSplitMsg(int newId, int newPort, String newIp, int mode) {
+	public JoinSplitMsg() {
 		super(MessageCodeDictionary.ID_SERVER, MessageCodeDictionary.JOIN_SPLIT);
-		newcomerId = newId;
-		newcomerPort = newPort;
-		newcomerIp = newIp;
-		splitMode = mode;
 	}
 
 }
