@@ -2,8 +2,8 @@ package ca.sfu.cmpt431.message;
 
 public class MessageCodeDictionary {
 
-	public final static int ID_SERVER = -1;
-	public final static int ID_INVALID = -2;
+	public final static int SERVER_ID = -1;
+	public final static int NOT_A_ID = -2;
 
 	public final static int REGULAR_NEXTCLOCK = 1;
 	public final static int REGULAR_REQUEST = 2;
