@@ -259,7 +259,13 @@ public class Server{
 				regedClientSender.remove(0);
 				regedClientSender.add(c);
 				//c is the pair
-				c.sender.sendMsg(new JoinSplitMsg(cid, c.sender.hostListenningPort, c.sender.hostIp, MessageCodeDictionary.SPLIT_MODE_HORIZONTAL));
+				int mode;
+				if((Math.log(2*cid+1)/Math.log(2)%2)==0)
+					mode = MessageCodeDictionary.SPLIT_MODE_HORIZONTAL;
+				else
+					mode = MessageCodeDictionary.SPLIT_MODE_VERTICAL;
+				
+				c.sender.sendMsg(new JoinSplitMsg(cid, c.sender.hostListenningPort, c.sender.hostIp, mode));
 			}
 			else{
 				regedClientSender.add(new Comrade(cid, newClientSender.get(0)));
