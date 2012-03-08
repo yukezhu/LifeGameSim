@@ -14,7 +14,7 @@ public class JoinOutfitsMsg extends Message {
 		yourOutfits = yo;
 	}
 	
-	public Outfits getMyOutFits() {
+	public getMyOutFits() {
 		return yourOutfits;
 	}
 
