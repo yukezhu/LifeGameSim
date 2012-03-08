@@ -218,7 +218,8 @@ public class Client {
 					//receive border or confirm
 					case MessageCodeDictionary.REVEIVE_BORDER_OR_CONFIRM_STATUS:
 						msgIp = Receiver.getNextMessageWithIp();
-						msg_type = msg.getMessageCode();
+						Message msgtogetcode = (Message)msgIp.extracMessage();
+						msg_type = msgtogetcode.getMessageCode();
 						int confirmCount = 0;
 						int borderexchangeCount = 0;
 						int[] posRecord = null;
