@@ -49,6 +49,7 @@ public class Server{
 		System.out.println("UI");
 		
 		MessageWithIp m;
+		boolean bl;
 		
 		while(true) {
 			if(!Receiver.isEmpty()) {
@@ -64,9 +65,13 @@ public class Server{
 					//waiting for confirm from first client
 					//send it the outfit
 					case 1:
-						handleConfirm(m, 0);
+						bl = handleNewAdding(m,1); //!every status, handle an unexpected new adding message first
+						if(bl)
+							break; // if it is a new adding request, go to status 1 to wait the confirm msg again
+						
+						handleConfirm(m,0);
 						//send the board
-						Outfits o = new Outfits(0,nextClock,0,0,10,10);
+						Outfits o = new Outfits(0,nextClock,0,0,b);
 						regedClientSender.get(0).sender.sendMsg(o);
 						break;
 					case -1:
@@ -92,7 +97,7 @@ public class Server{
 						if(!m.getIp().equals(client2_ip))
 							System.out.println("Error!");
 						System.out.println("before");
-						Sender1.sendMsg(auto.left());
+						//Sender1.sendMsg(auto.left());
 //						Sender1.sendMsg(auto);
 //						Sender1.sendMsg(new AutomataMsg(3, 4));
 //						Sender1.sendMsg("left");
@@ -102,7 +107,7 @@ public class Server{
 					case 4:
 						if(!m.getIp().equals(client1_ip))
 							System.out.println("Error!");
-						Sender2.sendMsg(auto.right());
+						//Sender2.sendMsg(auto.right());
 						status = 5;
 						break;
 					case 5:
@@ -137,22 +142,22 @@ public class Server{
 					case 10:
 //						if(m == null) System.out.println("null");
 						if(m.getIp().equals(client1_ip)){
-							auto.mergeLeft((AutomataMsg)m.extracMessage());
+							//auto.mergeLeft((AutomataMsg)m.extracMessage());
 							//Sender1.sendMsg("OK");
 						}
 						else{
-							auto.mergeRight((AutomataMsg)m.extracMessage());
+							//auto.mergeRight((AutomataMsg)m.extracMessage());
 							//Sender2.sendMsg("OK");
 						}
 						status = 11;
 						break;
 					case 11:
 						if(m.getIp().equals(client1_ip)){
-							auto.mergeLeft((AutomataMsg)m.extracMessage());
+							//auto.mergeLeft((AutomataMsg)m.extracMessage());
 							//Sender1.sendMsg("OK");
 						}
 						else{
-							auto.mergeRight((AutomataMsg)m.extracMessage());
+							//auto.mergeRight((AutomataMsg)m.extracMessage());
 							//Sender2.sendMsg("OK");
 						}
 						frame.repaint();
