@@ -390,6 +390,7 @@ public class Client {
 		return a;
 	}
 
+	//comment
 	protected void mergeBorder(boolean[] aa, int[] array1){
 		ArrayList<Boolean> tmp = new ArrayList<Boolean>();
 		
