@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.io.Serializable"/>
+<fullyQualifiedTypeName name="ca.sfu.cmpt431.message.Message"/>
+<fullyQualifiedTypeName name="ca.sfu.network.MessageSender"/>
+<fullyQualifiedTypeName name="ca.sfu.cmpt431.message.MessageCodeDictionary"/>
+</qualifiedTypeNameHistroy>
