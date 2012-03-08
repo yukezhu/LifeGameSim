@@ -52,6 +52,7 @@ public class Client {
 		}
 		comrade1.sender = new MessageSender("142.58.35.71", SERVER_PORT);
 		JoinRequestMsg Request = new JoinRequestMsg(port);
+//		comrade1.sender.sendMsg(confirm);
 		comrade1.sender.sendMsg(Request);
 		status = 0;
 	}
@@ -61,6 +62,7 @@ public class Client {
 		while(true){
 			if(!Receiver.isEmpty()){
 				System.out.println(status);
+				
 				switch(status) {
 					case 0:	
 						Receiver.getNextMessageWithIp().extracMessage();
