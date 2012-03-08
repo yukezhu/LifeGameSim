@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import ca.sfu.network.MessageSender;
 
-public class Comrade  implements Serializable{
+public class Comrade implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
