@@ -84,7 +84,7 @@ public class Server{
 						handleConfirm(m,3); //expect only one message responding for JoinOutfitsMsg
 						//send you a start
 						for (Comrade var : regedClientSender) {
-							//
+							var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 						}
 						break;
 						
