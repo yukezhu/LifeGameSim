@@ -20,9 +20,24 @@ public class AutomataPanel extends JPanel  {
 		cellSize = 10;
 	}
 
+	public int getCellSize()
+	{
+		return cellSize;
+	}
+	
+	public void setCellSize(int size)
+	{
+		cellSize = size;
+	}
+	
 	public void setBoard(Board board)
 	{
 		b = board;
+	}
+	
+	public Board getBoard()
+	{
+		return b;
 	}
 	
 	@Override
