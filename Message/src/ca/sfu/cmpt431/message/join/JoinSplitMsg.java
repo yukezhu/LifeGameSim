@@ -7,7 +7,9 @@ public class JoinSplitMsg extends Message {
 
 	private static final long serialVersionUID = 1L;
 	
-	public JoinSplitMsg(int mcode) {
+	private int newcomerId;
+	
+	public JoinSplitMsg() {
 		super(MessageCodeDictionary.ID_SERVER, MessageCodeDictionary.JOIN_SPLIT);
 	}
 
