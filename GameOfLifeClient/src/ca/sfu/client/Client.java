@@ -6,6 +6,7 @@ import java.util.Random;
 
 import ca.sfu.cmpt431.facility.Board;
 import ca.sfu.cmpt431.facility.BoardOperation;
+import ca.sfu.cmpt431.facility.Border;
 import ca.sfu.cmpt431.facility.Comrade;
 import ca.sfu.cmpt431.facility.Outfits;
 import ca.sfu.cmpt431.message.Message;
@@ -13,8 +14,10 @@ import ca.sfu.cmpt431.message.MessageCodeDictionary;
 import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.join.JoinSplitMsg;
+import ca.sfu.cmpt431.message.regular.RegularBorderMsg;
 import ca.sfu.cmpt431.message.regular.RegularConfirmMsg;
 import ca.sfu.cmpt431.message.regular.RegularNextClockMsg;
+import ca.sfu.cmpt431.message.regular.RegularUpdateNeighbour;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
 import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
@@ -110,6 +113,22 @@ public class Client {
 //							comrade2.sender = new MessageSender(pair_ip, pair_port);							
 							comrade[pair_id].sender.sendMsg(confirm);
 						}
+						int i=0;
+						for(i=0;i<12;i++)
+						{
+							if(outfit.neighbour[i] != null )
+								MessageSender Sender = new MessageSender(outfit.neighbour[i]., pair_port);
+								comrade[pair_id] = new Comrade(pair_id, Sender);
+								
+								RegularUpdateNeighbour neighbor = new RegularUpdateNeighbour(cid, )
+								comrade[pair_id].sender.sendMsg(neighbor);
+																
+						}
+						status = -1;
+						break;
+					case -1:
+						Receiver.getNextMessageWithIp();
+						server.sender.sendMsg(confirm);
 						status = 2;
 						break;
 						//wait for start or other commands
@@ -119,10 +138,33 @@ public class Client {
 						Message msg = (Message)msgIp.extracMessage();
 						int msg_type;
 						msg_type = msg.getMessageCode();
-						if(msg_type == 1)
+						if(msg_type == MessageCodeDictionary.REGULAR_NEXTCLOCK)
 							status = 3;
+						else if (msg_type == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
+							status = -2;
 						else 
 							status = 4;
+						break;
+					case -2:
+						msgIp = Receiver.getNextMessageWithIp();
+						RegularUpdateNeighbour neighbor = (RegularUpdateNeighbour)msgIp.extracMessage();
+						int i;
+						int j;
+						for(j = 0;j<neighbor.pos.length;j++)
+						{
+							for(i=0;i<12;i++)
+							{
+								if(i == neighbor.pos[j])
+								{
+									outfit.neighbour[i].id = neighbor.getClientId();
+								}
+							}
+						}
+						String neighbor_ip;
+						int neighbor_port;
+						MessageSender Sender = new MessageSender(neighbor_ip., neighbor_port);
+						comrade[neighbor.getClientId()] = new Comrade(neighbor.getClientId(), Sender);
+						comrade[neighbor.getClientId()].sender.sendMsg(confirm);
 						break;
 						//start
 					case 3:
@@ -130,14 +172,31 @@ public class Client {
 						myboard = new Board(outfit.myBoard.height,outfit.myBoard.width);
 //						int down = outfit.top+outfit.myBoard.height;
 //						int right = outfit.left+outfit.myBoard.width;
-						boolean[] up = new boolean[] {false,false,false,false,false,false,false,false,false,false};
-						boolean[] down= new boolean[] {false,false,false,false,false,false,false,false,false,false};
-						boolean[] left= new boolean[] {false,false,false,false,false,false,false,false,false,false};
-						boolean[] right= new boolean[] {false,false,false,false,false,false,false,false,false,false};
-						boolean upperLeft = false;
-						boolean upperRight = false;
-						boolean lowerLeft = false;
-						boolean lowerRight = false;
+						RegularBorderMsg bordermsgH;
+						RegularBorderMsg bordermsgW;
+						Border borderH;
+						Border borderW;
+						borderH = new Border(outfit.myBoard.height);
+						borderW = new Border(outfit.myBoard.width);
+						bordermsgH = new RegularBorderMsg(cid, borderH);
+						bordermsgW = new RegularBorderMsg(cid, borderW);
+						int i=0;
+						for(i=0;i<12;i++)
+						{
+							if(outfit.neighbour[i] != null && outfit.neighbour[i].id != outfit.neighbour[i-1].id)
+								
+								
+						}
+							
+						
+//						boolean[] up = new boolean[] {false,false,false,false,false,false,false,false,false,false};
+//						boolean[] down= new boolean[] {false,false,false,false,false,false,false,false,false,false};
+//						boolean[] left= new boolean[] {false,false,false,false,false,false,false,false,false,false};
+//						boolean[] right= new boolean[] {false,false,false,false,false,false,false,false,false,false};
+//						boolean upperLeft = false;
+//						boolean upperRight = false;
+//						boolean lowerLeft = false;
+//						boolean lowerRight = false;
 						myboard = BoardOperation.NextMoment(outfit.myBoard, up, down, left, right, upperLeft, upperRight, lowerLeft, lowerRight); 
 						server.sender.sendMsg(myboard);
 //						status = 3;
