@@ -2,13 +2,11 @@ package ca.sfu.cmpt431.facility;
 
 import java.util.Random;
 
-import ca.sfu.message.AutomataMsg;
-
 public class BoardOperation {
 
-	public static Board NextMoment(Board b, boolean[] up, boolean[] down, boolean[] left, boolean[] right)
+	public static Board NextMoment(Board b, boolean[] up, boolean[] down, boolean[] left, boolean[] right) throws IllegalArgumentException
 	{
-		Exception exception = new java.lang.IllegalArgumentException();
+		IllegalArgumentException exception = new java.lang.IllegalArgumentException();
 		if(up.length != b.width || down.length != b.width)
 		{
 			System.err.println("Up & down border lengths fail to match the board.");
