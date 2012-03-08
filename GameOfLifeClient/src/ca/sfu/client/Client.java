@@ -9,6 +9,7 @@ import ca.sfu.cmpt431.facility.BoardOperation;
 import ca.sfu.cmpt431.facility.Comrade;
 import ca.sfu.cmpt431.facility.Outfits;
 import ca.sfu.cmpt431.message.Message;
+import ca.sfu.cmpt431.message.MessageCodeDictionary;
 import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.join.JoinSplitMsg;
@@ -44,6 +45,7 @@ public class Client {
 	public int port;
 	public MessageWithIp msgIp;
 	public Board myboard;
+	public int pair_id;
 	
 	public Client() throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException
 	{	
@@ -82,6 +84,7 @@ public class Client {
 						server.sender.sendMsg(confirm);						
 						status = 1;
 						break;
+						//wait for cid
 					case 1:
 						
 						JoinOutfitsMsg ob;
@@ -91,7 +94,7 @@ public class Client {
 						outfit = ob.yourOutfits;
 						joinmsg = (JoinOutfitsMsg)ob;
 						cid = outfit.myId;
-						int pair_id = ob.getClientId();
+						pair_id = ob.getClientId();
 						int pair_port = joinmsg.myPort;
 						if(pair_port <0){
 							server.sender.sendMsg(confirm);
@@ -109,6 +112,7 @@ public class Client {
 						}
 						status = 2;
 						break;
+						//wait for start or other commands
 					case 2:			
 //						MessageWithIp msgIp2;						
 						msgIp = Receiver.getNextMessageWithIp();
@@ -120,6 +124,7 @@ public class Client {
 						else 
 							status = 4;
 						break;
+						//start
 					case 3:
 						RegularNextClockMsg clock = (RegularNextClockMsg)msgIp.extracMessage();
 						myboard = new Board(outfit.myBoard.height,outfit.myBoard.width);
@@ -137,15 +142,32 @@ public class Client {
 						server.sender.sendMsg(myboard);
 //						status = 3;
 						break;
+						// split
 					case 4:
 						JoinSplitMsg joinsplitmsg = (JoinSplitMsg)msgIp.extracMessage();
 						List<Board> board;
-						
-						myboard = verticalCut(myboard);
+						if (joinsplitmsg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
+						{
+							board = BoardOperation.VerticalCut(myboard);
+						}
+						else{
+							board = BoardOperation.HorizontalCut(myboard);
+						}
+							
+						myboard = board.get(0);
 						MessageSender Sender3 = new MessageSender(joinsplitmsg.newcomerIp, joinsplitmsg.newcomerPort);
 						comrade[joinsplitmsg.newcomerId] = new Comrade(joinsplitmsg.newcomerId, Sender3);
-						comrade[joinsplitmsg.newcomerId].sender.sendMsg(new JoinOutfitsMsg(cid, port, ));
+						Outfits pair_outfit = new Outfits(pair_id, outfit.nextClock, outfit.top, outfit.left, myboard.height, myboard.width);
 						
+						JoinOutfitsMsg JOM = new JoinOutfitsMsg(cid, port, pair_outfit);
+						comrade[joinsplitmsg.newcomerId].sender.sendMsg(JOM);
+						status = 5;
+						break;
+					//wait for pair's confirm
+					case 5:
+						msgIp = Receiver.getNextMessageWithIp();
+						server.sender.sendMsg(confirm);
+						status = 2;
 						break;
 //					case 0:
 //						String pair_ip = (String)Receiver.getNextMessageWithIp().extracMessage();
