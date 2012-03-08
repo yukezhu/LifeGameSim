@@ -41,6 +41,7 @@ public class Server{
 		frame.setSize(480, 480);
 		//AutomataMsg auto = new AutomataMsg(10, 10);
 		Board b = new Board(10, 10);
+		BoardOperation.Randomize(b,20);
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
 		frame.setContentPane(panel);
@@ -85,8 +86,13 @@ public class Server{
 						//send you a start
 						for (Comrade var : regedClientSender) {
 							var.sender.sendMsg(new RegularNextClockMsg(nextClock));
+							waiting4confirm++;
 						}
+						status = 3;
 						break;
+					//waiting for the respond for nextClockMsg	
+					case 3:
+						
 						
 					case -1:
 						client1_ip = m.getIp();
@@ -107,7 +113,7 @@ public class Server{
 						Sender2.sendMsg(client1_ip);
 						status = 3;
 						break;
-					case 3:
+					case -4:
 						if(!m.getIp().equals(client2_ip))
 							System.out.println("Error!");
 						System.out.println("before");
@@ -221,6 +227,16 @@ public class Server{
 			waiting4confirm++;
 			System.out.println("register a new client");
 		}
+	}
+	
+	protected void gandleNewBoard(MessageWithIp m, Board bigBoard, int nextStatus){
+		waiting4confirm--;
+		System.out.println("getting a result");
+		
+		bigBoard = (Board)m.extracMessage();
+		
+		if(waiting4confirm==0)
+			status = nextStatus;
 	}
 	
 	//getting a new confirm message, if there is no waiting confirm, go to nextStatus
