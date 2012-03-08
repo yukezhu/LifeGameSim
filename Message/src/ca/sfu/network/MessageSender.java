@@ -45,4 +45,13 @@ public class MessageSender{
 		out.close();
 		socketChannel.write(bb);
 	}
+	
+	public boolean isOpen() {
+		return socketChannel.isOpen();
+	}
+	
+	public void close() throws IOException {
+		selector.close();
+		socketChannel.close();
+	}
 }
