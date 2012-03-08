@@ -49,7 +49,6 @@ public class Server{
 		System.out.println("UI");
 		
 		MessageWithIp m;
-		boolean bl;
 		
 		while(true) {
 			if(!Receiver.isEmpty()) {
@@ -65,15 +64,23 @@ public class Server{
 					//waiting for confirm from first client
 					//send it the outfit
 					case 1:
-						bl = handleNewAdding(m,1); //!every status, handle an unexpected new adding message first
-						if(bl)
+						if(handleNewAdding(m,1)) //!every status, handle an unexpected new adding message first
 							break; // if it is a new adding request, go to status 1 to wait the confirm msg again
 						
-						handleConfirm(m,0);
+						handleConfirm(m,2); //expect only one confirm message
+						
 						//send the board
-						Outfits o = new Outfits(0,nextClock,0,0,b);
-						regedClientSender.get(0).sender.sendMsg(o);
+						regedClientSender.get(0).sender.sendMsg(new JoinOutfitsMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
+						waiting4confirm++;
+						status = 2;
 						break;
+					case 2:
+						if(handleNewAdding(m,2))
+							break;
+						
+						handleConfirm(m,3); //expect only one message responding for JoinOutfitsMsg
+						//send you a start
+						
 					case -1:
 						client1_ip = m.getIp();
 						Sender1 = new MessageSender(client1_ip, LISTEN_PORT);
@@ -87,7 +94,7 @@ public class Server{
 						Sender1.sendMsg(client2_ip);
 						status = 2;
 						break;
-					case 2:
+					case -3:
 						if(!m.getIp().equals(client1_ip))
 							System.out.println("Error!");
 						Sender2.sendMsg(client1_ip);
