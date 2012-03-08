@@ -92,7 +92,7 @@ public class Server{
 						break;
 					//waiting for the respond for nextClockMsg	
 					case 3:
-						handleConfirm(m,3); //expect confirms from all clients
+						
 						
 					case -1:
 						client1_ip = m.getIp();
@@ -227,6 +227,16 @@ public class Server{
 			waiting4confirm++;
 			System.out.println("register a new client");
 		}
+	}
+	
+	protected void gandleNewBoard(MessageWithIp m, Board bigBoard, int nextStatus){
+		waiting4confirm--;
+		System.out.println("getting a result");
+		
+		bigBoard = (Board)m.extracMessage();
+		
+		if(waiting4confirm==0)
+			status = nextStatus;
 	}
 	
 	//getting a new confirm message, if there is no waiting confirm, go to nextStatus
