@@ -1,7 +1,6 @@
 package ca.sfu.cmpt431.facility;
 
 import java.util.Random;
-import ca.sfu.cmpt431.facility.Board;
 
 public class BoardOperation {
 
