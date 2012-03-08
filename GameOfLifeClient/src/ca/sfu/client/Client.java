@@ -7,6 +7,7 @@ import java.util.Random;
 import ca.sfu.cmpt431.facility.Comrade;
 import ca.sfu.cmpt431.facility.Outfits;
 import ca.sfu.cmpt431.message.Message;
+import ca.sfu.cmpt431.message.MessageCodeDictionary;
 import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.regular.ConfirmMsg;
@@ -52,8 +53,8 @@ public class Client {
 		}
 		comrade1.sender = new MessageSender("142.58.35.71", SERVER_PORT);
 		JoinRequestMsg Request = new JoinRequestMsg(port);
-//		comrade1.sender.sendMsg(confirm);
 		comrade1.sender.sendMsg(Request);
+//		regedClientSender.get(0).sender.sendMsg(Request);
 		status = 0;
 	}
 	
@@ -71,11 +72,11 @@ public class Client {
 						break;
 					case 1:
 						MessageWithIp msgIp;
-						Message ob;
+						JoinOutfitsMsg ob;
 						JoinOutfitsMsg joinmsg;
 						msgIp = Receiver.getNextMessageWithIp();
-						ob = (Message)Receiver.getNextMessageWithIp().extracMessage();
-						outfit = (Outfits)msgIp.extracMessage();
+						ob = (JoinOutfitsMsg)msgIp.extracMessage();
+						outfit = ob.getMyOutFits();
 						joinmsg = (JoinOutfitsMsg)ob;
 						cid = outfit.myId;
 						int pair_id = ob.getClientId();
@@ -141,7 +142,50 @@ public class Client {
 		}
 		
 	}
-		
+//	//store all the adding request into an array
+//	protected boolean handleNewAdding(MessageWithIp m, int nextStatus) throws IOException{
+//		//check if m is a new adding request message
+//		Message msg = (Message) m.extracMessage();
+//		if(msg.getMessageCode()==MessageCodeDictionary.JOIN_REQUEST){
+//			JoinRequestMsg join = (JoinRequestMsg)m.extracMessage();
+//			newClientSender.add(new MessageSender(m.getIp(), join.getClientPort()));
+//			System.out.println("adding new to pending");
+//			//if it is a new adding request, we need to go to nextStatus
+//			//most time it should be the same status
+//			status = nextStatus;
+//			return true;
+//		}
+//		return false;
+//	}
+//	
+//	//deal with the pending adding request
+//	//manage the heap
+//	protected void handlePending() throws IOException{
+//		while(!newClientSender.isEmpty()){
+//			int cid = regedClientSender.size();
+//			//manage the heap
+//			if(cid!=0){ //not the first client
+//				Comrade c = regedClientSender.get(0); //get it down one level
+//				regedClientSender.remove(0);
+//				regedClientSender.add(c);
+//			}
+//			regedClientSender.add(new Comrade(cid, newClientSender.get(0)));
+//			
+//			//remove the pending one
+//			newClientSender.remove(0);
+//			regedClientSender.get(cid).sender.sendMsg(new ConfirmMsg(-1));
+//			waiting4confirm++;
+//			System.out.println("register a new client");
+//		}
+//	}
+//	
+//	//getting a new confirm message, if there is no waiting confirm, go to nextStatus
+//	protected void handleConfirm(MessageWithIp m, int nextStatus){
+//		waiting4confirm--;
+//		System.out.println("getting a confirm");
+//		if(waiting4confirm==0)
+//			status = nextStatus;
+//	}	
 }
 
 
