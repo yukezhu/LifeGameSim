@@ -122,5 +122,11 @@ public class BoardOperation {
 		}
 	}
 
+	public static void merge(Board bigBoard, Board smallBoard, int top, int left){
+		for(int i=top; i<top+smallBoard.height; i++)
+			for(int j=left; j<left+smallBoard.width; j++){
+				bigBoard.bitmap[i][j]=smallBoard.bitmap[i-top][j-left];
+			}
+	}
 
 }

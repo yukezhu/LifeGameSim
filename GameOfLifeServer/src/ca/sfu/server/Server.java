@@ -247,7 +247,8 @@ public class Server{
 		if(waiting4confirm==0)
 			status = nextStatus;
 		
-		b = (Board)m.extracMessage();
+		BoardOperation.merge(b, (Board)m.extracMessage(), 0, 0);
+//		b = (Board)m.extracMessage();
 	}
 	
 	//getting a new confirm message, if there is no waiting confirm, go to nextStatus
