@@ -1,5 +1,6 @@
 package ca.sfu.client;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Random;
@@ -17,7 +18,7 @@ import ca.sfu.cmpt431.message.join.JoinSplitMsg;
 import ca.sfu.cmpt431.message.regular.RegularBorderMsg;
 import ca.sfu.cmpt431.message.regular.RegularConfirmMsg;
 import ca.sfu.cmpt431.message.regular.RegularNextClockMsg;
-import ca.sfu.cmpt431.message.regular.RegularUpdateNeighbour;
+import ca.sfu.cmpt431.message.regular.RegularUpdateNeighbourMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
 import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
@@ -120,7 +121,7 @@ public class Client {
 								MessageSender Sender = new MessageSender(outfit.neighbour[i]., pair_port);
 								comrade[pair_id] = new Comrade(pair_id, Sender);
 								
-								RegularUpdateNeighbour neighbor = new RegularUpdateNeighbour(cid, )
+								RegularUpdateNeighbour neighbor = new RegularUpdateNeighbour(cid, , port, InetAddress.getLocalHost().getHostAddress())
 								comrade[pair_id].sender.sendMsg(neighbor);
 																
 						}
@@ -145,26 +146,28 @@ public class Client {
 						else 
 							status = 4;
 						break;
+						//update neighbor
 					case -2:
 						msgIp = Receiver.getNextMessageWithIp();
-						RegularUpdateNeighbour neighbor = (RegularUpdateNeighbour)msgIp.extracMessage();
+						RegularUpdateNeighbourMsg neighbormsg = (RegularUpdateNeighbourMsg)msgIp.extracMessage();
 						int i;
 						int j;
-						for(j = 0;j<neighbor.pos.length;j++)
+						for(j = 0;j<neighbormsg.pos.length;j++)
 						{
+							//?
 							for(i=0;i<12;i++)
 							{
-								if(i == neighbor.pos[j])
+								if(i == neighbormsg.pos[j] && )
 								{
-									outfit.neighbour[i].id = neighbor.getClientId();
+									outfit.neighbour.get(i).comrade.id = neighbormsg.getClientId();
 								}
 							}
 						}
-						String neighbor_ip;
-						int neighbor_port;
-						MessageSender Sender = new MessageSender(neighbor_ip., neighbor_port);
-						comrade[neighbor.getClientId()] = new Comrade(neighbor.getClientId(), Sender);
-						comrade[neighbor.getClientId()].sender.sendMsg(confirm);
+						String neighbor_ip = neighbormsg.ip;
+						int neighbor_port = neighbormsg.port;
+						MessageSender Sender = new MessageSender(neighbor_ip, neighbor_port);
+						comrade[neighbormsg.getClientId()] = new Comrade(neighbormsg.getClientId(), Sender);
+						comrade[neighbormsg.getClientId()].sender.sendMsg(confirm);
 						break;
 						//start
 					case 3:
@@ -274,6 +277,7 @@ public class Client {
 		
 	}
 
+	
 }
 
 
