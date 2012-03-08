@@ -25,16 +25,16 @@ public class BoardOperation {
 
 		for(int i=1; i <= height; i++)
 			for(int j=1; j <= width; j++)
-				prebitmap[i][j] = b.bitmap[i][j];
+				prebitmap[i][j] = b.bitmap[i-1][j-1];
 		for(int j=1; j <= width; j++)
 		{
-			prebitmap[0][j] = up[j];
-			prebitmap[height+1][j] = down[j];
+			prebitmap[0][j] = up[j-1];
+			prebitmap[height+1][j] = down[j-1];
 		}
 		for(int i=1; i <= height; i++)
 		{
-			prebitmap[i][0] = left[i];
-			prebitmap[i][width+1] = right[i];
+			prebitmap[i][0] = left[i-1];
+			prebitmap[i][width+1] = right[i-1];
 		}
 		prebitmap[0][0] = upperLeft;
 		prebitmap[0][width+1] = upperRight;
@@ -95,9 +95,9 @@ public class BoardOperation {
 			for(int j=0; j<b.width; j++)
 			{
 				if(b.bitmap[i][j])
-					System.out.print(' ');
-				else
 					System.out.print('@');
+				else
+					System.out.print(' ');
 			}
 			System.out.println();
 		}
@@ -106,8 +106,20 @@ public class BoardOperation {
 	public static void main(String args[])
 	{
 		Board b = new Board(5, 5);
-		b = BoardOperation.Randomize(b, 0.4);
+		b = BoardOperation.Randomize(b, 0.3);
 		BoardOperation.Print(b);
+		boolean[] up = new boolean[5];
+		boolean[] down = new boolean[5];
+		boolean[] left = new boolean[5];
+		boolean[] right = new boolean[5];
+		int n = 0;
+		while(n < 10)
+		{
+			b = BoardOperation.NextMoment(b, up, down, left, right, false, false, false, false);
+			BoardOperation.Print(b);
+			n ++;
+			System.out.println();
+		}
 	}
 
 
