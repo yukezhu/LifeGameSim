@@ -22,8 +22,8 @@ public class Server{
 	private MessageSender Sender2;
 	private String client1_ip;
 	private String client2_ip;
-	private ArrayList<MessageSender> newClientSender = new ArrayList();
-	private ArrayList<Comrade>  regedClientSender = new ArrayList();
+	private ArrayList<MessageSender> newClientSender = new ArrayList<MessageSender>();
+	private ArrayList<Comrade>  regedClientSender = new ArrayList<Comrade>();
 	private int waiting4confirm = 0;
 	private int nextClock = 0;
 	
@@ -217,7 +217,7 @@ public class Server{
 			
 			//remove the pending one
 			newClientSender.remove(0);
-			regedClientSender.get(cid).sender.sendMsg(new ConfirmMsg(-1));
+			regedClientSender.get(cid).sender.sendMsg(new RegularConfirmMsg(-1));
 			waiting4confirm++;
 			System.out.println("register a new client");
 		}
