@@ -11,7 +11,7 @@ public class RegularBoardReturnMsg extends Message{
 	public Board board;
 	
 	public RegularBoardReturnMsg(int cid, Board newBoard) {
-		super(cid, MessageCodeDictionary.REGULAR_BOARDRET);
+		super(cid, MessageCodeDictionary.REGULAR_BOARD_RETURN);
 		board = newBoard;
 	}
 	
