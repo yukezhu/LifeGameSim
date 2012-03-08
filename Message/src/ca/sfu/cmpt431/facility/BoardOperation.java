@@ -24,6 +24,32 @@ public class BoardOperation {
 	public static Board NextMoment(Board b, boolean[] up, boolean[] down, boolean[] left, boolean[] right, boolean upperLeft, boolean upperRight, boolean lowerLeft, boolean lowerRight) throws IllegalArgumentException
 	{
 		IllegalArgumentException exception = new java.lang.IllegalArgumentException();
+		
+		if(left == null)
+		{
+			left = new boolean[b.height];
+			for(int i=0; i<b.height; i++)
+				left[i] = false;
+		}
+		if(right == null)
+		{
+			right = new boolean[b.height];
+			for(int i=0; i<b.height; i++)
+				right[i] = false;
+		}
+		if(up == null)
+		{
+			up = new boolean[b.width];
+			for(int i=0; i<b.width; i++)
+				up[i] = false;
+		}
+		if(down == null)
+		{
+			down = new boolean[b.width];
+			for(int i=0; i<b.width; i++)
+				down[i] = false;
+		}
+		
 		if(up.length != b.width || down.length != b.width)
 		{
 			System.err.println("Up & down border lengths fail to match the board.");
