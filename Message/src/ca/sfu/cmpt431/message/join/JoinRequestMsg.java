@@ -7,15 +7,11 @@ public class JoinRequestMsg extends Message {
 
 	private static final long serialVersionUID = 1L;
 	
-	private int clientPort;
+	public int clientPort;
 	
 	public JoinRequestMsg(int port) {
 		super(MessageCodeDictionary.ID_INVALID, MessageCodeDictionary.JOIN_REQUEST);
 		clientPort = port;
-	}
-	
-	public int getClientPort() {
-		return clientPort;
 	}
 
 }

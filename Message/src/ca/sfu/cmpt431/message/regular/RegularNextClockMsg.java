@@ -7,15 +7,11 @@ public class RegularNextClockMsg extends Message {
 
 	private static final long serialVersionUID = 1L;
 	
-	private int clockNum;
+	public int clockNum;
 	
 	public RegularNextClockMsg(int newClock) {
 		super(MessageCodeDictionary.ID_SERVER, MessageCodeDictionary.REGULAR_NEXTCLOCK);
 		clockNum = newClock;
-	}
-	
-	public int getClockNum() {
-		return clockNum;
 	}
 
 }
