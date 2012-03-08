@@ -6,8 +6,6 @@ import java.util.ArrayList;
 public class Outfits implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-
-	public static int NUM_NEIBOURS;
 	
 	public int myId;
 	public int nextClock;
