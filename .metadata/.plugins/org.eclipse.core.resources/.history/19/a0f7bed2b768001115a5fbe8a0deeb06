@@ -1,11 +1,7 @@
 package ca.sfu.cmpt431.facility;
 
-import java.io.Serializable;
-
-public class Outfits implements Serializable {
+public class Outfits extends Serializable{
 	
-	private static final long serialVersionUID = 1L;
-
 	public static int NUM_NEIBOURS;
 	
 	public int myId;
