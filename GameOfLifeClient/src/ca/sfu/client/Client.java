@@ -5,12 +5,14 @@ import java.util.Random;
 
 import ca.sfu.cmpt431.facility.Comrade;
 import ca.sfu.cmpt431.facility.Outfits;
+import ca.sfu.cmpt431.message.Message;
 import ca.sfu.cmpt431.message.join.JoinConfirmMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.regular.ConfirmMsg;
 import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
+import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
 public class Client {
 	
 	protected static final int SERVER_PORT = 6560;
@@ -59,23 +61,29 @@ public class Client {
 				System.out.println(status);
 				switch(status) {
 					case 0:	
-						cid = ((JoinConfirmMsg)Receiver.getNextMessageWithIp().extracMessage()).getMyId();					
+						Receiver.getNextMessageWithIp().extracMessage();
 						comrade1.sender.sendMsg(confirm);						
 						status = 1;
 						break;
 					case 1:
-						outfit = (Outfits)Receiver.getNextMessageWithIp().extracMessage();
-						int pair_id = ;
-						if(pair_id == -1){
+						MessageWithIp msgIp;
+						Message ob;
+						msgIp = Receiver.getNextMessageWithIp();
+						
+						ob = (Message)Receiver.getNextMessageWithIp().extracMessage();
+						outfit = (Outfits)ob;
+						cid = outfit.myId;
+						int pair_id = ob.getClientId();
+						int pair_port =
+						if(pair_port <0){
 							comrade1.sender.sendMsg(confirm);
 						}
 						else{
-							String pair_ip = outfit.
+							String pair_ip = msgIp.getIp().substring(1);
+							 
 							Comrade comrade2 = new Comrade(pair_id, Sender2);
-							comrade2.sender = new MessageSender(pair_ip, );							
+							comrade2.sender = new MessageSender(pair_ip, pair_port);							
 							comrade2.sender.sendMsg(confirm);
-						}
-							
 						}
 						status = 2;
 						break;
