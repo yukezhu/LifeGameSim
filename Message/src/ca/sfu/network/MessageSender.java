@@ -50,8 +50,14 @@ public class MessageSender{
 		return socketChannel.isOpen();
 	}
 	
-	public void close() throws IOException {
-		selector.close();
-		socketChannel.close();
+	public void close() {
+		try {
+			selector.close();
+		} catch (IOException e) {
+		}
+		try {
+			socketChannel.close();
+		} catch (IOException e) {
+		}
 	}
 }

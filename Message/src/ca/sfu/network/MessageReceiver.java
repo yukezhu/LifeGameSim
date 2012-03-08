@@ -95,9 +95,15 @@ public class MessageReceiver {
 		return listenerChannel.isOpen();
 	}
 	
-	public void close() throws IOException {
-		selector.close();
-		listenerChannel.close();
+	public void close() {
+		try {
+			selector.close();
+		} catch (IOException e) {
+		}
+		try {
+			listenerChannel.close();
+		} catch (IOException e) {
+		}
 	}
 	
 	private void handleAccept(SelectionKey key) throws IOException {
