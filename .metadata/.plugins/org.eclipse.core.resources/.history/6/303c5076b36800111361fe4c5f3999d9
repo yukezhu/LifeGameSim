@@ -19,9 +19,5 @@ public class JoinOutfitsMsg extends Message {
 	public Outfits getMyOutFits() {
 		return yourOutfits;
 	}
-	
-	public int getYourPort() {
-		return myPort;
-	}
 
 }
