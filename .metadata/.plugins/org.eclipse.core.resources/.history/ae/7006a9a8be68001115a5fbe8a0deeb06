@@ -14,9 +14,9 @@ public class MessageSender{
 
 	SocketChannel socketChannel;
 
-	public String hostIp;
+	private String hostIp;
 
-	public int hostListenningPort;
+	private int hostListenningPort;
 
 	public static void main(String[] args) throws IOException{
 		MessageSender client = new MessageSender("142.58.35.130",1990);
