@@ -96,7 +96,6 @@ public class BoardCut {
 				System.out.print(list.get(1).bitmap[i][j]);
 			System.out.println();
 		}
-
 	}
 
 }
