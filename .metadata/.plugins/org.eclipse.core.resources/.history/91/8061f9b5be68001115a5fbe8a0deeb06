@@ -11,7 +11,7 @@ public class Comrade  implements Serializable{
 	public int id;
 	public MessageSender sender;
 	
-	public Comrade(int id, MessageSender sender) {
+	public Comrade(int id, , MessageSender sender) {
 		this.id = id;
 		this.sender = sender;
 	}

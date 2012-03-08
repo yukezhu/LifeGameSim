@@ -15,7 +15,6 @@ public class MessageSender{
 	SocketChannel socketChannel;
 
 	public String hostIp;
-
 	public int hostListenningPort;
 
 	public static void main(String[] args) throws IOException{
