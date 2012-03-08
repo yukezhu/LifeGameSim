@@ -10,7 +10,7 @@ import ca.sfu.cmpt431.message.Message;
 import ca.sfu.cmpt431.message.MessageCodeDictionary;
 import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
-import ca.sfu.cmpt431.message.regular.ConfirmMsg;
+import ca.sfu.cmpt431.message.regular.RegularConfirmMsg;
 import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
@@ -24,7 +24,7 @@ public class Client {
 	private AutomataMsg auto;
 	private String direction;
 	private int[] border;
-	private ConfirmMsg confirm = new ConfirmMsg(-10);
+	private RegularConfirmMsg confirm = new RegularConfirmMsg(-10);
 	private Outfits outfit;
 //	private ArrayList<MessageSender> newClientSender = new ArrayList();
 //	private ArrayList<Comrade>  regedClientSender = new ArrayList();
