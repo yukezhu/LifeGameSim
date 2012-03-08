@@ -268,7 +268,7 @@ public class Server{
 				c.sender.sendMsg(new JoinSplitMsg(cid, c.sender.hostListenningPort, c.sender.hostIp, mode));
 			}
 			else{
-				regedClientSender.add(new Comrade(cid, newClientSender.get(0)));
+				regedClientSender.add(new Comrade(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));
 				regedClientSender.get(cid).sender.sendMsg(new RegularConfirmMsg(-1));
 			}
 			

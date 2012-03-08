@@ -14,10 +14,9 @@ import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
 
 public class MessageReceiver {
 	
-	private static final int BufferSize = 1024;
+	private static final int BufferSize = 1048576;
 	private static final int QueueSize  = 1024;
 	private static final int TimeOut    = 3000;
-	//private static final int ListenPort = 1978;
 	
 	private Selector selector;
 	private ServerSocketChannel listenerChannel;
@@ -66,7 +65,7 @@ public class MessageReceiver {
 			while(true) {
 				try {
 					if(selector.select(TimeOut) == 0){
-						//System.out.println("Listening.");
+//						System.out.println("Listening.");
 						continue;
 					}
 				} catch (IOException e) {
@@ -92,6 +91,21 @@ public class MessageReceiver {
 		}
 	}
 	
+	public boolean isOpen() {
+		return listenerChannel.isOpen();
+	}
+	
+	public void close() {
+		try {
+			selector.close();
+		} catch (IOException e) {
+		}
+		try {
+			listenerChannel.close();
+		} catch (IOException e) {
+		}
+	}
+	
 	private void handleAccept(SelectionKey key) throws IOException {
 		SocketChannel clientChannel=((ServerSocketChannel)key.channel()).accept();
 		clientChannel.configureBlocking(false);
@@ -107,7 +121,7 @@ public class MessageReceiver {
 		
 		if(bytesRead != -1){
 			buffer.flip();
-			//System.out.println(bytesRead);
+//			System.out.println(bytesRead);
 			ByteArrayInputStream bi = new ByteArrayInputStream(buffer.array());
 			ObjectInputStream oi = new ObjectInputStream(bi);
 			Object msg;
