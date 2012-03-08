@@ -115,7 +115,7 @@ public class MessageReceiver {
 			try {
 				msg = oi.readObject();
 				try {
-					
+//					System.out.println(msg.getClass().toString());
 					msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
 				} catch (InterruptedException e) {
 					e.printStackTrace();

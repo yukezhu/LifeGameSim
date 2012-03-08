@@ -187,8 +187,6 @@ public class Server{
 	protected boolean handleNewAdding(MessageWithIp m, int nextStatus) throws IOException{
 		//check if m is a new adding request message
 		Message msg = (Message) m.extracMessage();
-		if(m.extracMessage()==null)
-			System.out.println("null");
 		if(msg.getMessageCode()==MessageCodeDictionary.JOIN_REQUEST){
 			JoinRequestMsg join = (JoinRequestMsg)m.extracMessage();
 			newClientSender.add(new MessageSender(m.getIp(), join.getClientPort()));
