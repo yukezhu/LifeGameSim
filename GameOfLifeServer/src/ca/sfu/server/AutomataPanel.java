@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import ca.sfu.cmpt431.facility.Board;
-import ca.sfu.message.AutomataMsg;
 
 public class AutomataPanel extends JPanel  {
 	

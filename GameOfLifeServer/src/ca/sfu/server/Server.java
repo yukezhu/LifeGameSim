@@ -8,7 +8,6 @@ import ca.sfu.cmpt431.facility.*;
 import ca.sfu.cmpt431.message.*;
 import ca.sfu.cmpt431.message.join.*;
 import ca.sfu.cmpt431.message.regular.*;
-import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
 import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
