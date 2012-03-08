@@ -1,6 +1,7 @@
 package ca.sfu.client;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import ca.sfu.cmpt431.facility.Comrade;
@@ -24,7 +25,8 @@ public class Client {
 	private int[] border;
 	private ConfirmMsg confirm;
 	private Outfits outfit;
-	
+//	private ArrayList<MessageSender> newClientSender = new ArrayList();
+//	private ArrayList<Comrade>  regedClientSender = new ArrayList();
 
 	public MessageReceiver Receiver; 
 	public MessageSender Sender1;
@@ -68,24 +70,29 @@ public class Client {
 					case 1:
 						MessageWithIp msgIp;
 						Message ob;
+						JoinOutfitsMsg joinmsg;
 						msgIp = Receiver.getNextMessageWithIp();
-						
 						ob = (Message)Receiver.getNextMessageWithIp().extracMessage();
 						outfit = (Outfits)msgIp.extracMessage();
+						joinmsg = (JoinOutfitsMsg)ob;
 						cid = outfit.myId;
 						int pair_id = ob.getClientId();
-						int pair_port = 
+						int pair_port = joinmsg.getYourPort();
 						if(pair_port <0){
 							comrade1.sender.sendMsg(confirm);
+							System.out.println(pair_id);
 						}
 						else{
-							String pair_ip = msgIp.getIp().substring(1);
-							 
+							String pair_ip = msgIp.getIp().substring(1); 
 							Comrade comrade2 = new Comrade(pair_id, Sender2);
 							comrade2.sender = new MessageSender(pair_ip, pair_port);							
 							comrade2.sender.sendMsg(confirm);
 						}
 						status = 2;
+						break;
+					case 2:
+						String start = (String)Receiver.getNextMessageWithIp().extracMessage();
+						
 						break;
 //					case 0:
 //						String pair_ip = (String)Receiver.getNextMessageWithIp().extracMessage();
