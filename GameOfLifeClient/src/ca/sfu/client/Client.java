@@ -1,15 +1,12 @@
 package ca.sfu.client;
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Random;
 
 import ca.sfu.cmpt431.facility.Board;
 import ca.sfu.cmpt431.facility.BoardOperation;
 import ca.sfu.cmpt431.facility.Comrade;
 import ca.sfu.cmpt431.facility.Outfits;
-import ca.sfu.cmpt431.message.Message;
-import ca.sfu.cmpt431.message.MessageCodeDictionary;
 import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.regular.RegularConfirmMsg;
