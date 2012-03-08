@@ -6,9 +6,10 @@ public class MessageCodeDictionary {
 	public final static int ID_INVALID = -2;
 
 	public final static int REGULAR_NEXTCLOCK = 1;
-	public final static int REGULAR_REQUEST = 2;
-	public final static int REGULAR_BOARDRET = 4;
-	public final static int REGULAR_UPDATENEI = 5;
+	public final static int REGULAR_CONFIRM = 2;
+	public final static int REGULAR_BORDER_EXCHANGE = 3;
+	public final static int REGULAR_BOARD_RETURN = 4;
+	public final static int REGULAR_UPDATE_NEIGHBOUR = 5;
 	
 	public final static int JOIN_REQUEST = 41;
 	public final static int JOIN_OUTFITS = 42;

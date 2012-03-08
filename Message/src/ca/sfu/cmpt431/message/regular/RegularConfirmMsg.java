@@ -8,7 +8,7 @@ public class RegularConfirmMsg extends Message {
 	private static final long serialVersionUID = 1L;
 	
 	public RegularConfirmMsg(int cid) {
-		super(cid, MessageCodeDictionary.REGULAR_REQUEST);
+		super(cid, MessageCodeDictionary.REGULAR_CONFIRM);
 	}
 
 }

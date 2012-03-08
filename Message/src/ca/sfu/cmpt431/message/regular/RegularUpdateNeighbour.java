@@ -7,10 +7,11 @@ public class RegularUpdateNeighbour extends Message {
 	
 	private static final long serialVersionUID = 1L;
 	
-//	private 
+	public int [] pos;
 
-	public RegularUpdateNeighbour(int cid, int postion) {
-		super(cid, MessageCodeDictionary.REGULAR_UPDATENEI);
+	public RegularUpdateNeighbour(int cid, int [] pos) {
+		super(cid, MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR);
+		this.pos = pos;
 	}
 
 }
