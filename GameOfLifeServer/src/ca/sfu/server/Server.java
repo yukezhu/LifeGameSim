@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import ca.sfu.cmpt431.facility.*;
 import ca.sfu.cmpt431.message.*;
 import ca.sfu.cmpt431.message.join.*;
+import ca.sfu.cmpt431.message.regular.*;
 import ca.sfu.message.AutomataMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
@@ -38,9 +39,10 @@ public class Server{
 		// UI
 		JFrame frame = new JFrame();
 		frame.setSize(480, 480);
-		AutomataMsg auto = new AutomataMsg(10, 10);
+		//AutomataMsg auto = new AutomataMsg(10, 10);
+		Board b = new Board(10, 10);
 		AutomataPanel panel = new AutomataPanel();
-		panel.setAutomata(auto);
+		panel.setBoard(b);
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 		
@@ -63,6 +65,9 @@ public class Server{
 					//send it the outfit
 					case 1:
 						handleConfirm(m, 0);
+						//send the board
+						Outfits o = new Outfits(0,nextClock,0,0,10,10);
+						regedClientSender.get(0).sender.sendMsg(o);
 						break;
 					case -1:
 						client1_ip = m.getIp();
@@ -193,7 +198,7 @@ public class Server{
 			
 			//remove the pending one
 			newClientSender.remove(0);
-			regedClientSender.get(cid).sender.sendMsg(new JoinConfirmMsg(cid));
+			regedClientSender.get(cid).sender.sendMsg(new ConfirmMsg(-1));
 			waiting4confirm++;
 			System.out.println("register a new client");
 		}
