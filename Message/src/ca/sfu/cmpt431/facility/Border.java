@@ -8,6 +8,10 @@ public class Border implements Serializable{
 	
 	public boolean [] bits;
 	
+	public Border(){
+		bits = null;
+	}
+	
 	public Border(int length) {
 		bits = new boolean[length];
 	}

@@ -2,6 +2,7 @@ package ca.sfu.client;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -176,7 +177,8 @@ public class Client {
 					case MessageCodeDictionary.UPDATE_NEIGHBOR_STATUS:
 						msgIp = Receiver.getNextMessageWithIp();
 						RegularUpdateNeighbourMsg neighbormsg = (RegularUpdateNeighbourMsg)msgIp.extracMessage();
-
+						
+						j = 0;
 						for(i=0;i<12;i++)
 						{
 							while(outfit.neighbour.get(j) != null){
@@ -205,8 +207,8 @@ public class Client {
 						Border sendborder;						
 						for(j = 0; j < neighborCount; j++)
 						{
-							
-								sendborder = getborder(outfit.neighbour.get(j).position);
+								sendborder = new Border();
+								sendborder.bits = getborder(outfit.neighbour.get(j).position);
 								RegularBorderMsg sendbordermsg = new RegularBorderMsg(cid, sendborder);	
 								outfit.neighbour.get(j).comrade.sender.sendMsg(myboard);
 
@@ -219,7 +221,7 @@ public class Client {
 						msg_type = msg.getMessageCode();
 						int confirmCount = 0;
 						int borderexchangeCount = 0;
-						int[] posRecord;
+						int[] posRecord = null;
 						if(msg_type == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 						{
 							RegularBorderMsg neighborbordermsg = (RegularBorderMsg)msgIp.extracMessage();
@@ -227,10 +229,10 @@ public class Client {
 							for(j = 0; j<outfit.neighbour.size(); j++)
 							{
 								if(neighborbordermsg.getClientId() == outfit.neighbour.get(j).comrade.id)
-									posRecord = outfit.neighbour.get(i).position;
+									posRecord = outfit.neighbour.get(j).position;
 									
 							}
-							mergeBorder(neighborbordermsg.boarder, posRecord);
+							mergeBorder(neighborbordermsg.boarder.bits, posRecord);
 							
 						}
 						else if (msg_type == MessageCodeDictionary.REGULAR_CONFIRM)
@@ -283,7 +285,192 @@ public class Client {
 		}
 		
 	}
+	
+	protected boolean[] getborder(int[] array){
+		
+		Board b = myboard;
+		ArrayList<Boolean> al = new ArrayList<Boolean>();
+		
+		int j;
+		for(int i=0; i<array.length; i++){
+			int a = array[i];
+			switch(a+1){
+			case 1:
+				if(al.size()!=0)
+					break;
+				al.add(b.bitmap[0][0]);
+				break;
+			case 2:
+				j = 0;
+				//if it is 1 already
+				if(al.size() != 0)
+					j = 1;
+				for(; j<=b.width/2; j++)
+					al.add(b.bitmap[0][j]);
+				break;
+			case 3:
+				//if it is 2 already
+				j = b.width/2-1;
+				if(al.size() != 0)
+					j=j+2;
+				
+				for(; j<b.width; j++)
+					al.add(b.bitmap[0][j]);
+				break;
+			case 4:
+				//if it is 3 already
+				if(al.size() != 0)
+					break;
+				al.add(b.bitmap[0][b.width-1]);
+				break;
+			case 5:
+				j = 0;
+				//if it is 4 already
+				if(al.size()!=0)
+					j=1;
+				for(; j<=b.height/2; j++)
+					al.add(b.bitmap[j][b.width-1]);
+				break;
+			case 6:
+				j = b.height/2-1;
+				//if it is 5 already
+				if(al.size()!=0)
+					j=j+2;
+				for(; j<b.height; j++)
+					al.add(b.bitmap[j][b.width-1]);
+				break;
+			case 7:
+				//if it is 6 already
+				if(al.size()!=0)
+					break;
+				al.add(b.bitmap[b.height-1][b.width-1]);
+				break;
+			case 8:
+				j = b.width - 1;
+				//if it is 7 already
+				if(al.size()!=0)
+					j--;
+				for(; j>=b.width/2-1; j--)
+					al.add(b.bitmap[b.height-1][j]);
+				break;
+			case 9:
+				j = b.width/2;
+				if(al.size()!=0)
+					j=j-2;
+				for(; j>=0; j--)
+					al.add(b.bitmap[b.height-1][j]);
+				break;
+			case 10:
+				if(al.size()!=0)
+					break;
+				al.add(b.bitmap[b.height-1][0]);
+				break;
+			case 11:
+				j = b.height-1;
+				if(al.size()!=0)
+					j--;
+				for(; j>=b.height/2-1; j--)
+					al.add(b.bitmap[j][0]);
+				break;
+			case 12:
+				j = b.height/2;
+				if(al.size()!=0)
+					j=j-2;
+				for(; j>=0; j--)
+					al.add(b.bitmap[j][0]);
+				break;
+			}
+		}
+		
+		boolean[] a = new boolean[al.size()];
+		for(int k=0; k<a.length; k++){
+			a[k]=(boolean)al.get(k);
+		}
+		
+		return a;
+	}
 
+	protected void mergeBorder(boolean[] aa, int[] array1){
+		ArrayList<Boolean> tmp = new ArrayList<Boolean>();
+		
+		Board b = myboard;
+
+		for(int k=0; k<aa.length; k++)
+			tmp.add(aa[k]);
+		
+		for(int i=0; i<array1.length; i++){
+			if(tmp.size()==0)
+				break;
+			
+			int num = array1[i];
+			switch(num+1){
+			case 1:
+				upperLeft = (boolean) tmp.get(0);
+				tmp.remove(0);
+				break;
+			case 2:
+				for(int p=0; p<b.width/2; p++){
+					up[p] = (boolean)tmp.get(0);
+					tmp.remove(0);
+				}
+				break;
+			case 3:
+				for(int p=b.width/2; p<b.width; p++){
+					up[p] = (boolean)tmp.get(0);
+					tmp.remove(0);
+				}
+				break;
+			case 4:
+				upperRight = (boolean)tmp.get(0);
+				tmp.remove(0);
+				break;
+			case 5:
+				for(int p=0; p<b.height/2; p++){
+					right[p] = (boolean)tmp.get(0);
+					tmp.remove(0);
+				}
+				break;
+			case 6:
+				for(int p=b.height/2; p<b.height; p++){
+					right[p] = (boolean)tmp.get(0);
+					tmp.remove(0);
+				}
+				break;
+			case 7:
+				lowerRight = (boolean)tmp.get(0);
+				tmp.remove(0);
+				break;
+			case 8:
+				for(int p=b.width-1; p>=b.width/2; p--){
+					down[p] = (boolean)tmp.get(0);
+					tmp.remove(0);
+				}
+				break;
+			case 9:
+				for(int p=b.width/2-1; p>=0; p--){
+					down[p] = (boolean)tmp.get(0);
+					tmp.remove(0);
+				}
+				break;
+			case 10:
+				lowerLeft = (boolean)tmp.get(0);
+				tmp.remove(0);
+				break;
+			case 11:
+				for(int p=b.height-1; p>=b.height/2; p--){
+					left[p] = (boolean)tmp.get(0);
+					tmp.remove(0);
+				}
+				break;
+			case 12:
+				for(int p=b.height/2-1; p>=0; p--){
+					left[p] = (boolean)tmp.get(0);
+					tmp.remove(0);
+				}
+				break;
+			}
+		}
+	}
 	
 }
 
