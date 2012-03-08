@@ -6,7 +6,7 @@ import java.util.Random;
 import ca.sfu.cmpt431.facility.Comrade;
 import ca.sfu.cmpt431.facility.Outfits;
 import ca.sfu.cmpt431.message.Message;
-import ca.sfu.cmpt431.message.join.JoinConfirmMsg;
+import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.regular.ConfirmMsg;
 import ca.sfu.message.AutomataMsg;
@@ -71,10 +71,10 @@ public class Client {
 						msgIp = Receiver.getNextMessageWithIp();
 						
 						ob = (Message)Receiver.getNextMessageWithIp().extracMessage();
-						outfit = (Outfits)ob;
+						outfit = (Outfits)msgIp.extracMessage();
 						cid = outfit.myId;
 						int pair_id = ob.getClientId();
-						int pair_port =
+						int pair_port = 
 						if(pair_port <0){
 							comrade1.sender.sendMsg(confirm);
 						}
