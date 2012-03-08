@@ -4,6 +4,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import ca.sfu.cmpt431.facility.Board;
+import ca.sfu.cmpt431.facility.BoardOperation;
 import ca.sfu.cmpt431.facility.Comrade;
 import ca.sfu.cmpt431.facility.Outfits;
 import ca.sfu.cmpt431.message.Message;
@@ -94,8 +96,11 @@ public class Client {
 						status = 2;
 						break;
 					case 2:
-						String start = (String)Receiver.getNextMessageWithIp().extracMessage();
-						
+						int clock = (Integer)Receiver.getNextMessageWithIp().extracMessage();
+						Board myboard = new Board(outfit.myBoard.height,outfit.myBoard.width);
+						int down = outfit.top+outfit.myBoard.height;
+						int right = outfit.left+outfit.myBoard.width;
+						myboard = BoardOperation.NextMoment(outfit.myBoard, outfit.top, down, outfit.left, right); 
 						break;
 //					case 0:
 //						String pair_ip = (String)Receiver.getNextMessageWithIp().extracMessage();
