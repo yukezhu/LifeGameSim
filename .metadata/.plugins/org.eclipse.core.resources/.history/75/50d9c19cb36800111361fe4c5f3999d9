@@ -10,10 +10,10 @@ public class JoinOutfitsMsg extends Message {
 	private int myPort;
 	private Outfits yourOutfits;
 	
-	public JoinOutfitsMsg(int cid, int myPort, Outfits yourOutfits) {
+	public JoinOutfitsMsg(int cid, int mp, Outfits yo) {
 		super(cid, MessageCodeDictionary.JOIN_OUTFITS);
-		this.myPort  = myPort;
-		this.yourOutfits = yourOutfits;
+		myPort  = mp;
+		yourOutfits = yo;
 	}
 	
 	public Outfits getMyOutFits() {
