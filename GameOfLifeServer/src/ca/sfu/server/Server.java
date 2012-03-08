@@ -54,6 +54,7 @@ public class Server{
 			if(!Receiver.isEmpty()) {
 				System.out.println(status);
 				m = Receiver.getNextMessageWithIp();
+				
 				switch(status) {
 					//waiting for first client
 					case 0:
@@ -74,12 +75,15 @@ public class Server{
 						waiting4confirm++;
 						status = 2;
 						break;
+					//wait for the confirm
+					//start a cycle
 					case 2:
 						if(handleNewAdding(m,2))
 							break;
 						
 						handleConfirm(m,3); //expect only one message responding for JoinOutfitsMsg
 						//send you a start
+						break;
 						
 					case -1:
 						client1_ip = m.getIp();
@@ -183,6 +187,8 @@ public class Server{
 	protected boolean handleNewAdding(MessageWithIp m, int nextStatus) throws IOException{
 		//check if m is a new adding request message
 		Message msg = (Message) m.extracMessage();
+		if(m.extracMessage()==null)
+			System.out.println("null");
 		if(msg.getMessageCode()==MessageCodeDictionary.JOIN_REQUEST){
 			JoinRequestMsg join = (JoinRequestMsg)m.extracMessage();
 			newClientSender.add(new MessageSender(m.getIp(), join.getClientPort()));
