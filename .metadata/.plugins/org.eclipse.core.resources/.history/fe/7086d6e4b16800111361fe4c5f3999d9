@@ -23,13 +23,4 @@ public class Outfits {
 		pair = null;
 	}
 	
-	public Outfits(int id, int clk, int t, int l, Board bd) {
-		myId = id;
-		myBoard = bd;
-		neighbour = new Comrade[NUM_NEIBOURS];
-		for(int i = 0; i < NUM_NEIBOURS; i++)
-			neighbour[i] = null;
-		pair = null;
-	}
-	
 }
