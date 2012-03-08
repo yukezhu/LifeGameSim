@@ -198,7 +198,7 @@ public class Server{
 		Message msg = (Message) m.extracMessage();
 		if(msg.getMessageCode()==MessageCodeDictionary.JOIN_REQUEST){
 			JoinRequestMsg join = (JoinRequestMsg)m.extracMessage();
-			newClientSender.add(new MessageSender(m.getIp(), join.getClientPort()));
+			newClientSender.add(new MessageSender(m.getIp(), join.clientPort));
 			System.out.println("adding new to pending");
 			//if it is a new adding request, we need to go to nextStatus
 			//most time it should be the same status
