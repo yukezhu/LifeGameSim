@@ -91,6 +91,7 @@ public class Server{
 						status = 3;
 						break;
 					//waiting for the client to send the result back
+					//handle new adding or
 					//restart next cycle
 					case 3:
 						if(handleNewAdding(m,2))
@@ -124,10 +125,14 @@ public class Server{
 						if(waiting4confirm!=0) //still need waiting for confirmation
 							break;
 						
-						//send info to its pair
-						regedClientSender.get(0).sender.sendMsg(new JoinOutfitsMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
-						waiting4confirm++;
-						status = 2;
+						//start
+						if(waiting4confirm==0){
+							for (Comrade var : regedClientSender) {
+								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
+								waiting4confirm++;
+							}
+						}
+						status = 3;
 						break;
 						
 					case -1:
@@ -255,13 +260,16 @@ public class Server{
 				regedClientSender.remove(0);
 				regedClientSender.add(c);
 				//c is the pair
-				c.sender.sendMsg(new JoinSplitMsg(cid, c.sender.hostListenningPort, c.sender.hostIp, ));
+				c.sender.sendMsg(new JoinSplitMsg(cid, c.sender.hostListenningPort, c.sender.hostIp, MessageCodeDictionary.SPLIT_MODE_HORIZONTAL));
 			}
-			regedClientSender.add(new Comrade(cid, newClientSender.get(0)));
+			else{
+				regedClientSender.add(new Comrade(cid, newClientSender.get(0)));
+				regedClientSender.get(cid).sender.sendMsg(new RegularConfirmMsg(-1));
+			}
 			
 			//remove the pending one
 			newClientSender.remove(0);
-			regedClientSender.get(cid).sender.sendMsg(new RegularConfirmMsg(-1));
+			
 			waiting4confirm++;
 			System.out.println("register a new client");
 			return true;
@@ -276,7 +284,7 @@ public class Server{
 		if(waiting4confirm==0)
 			status = nextStatus;
 		
-		BoardOperation.merge(b, (Board)m.extracMessage(), 0, 0);
+		BoardOperation.Merge(b, (Board)m.extracMessage(), 0, 0);
 //		b = (Board)m.extracMessage();
 	}
 	
