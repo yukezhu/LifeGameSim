@@ -23,7 +23,7 @@ public class Client {
 	private AutomataMsg auto;
 	private String direction;
 	private int[] border;
-	private ConfirmMsg confirm;
+	private ConfirmMsg confirm = new ConfirmMsg(-10);
 	private Outfits outfit;
 //	private ArrayList<MessageSender> newClientSender = new ArrayList();
 //	private ArrayList<Comrade>  regedClientSender = new ArrayList();
