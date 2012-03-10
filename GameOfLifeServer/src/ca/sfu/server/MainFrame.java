@@ -7,6 +7,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -23,13 +25,24 @@ public class MainFrame extends JFrame {
 
 	Board board;
 	
+	private JMenuBar createMenuBar()
+	{
+		JMenuBar menuBar = new JMenuBar();
+		JMenu aboutMenu = new JMenu("About");
+		JMenu windowMenu = new JMenu("Window");
+		menuBar.add(aboutMenu);
+		menuBar.add(windowMenu);
+		return menuBar;
+	}
+	
 	public MainFrame()
 	{
 		super();
-		this.setSize(800, 800);
+		setSize(800, 800);
+		setJMenuBar(createMenuBar());
 		
 		board = new Board(800, 800);
-		BoardOperation.Randomize(board, 0.2);
+		BoardOperation.Randomize(board, 0.1);
 		final AutomataPanel automataPanel = new AutomataPanel();
 		automataPanel.setCellSize(1);
 		automataPanel.setBoard(board);
@@ -39,7 +52,8 @@ public class MainFrame extends JFrame {
 		
 		infoPanel.setBackground(Color.RED);
 		clientPanel.setBackground(Color.GREEN);
-		automataPanel.setBackground(Color.GRAY);
+		automataPanel.setBackground(Color.LIGHT_GRAY);
+		
 		setContentPane(automataPanel);
 		setVisible(true);
 				
