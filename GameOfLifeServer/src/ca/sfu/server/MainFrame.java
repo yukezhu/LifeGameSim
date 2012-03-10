@@ -7,6 +7,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -23,15 +25,26 @@ public class MainFrame extends JFrame {
 
 	Board board;
 	
+	private JMenuBar createMenuBar()
+	{
+		JMenuBar menuBar = new JMenuBar();
+		JMenu aboutMenu = new JMenu("About");
+		JMenu windowMenu = new JMenu("Window");
+		menuBar.add(aboutMenu);
+		menuBar.add(windowMenu);
+		return menuBar;
+	}
+	
 	public MainFrame()
 	{
 		super();
-		this.setSize(480, 480);
+		setSize(800, 800);
+		setJMenuBar(createMenuBar());
 		
-		board = new Board(1000, 1000);
-		BoardOperation.Randomize(board, 0.3);
+		board = new Board(800, 800);
+		BoardOperation.Randomize(board, 0.1);
 		final AutomataPanel automataPanel = new AutomataPanel();
-		automataPanel.setCellSize(2);
+		automataPanel.setCellSize(1);
 		automataPanel.setBoard(board);
 		
 		infoPanel = new JPanel();
@@ -39,10 +52,11 @@ public class MainFrame extends JFrame {
 		
 		infoPanel.setBackground(Color.RED);
 		clientPanel.setBackground(Color.GREEN);
-		automataPanel.setBackground(Color.GRAY);
+		automataPanel.setBackground(Color.LIGHT_GRAY);
+		
 		setContentPane(automataPanel);
 		setVisible(true);
-		
+				
 		Timer timer = new Timer(0, new ActionListener()
 		{
 			@Override
@@ -53,7 +67,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		timer.setDelay(50);
+		timer.setDelay(200);
 		timer.start();
 		
 		addWindowListener(windowAdapter);
