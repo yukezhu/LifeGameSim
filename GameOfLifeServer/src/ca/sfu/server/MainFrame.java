@@ -26,12 +26,12 @@ public class MainFrame extends JFrame {
 	public MainFrame()
 	{
 		super();
-		this.setSize(480, 480);
+		this.setSize(800, 800);
 		
-		board = new Board(1000, 1000);
-		BoardOperation.Randomize(board, 0.3);
+		board = new Board(800, 800);
+		BoardOperation.Randomize(board, 0.2);
 		final AutomataPanel automataPanel = new AutomataPanel();
-		automataPanel.setCellSize(2);
+		automataPanel.setCellSize(1);
 		automataPanel.setBoard(board);
 		
 		infoPanel = new JPanel();
@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
 		automataPanel.setBackground(Color.GRAY);
 		setContentPane(automataPanel);
 		setVisible(true);
-		
+				
 		Timer timer = new Timer(0, new ActionListener()
 		{
 			@Override
@@ -53,7 +53,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		timer.setDelay(50);
+		timer.setDelay(200);
 		timer.start();
 		
 		addWindowListener(windowAdapter);
