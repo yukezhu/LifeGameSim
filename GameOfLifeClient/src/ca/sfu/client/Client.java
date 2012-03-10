@@ -10,6 +10,7 @@ import ca.sfu.cmpt431.facility.Board;
 import ca.sfu.cmpt431.facility.BoardOperation;
 import ca.sfu.cmpt431.facility.Border;
 import ca.sfu.cmpt431.facility.Comrade;
+import ca.sfu.cmpt431.facility.Neighbour;
 import ca.sfu.cmpt431.facility.Outfits;
 import ca.sfu.cmpt431.message.Message;
 import ca.sfu.cmpt431.message.MessageCodeDictionary;
@@ -28,6 +29,7 @@ import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
 public class Client {
 
 	protected static final int SERVER_PORT = 6560;
+	protected static final String SERVER_IP = "142.58.35.62";
 //	private final static int 
 	
 	private int status;
@@ -78,8 +80,8 @@ public class Client {
 		
 		}
 		MessageSender Sender1;
-		Sender1 = new MessageSender("142.58.35.71", SERVER_PORT);
-		server = new Comrade(-1, SERVER_PORT, "142.58.35.71",Sender1);
+		Sender1 = new MessageSender(SERVER_IP, SERVER_PORT);
+		server = new Comrade(-1, SERVER_PORT, SERVER_IP,Sender1);
 		JoinRequestMsg Request = new JoinRequestMsg(port);
 		server.sender.sendMsg(Request);
 //		regedClientSender.get(0).sender.sendMsg(Request);
@@ -98,7 +100,7 @@ public class Client {
 						server.sender.sendMsg(confirm);						
 						status = MessageCodeDictionary.GET_CLIENT_ID_STATUS;
 						break;
-					//wait for cid
+					//wait for outfit
 					case MessageCodeDictionary.GET_CLIENT_ID_STATUS:
 						
 //						JoinOutfitsMsg ob;
@@ -108,11 +110,14 @@ public class Client {
 						outfit = joinmsg.yourOutfits;
 //						joinmsg = (JoinOutfitsMsg)ob;
 						cid = outfit.myId;
-						pair_id = joinmsg.getClientId();
+//						pair_id = joinmsg.getClientId();
 						int pair_port = joinmsg.myPort;
-						if(pair_port <0){
+						if(outfit.pair == null){
+							
 							server.sender.sendMsg(confirm);
-							System.out.println(pair_id);
+//							System.out.println("piarid"+pair_id);
+							status = MessageCodeDictionary.WAIT_FOR_COMMAND_STATUS;
+							break;
 						}
 						else{
 							String pair_ip = msgIp.getIp().substring(1); 
@@ -124,39 +129,51 @@ public class Client {
 						int[] position;
 						int j = 0;
 						int p = 0;
-						for(i=0;i<12;i++)
-						{
-							while(outfit.neighbour.get(j) != null){
-								for (p = 0; p < outfit.neighbour.get(j).position.length; p++ ){
-									if(i == outfit.neighbour.get(j).position[p]){
-										MessageSender Sender = new MessageSender(outfit.neighbour.get(i).comrade.ip, pair_port);
-										comrade[pair_id] = new Comrade(pair_id, pair_port, outfit.neighbour.get(i).comrade.ip, Sender);
-										int[] mypos;
-										mypos = ClientHelper.ClientNeighbor(outfit.neighbour.get(j).position);
-										RegularUpdateNeighbourMsg neighbor = new RegularUpdateNeighbourMsg(cid, mypos, port, InetAddress.getLocalHost().getHostAddress());
-										comrade[pair_id].sender.sendMsg(neighbor);
-									}
-									
-								}
-								j++;
-							}
-																
+						for(Neighbour nei: outfit.neighbour) {
+							int[] mypos = ClientHelper.ClientNeighbor(nei.position);
+							nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
+							//outfit. = new Comrade(pair_id, pair_port, outfit.neighbour.get(i).comrade.ip, Sender);
+							RegularUpdateNeighbourMsg neighbor = new RegularUpdateNeighbourMsg(cid, mypos, port, InetAddress.getLocalHost().getHostAddress());
+							nei.comrade.sender.sendMsg(neighbor);
 						}
-						status = MessageCodeDictionary.RECEIVE_NEIGHBORS_CONFIRM_STATUS;
+//						for(i=0;i<12;i++)
+//						{
+//							for(j = 0; outfit.neighbour.get(j) != null){
+//								for (p = 0; p < outfit.neighbour.get(j).position.length; p++ ){
+//									if(i == outfit.neighbour.get(j).position[p]){
+//										MessageSender Sender = new MessageSender(outfit.neighbour.get(i).comrade.ip, pair_port);
+//										comrade[pair_id] = new Comrade(pair_id, pair_port, outfit.neighbour.get(i).comrade.ip, Sender);
+//										int[] mypos;
+//										mypos = ClientHelper.ClientNeighbor(outfit.neighbour.get(j).position);
+//										RegularUpdateNeighbourMsg neighbor = new RegularUpdateNeighbourMsg(cid, mypos, port, InetAddress.getLocalHost().getHostAddress());
+//										comrade[pair_id].sender.sendMsg(neighbor);
+//									}
+//									
+//								}
+//								j++;
+//							}
+//																
+//						}
+//						if(!outfit.neighbour.isEmpty())
+							status = MessageCodeDictionary.RECEIVE_NEIGHBORS_CONFIRM_STATUS;
+						
 						break;
 					//receive neighbor's confirm
 					case MessageCodeDictionary.RECEIVE_NEIGHBORS_CONFIRM_STATUS:
 						int neighborupdateconfirmCount = 0;	
 						
 						Receiver.getNextMessageWithIp();
-						neighborupdateconfirmCount++;
+						
 						if(neighborupdateconfirmCount == outfit.neighbour.size())
 						{
+							System.out.println(outfit.neighbour.size());
 							server.sender.sendMsg(confirm);
 							status = MessageCodeDictionary.WAIT_FOR_COMMAND_STATUS;
+							break;
 						}
 						else 
 							status = MessageCodeDictionary.RECEIVE_NEIGHBORS_CONFIRM_STATUS;
+						neighborupdateconfirmCount++;
 						break;
 					//wait for start or other commands
 					case MessageCodeDictionary.WAIT_FOR_COMMAND_STATUS:								
@@ -164,69 +181,102 @@ public class Client {
 						Message msg = (Message)msgIp.extracMessage();
 						int msg_type;
 						msg_type = msg.getMessageCode();
-						if(msg_type == MessageCodeDictionary.REGULAR_NEXTCLOCK)
-							status = MessageCodeDictionary.SEND_BORDER_STATUS;
-						else if (msg_type == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
-							status = MessageCodeDictionary.UPDATE_NEIGHBOR_STATUS;
-						else if (msg_type == MessageCodeDictionary.JOIN_SPLIT)
-							status = MessageCodeDictionary.SPLIT_STATUS;
+						if(msg_type == MessageCodeDictionary.REGULAR_NEXTCLOCK){
+							myboard = new Board(outfit.myBoard.height,outfit.myBoard.width);
+
+							int neighborCount = outfit.neighbour.size();
+							Border sendborder;						
+							for(j = 0; j < neighborCount; j++)
+							{
+									sendborder = new Border();
+									sendborder.bits = getborder(outfit.neighbour.get(j).position);
+									RegularBorderMsg sendbordermsg = new RegularBorderMsg(cid, sendborder);	
+									outfit.neighbour.get(j).comrade.sender.sendMsg(myboard);
+
+							}
+							
+							status = MessageCodeDictionary.REVEIVE_BORDER_OR_CONFIRM_STATUS;
+							
+							break;
+						}
+//							status = MessageCodeDictionary.SEND_BORDER_STATUS;
+						else if (msg_type == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR){
+							RegularUpdateNeighbourMsg neighbormsg = (RegularUpdateNeighbourMsg)msgIp.extracMessage();
+							
+							j = 0;
+							for(i=0;i<12;i++)
+							{
+								while(outfit.neighbour.get(j) != null){
+									for (p = 0; p < outfit.neighbour.get(j).position.length; p++ ){
+										if(i == outfit.neighbour.get(j).position[p]){
+											outfit.neighbour.get(j).comrade.id = neighbormsg.getClientId();
+										}									
+									}
+									j++;
+								}																
+							}
+
+							String neighbor_ip = neighbormsg.ip;
+							int neighbor_port = neighbormsg.port;
+							MessageSender Sender = new MessageSender(neighbor_ip, neighbor_port);
+							comrade[neighbormsg.getClientId()] = new Comrade(neighbormsg.getClientId(), neighbor_port, neighbor_ip,  Sender);
+							comrade[neighbormsg.getClientId()].sender.sendMsg(confirm);
+							status = MessageCodeDictionary.WAIT_FOR_COMMAND_STATUS;
+							break;
+						}	
+						else if (msg_type == MessageCodeDictionary.JOIN_SPLIT){
+							JoinSplitMsg joinsplitmsg = (JoinSplitMsg)msgIp.extracMessage();
+							List<Board> board;
+							if (joinsplitmsg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
+							{
+								board = BoardOperation.VerticalCut(myboard);
+							}
+							else{
+								board = BoardOperation.HorizontalCut(myboard);
+							}	
+							myboard = board.get(0);
+							MessageSender Sender3 = new MessageSender(joinsplitmsg.newcomerIp, joinsplitmsg.newcomerPort);
+							comrade[joinsplitmsg.newcomerId] = new Comrade(joinsplitmsg.newcomerId, joinsplitmsg.newcomerPort, joinsplitmsg.newcomerIp, Sender3);
+							Outfits pair_outfit = new Outfits(pair_id, outfit.nextClock, outfit.top, outfit.left, myboard.height, myboard.width);
+							
+							JoinOutfitsMsg JOM = new JoinOutfitsMsg(cid, port, pair_outfit);
+							comrade[joinsplitmsg.newcomerId].sender.sendMsg(JOM);
+							status = MessageCodeDictionary.WAIT_FOR_PAIR_CONFIRM_STATUS;
+							break;
+						}
+//							status = MessageCodeDictionary.SPLIT_STATUS;
 						else
 							status = MessageCodeDictionary.REVEIVE_BORDER_OR_CONFIRM_STATUS;
 						break;
-					//update neighbor
-					case MessageCodeDictionary.UPDATE_NEIGHBOR_STATUS:
-						msgIp = Receiver.getNextMessageWithIp();
-						RegularUpdateNeighbourMsg neighbormsg = (RegularUpdateNeighbourMsg)msgIp.extracMessage();
+					
 						
-						j = 0;
-						for(i=0;i<12;i++)
-						{
-							while(outfit.neighbour.get(j) != null){
-								for (p = 0; p < outfit.neighbour.get(j).position.length; p++ ){
-									if(i == outfit.neighbour.get(j).position[p]){
-										outfit.neighbour.get(j).comrade.id = neighbormsg.getClientId();
-									}									
-								}
-								j++;
-							}																
-						}
-
-						String neighbor_ip = neighbormsg.ip;
-						int neighbor_port = neighbormsg.port;
-						MessageSender Sender = new MessageSender(neighbor_ip, neighbor_port);
-						comrade[neighbormsg.getClientId()] = new Comrade(neighbormsg.getClientId(), neighbor_port, neighbor_ip,  Sender);
-						comrade[neighbormsg.getClientId()].sender.sendMsg(confirm);
-						status = MessageCodeDictionary.WAIT_FOR_COMMAND_STATUS;
-						break;
-					//start and send border
-					case MessageCodeDictionary.SEND_BORDER_STATUS:
-						RegularNextClockMsg clock = (RegularNextClockMsg)msgIp.extracMessage();
-						myboard = new Board(outfit.myBoard.height,outfit.myBoard.width);
-
-						int neighborCount = outfit.neighbour.size();
-						Border sendborder;						
-						for(j = 0; j < neighborCount; j++)
-						{
-								sendborder = new Border();
-								sendborder.bits = getborder(outfit.neighbour.get(j).position);
-								RegularBorderMsg sendbordermsg = new RegularBorderMsg(cid, sendborder);	
-								outfit.neighbour.get(j).comrade.sender.sendMsg(myboard);
-
-						}
-						status = MessageCodeDictionary.REVEIVE_BORDER_OR_CONFIRM_STATUS;
-						break;
+					
 					//receive border or confirm
 					case MessageCodeDictionary.REVEIVE_BORDER_OR_CONFIRM_STATUS:
+						int confirmCount = 0;
+						int borderexchangeCount = 0;
+//						if(outfit.neighbour.size() == 0){
+//							status = MessageCodeDictionary.COMPUTING_STATUS;
+//							break;
+//						}
+						if(borderexchangeCount == outfit.neighbour.size() && confirmCount == outfit.neighbour.size()){
+//							status = MessageCodeDictionary.COMPUTING_STATUS;
+							myboard = BoardOperation.NextMoment(myboard, up, down, left, right, upperLeft, upperRight, lowerLeft, lowerRight);
+							RegularBoardReturnMsg boardreturnmsg = new RegularBoardReturnMsg(cid,myboard);
+							server.sender.sendMsg(boardreturnmsg);
+							status = MessageCodeDictionary.WAIT_FOR_COMMAND_STATUS;
+						}
+						else 
+							status = MessageCodeDictionary.WAIT_FOR_COMMAND_STATUS;
 						msgIp = Receiver.getNextMessageWithIp();
 						Message msgtogetcode = (Message)msgIp.extracMessage();
 						msg_type = msgtogetcode.getMessageCode();
-						int confirmCount = 0;
-						int borderexchangeCount = 0;
+						
 						int[] posRecord = null;
 						if(msg_type == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 						{
 							RegularBorderMsg neighborbordermsg = (RegularBorderMsg)msgIp.extracMessage();
-							borderexchangeCount++;
+							
 							for(j = 0; j<outfit.neighbour.size(); j++)
 							{
 								if(neighborbordermsg.getClientId() == outfit.neighbour.get(j).comrade.id)
@@ -234,38 +284,16 @@ public class Client {
 									
 							}
 							mergeBorder(neighborbordermsg.boarder.bits, posRecord);
-							
+							borderexchangeCount++;
 						}
 						else if (msg_type == MessageCodeDictionary.REGULAR_CONFIRM)
 						{
 							confirmCount++;
 						}
-						if(borderexchangeCount == outfit.neighbour.size() && borderexchangeCount == outfit.neighbour.size())
-								status = MessageCodeDictionary.COMPUTING_STATUS;
-						else 
-							status = MessageCodeDictionary.REVEIVE_BORDER_OR_CONFIRM_STATUS;
-						break;
-										
-					// split
-					case MessageCodeDictionary.SPLIT_STATUS:
-						JoinSplitMsg joinsplitmsg = (JoinSplitMsg)msgIp.extracMessage();
-						List<Board> board;
-						if (joinsplitmsg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
-						{
-							board = BoardOperation.VerticalCut(myboard);
-						}
-						else{
-							board = BoardOperation.HorizontalCut(myboard);
-						}	
-						myboard = board.get(0);
-						MessageSender Sender3 = new MessageSender(joinsplitmsg.newcomerIp, joinsplitmsg.newcomerPort);
-						comrade[joinsplitmsg.newcomerId] = new Comrade(joinsplitmsg.newcomerId, joinsplitmsg.newcomerPort, joinsplitmsg.newcomerIp, Sender3);
-						Outfits pair_outfit = new Outfits(pair_id, outfit.nextClock, outfit.top, outfit.left, myboard.height, myboard.width);
 						
-						JoinOutfitsMsg JOM = new JoinOutfitsMsg(cid, port, pair_outfit);
-						comrade[joinsplitmsg.newcomerId].sender.sendMsg(JOM);
-						status = MessageCodeDictionary.WAIT_FOR_PAIR_CONFIRM_STATUS;
 						break;
+
+						
 					//wait for pair's confirm
 					case MessageCodeDictionary.WAIT_FOR_PAIR_CONFIRM_STATUS:
 						msgIp = Receiver.getNextMessageWithIp();
