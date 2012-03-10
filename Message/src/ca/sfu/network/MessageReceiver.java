@@ -92,6 +92,7 @@ public class MessageReceiver {
 	}
 	
 	public boolean isOpen() {
+		if(listenerChannel == null) return false;
 		return listenerChannel.isOpen();
 	}
 	
@@ -102,7 +103,7 @@ public class MessageReceiver {
 		}
 		try {
 			listenerChannel.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 		}
 	}
 	

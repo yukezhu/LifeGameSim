@@ -47,6 +47,7 @@ public class MessageSender{
 	}
 	
 	public boolean isOpen() {
+		if(socketChannel == null) return false;
 		return socketChannel.isOpen();
 	}
 	
@@ -57,7 +58,7 @@ public class MessageSender{
 		}
 		try {
 			socketChannel.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 		}
 	}
 }
