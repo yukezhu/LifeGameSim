@@ -22,17 +22,17 @@ public class InformationPanel extends JFrame {
 		
 		cellNumLabel = new JLabel("Cell Number:");
 		cellNumLabel.setBounds(20, 20, 140, 20);
-		cellNum = new JLabel("1,000,000"); 
+		cellNum = new JLabel("0"); 
 		cellNum.setBounds(150, 20, 180, 20);
 		
 		lifeNumLabel = new JLabel("Life Number:");
 		lifeNumLabel.setBounds(20, 60, 180, 20);
-		lifeNum = new JLabel("123,456");
+		lifeNum = new JLabel("0");
 		lifeNum.setBounds(150, 60, 180, 20);
 		
 		cycleNumLabel = new JLabel("Life Cycle:");
 		cycleNumLabel.setBounds(20, 100, 180, 20);
-		cycleNum = new JLabel("103");
+		cycleNum = new JLabel("0");
 		cycleNum.setBounds(150, 100, 180, 20);
 
 		clientNumLabel = new JLabel("Client Number:");
@@ -61,7 +61,7 @@ public class InformationPanel extends JFrame {
 			
 		setTitle("System Information");
 		setLayout(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+//		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
 
