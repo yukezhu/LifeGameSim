@@ -18,7 +18,9 @@ public class AutomataPanel extends JPanel  {
 	private Board b = null;
 	private boolean zoomIn, zoomOut;
 	
-	private Stack<Integer> startX, startY; 
+	private Stack<Integer> startX, startY;
+	
+	private int alive, cell, cycle;
 	
 	public AutomataPanel()
 	{
@@ -27,6 +29,9 @@ public class AutomataPanel extends JPanel  {
 		cellScale = 1;
 		zoomIn = false;
 		zoomOut = false;
+		alive = 0;
+		cell = 0;
+		cycle = 0;
 		
 		startX = new Stack<Integer>();
 		startY = new Stack<Integer>();
@@ -132,6 +137,18 @@ public class AutomataPanel extends JPanel  {
 		setSize(b.width, b.height);
 	}
 	
+	public int getAlive() {
+		return alive;
+	}
+
+	public int getCell() {
+		return cell;
+	}
+	
+	public int getCycle() {
+		return cycle;
+	}
+	
 	public Board getBoard()
 	{
 		return b;
@@ -146,6 +163,7 @@ public class AutomataPanel extends JPanel  {
 			int height = b.height / cellScale;
 			boolean[][] bitmap = b.bitmap;
 			int sX = startX.peek(), sY = startY.peek();
+			int count = 0;
 			for(int i=0; i<height; i++)
 				for(int j=0; j<width; j++)
 				{
@@ -154,8 +172,13 @@ public class AutomataPanel extends JPanel  {
 						int size = cellSize * cellScale;
 						g.setColor(Color.BLACK);
 						g.fillRect(size * j, size * i, size, size);
+						count ++;
 					}
 				}
+			alive = count;
+			cell = b.width * b.height;
+			cycle ++;
 		}
 	}
+
 }
