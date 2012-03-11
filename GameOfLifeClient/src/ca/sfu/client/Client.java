@@ -1,6 +1,7 @@
 package ca.sfu.client;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -187,7 +188,65 @@ public class Client {
 		}
 	}
 	
-	private void handleSplit(JoinSplitMsg msg) {
+	private void handleSplit(JoinSplitMsg msg) throws UnknownHostException, IOException {
+		
+		List<Board> board;
+		if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
+		{
+			board = BoardOperation.VerticalCut(outfit.myBoard);
+		}
+		else{
+			board = BoardOperation.HorizontalCut(outfit.myBoard);
+		}	
+		outfit.myBoard = board.get(0);
+		Board pair_board;
+		pair_board = board.get(1);
+		MessageSender Sender3 = new MessageSender(msg.newcomerIp, msg.newcomerPort);
+//		comrade[msg.newcomerId] = new Comrade(msg.newcomerId, msg.newcomerPort, msg.newcomerIp, Sender3);
+		Outfits pair_outfit = new Outfits(msg.newcomerId, outfit.nextClock, outfit.top, outfit.left, pair_board);
+		if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
+		{
+			for(int i = 0; i < 7; i++)
+				for( int j = 0; j < outfit.neighbour.size(); j++)
+					if(outfit.neighbour.get(j).position.get(0) <= i){
+						pair_outfit.neighbour.add(outfit.neighbour.get(j));
+						break;
+					}
+			MessageSender Sender = new MessageSender(InetAddress.getLocalHost().getHostAddress(), myPort);
+			Comrade comerade = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), Sender); 
+			ArrayList<Integer> mypos = new ArrayList<Integer>();
+			mypos.add(7);
+			mypos.add(8);
+			Neighbour newneighbor = new Neighbour(mypos, comerade);
+			pair_outfit.neighbour.add(newneighbor);
+			for(int i = 9; i < 12; i++)
+				for( int j = 0; j < outfit.neighbour.size(); j++)
+					if(outfit.neighbour.get(j).position.get(0) <= i){
+						pair_outfit.neighbour.add(outfit.neighbour.get(j));
+						break;
+					}
+		}
+		else{
+			for(int i = 0; i < 4; i++)
+				for( int j = 0; j < outfit.neighbour.size(); j++)
+					if(outfit.neighbour.get(j).position.get(0) <= i){
+						pair_outfit.neighbour.add(outfit.neighbour.get(j));
+						break;
+					}
+			MessageSender Sender = new MessageSender(InetAddress.getLocalHost().getHostAddress(), myPort);
+			Comrade comerade = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), Sender); 
+			ArrayList<Integer> mypos = new ArrayList<Integer>();
+			mypos.add(4);
+			mypos.add(5);
+			Neighbour newneighbor = new Neighbour(mypos, comerade);
+			pair_outfit.neighbour.add(newneighbor);
+			for(int i = 5; i < 12; i++)
+				for( int j = 0; j < outfit.neighbour.size(); j++)
+					if(outfit.neighbour.get(j).position.get(0) <= i){
+						pair_outfit.neighbour.add(outfit.neighbour.get(j));
+						break;
+					}
+		}
 		
 	}
 	
@@ -377,9 +436,9 @@ public class Client {
 //										
 //					// split
 //					case MessageCodeDictionary.SPLIT_STATUS:
-//						JoinSplitMsg joinsplitmsg = (JoinSplitMsg)msgIp.extracMessage();
+//						msg msg = (msg)msgIp.extracMessage();
 //						List<Board> board;
-//						if (joinsplitmsg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
+//						if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
 //						{
 //							board = BoardOperation.VerticalCut(myboard);
 //						}
@@ -387,12 +446,12 @@ public class Client {
 //							board = BoardOperation.HorizontalCut(myboard);
 //						}	
 //						myboard = board.get(0);
-//						MessageSender Sender3 = new MessageSender(joinsplitmsg.newcomerIp, joinsplitmsg.newcomerPort);
-//						comrade[joinsplitmsg.newcomerId] = new Comrade(joinsplitmsg.newcomerId, joinsplitmsg.newcomerPort, joinsplitmsg.newcomerIp, Sender3);
+//						MessageSender Sender3 = new MessageSender(msg.newcomerIp, msg.newcomerPort);
+//						comrade[msg.newcomerId] = new Comrade(msg.newcomerId, msg.newcomerPort, msg.newcomerIp, Sender3);
 //						Outfits pair_outfit = new Outfits(pair_id, outfit.nextClock, outfit.top, outfit.left, myboard.height, myboard.width);
 //						
 //						JoinOutfitsMsg JOM = new JoinOutfitsMsg(cid, port, pair_outfit);
-//						comrade[joinsplitmsg.newcomerId].sender.sendMsg(JOM);
+//						comrade[msg.newcomerId].sender.sendMsg(JOM);
 //						status = MessageCodeDictionary.WAIT_FOR_PAIR_CONFIRM_STATUS;
 //						break;
 //					//wait for pair's confirm
