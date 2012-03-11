@@ -27,14 +27,14 @@ public class MainFrame extends JFrame {
 		super();
 		setSize(800, 850);
 		setJMenuBar(createMenuBar());
-		setBackground(Color.LIGHT_GRAY);
+		setBackground(new Color(0xeb, 0xeb, 0xeb));
 		
 		board = new Board(800, 800);
 		BoardOperation.Randomize(board, 0.1);
 		automataPanel = new AutomataPanel();
 		automataPanel.setCellSize(1);
 		automataPanel.setBoard(board);
-		automataPanel.setBackground(Color.LIGHT_GRAY);
+		automataPanel.setBackground(new Color(0xeb, 0xeb, 0xeb));
 		
 		setContentPane(automataPanel);
 		setVisible(true);
