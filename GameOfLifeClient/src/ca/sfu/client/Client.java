@@ -131,6 +131,7 @@ public class Client {
 						}
 						else
 							server.sender.sendMsg(myConfirmMessage);
+						status = 3;
 						break;
 					default:
 						System.out.println("Received unexpectd message.");
