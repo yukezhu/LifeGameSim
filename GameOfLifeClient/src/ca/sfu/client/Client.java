@@ -73,8 +73,10 @@ public class Client {
 		server.sender.sendMsg(Request);
 		status = 1;
 		while(true){
+			System.out.println("status :" + status);
 			if(!Receiver.isEmpty()){
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
+				System.out.println(status);
 				switch(status) {
 //					case 0:
 //						server.sender.sendMsg(new RegularConfirmMsg(-1));
@@ -141,17 +143,24 @@ public class Client {
 		System.out.println("received outfit");
 		outfit = msg.yourOutfits;
 		myConfirmMessage = new RegularConfirmMsg(outfit.myId);
-		if(outfit.pair == null) 
+		if(outfit.pair == null) {
 			server.sender.sendMsg(myConfirmMessage);
+			System.out.println('A');
+		}
 		else {
 			outfit.pair.sender = new MessageSender(outfit.pair.ip, outfit.pair.port);
 			outfit.pair.sender.sendMsg(myConfirmMessage);
+			System.out.println('B');
 		}
 		for(Neighbour nei: outfit.neighbour) {
-			nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
-			ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
-			nei.comrade.sender.sendMsg(
-					new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, InetAddress.getLocalHost().getHostAddress()));
+			if(nei.comrade.id == outfit.pair.id)
+				nei.comrade.sender = outfit.pair.sender;
+			else {
+				nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
+				ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
+				nei.comrade.sender.sendMsg(
+						new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, InetAddress.getLocalHost().getHostAddress()));
+			}
 		}
 	}
 	
@@ -213,6 +222,18 @@ public class Client {
 		Board pair_board;
 		pair_board = board.get(1);
 		Outfits pair_outfit = new Outfits(msg.newcomerId, outfit.nextClock, outfit.top, outfit.left, pair_board);
+		Neighbour N10 = findNeiWithPos(10);
+		Neighbour N11 = findNeiWithPos(11);
+		Neighbour N0= findNeiWithPos(0);
+		Neighbour N3 = findNeiWithPos(3);
+		Neighbour N4 = findNeiWithPos(4);
+		Neighbour N5= findNeiWithPos(5);
+		Neighbour N1 = findNeiWithPos(1);
+		Neighbour N2= findNeiWithPos(2);
+		Neighbour N6 = findNeiWithPos(6);
+		Neighbour N7= findNeiWithPos(7);
+		Neighbour N8 = findNeiWithPos(8);
+		Neighbour N9 = findNeiWithPos(9);
 		if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
 		{
 			for(int i = 0; i < 7; i++)
@@ -222,18 +243,81 @@ public class Client {
 						break;
 					}
 //			MessageSender Sender = new MessageSender(InetAddress.getLocalHost().getHostAddress(), myPort);
-			Comrade comerade = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null); 
+			Comrade comerade = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null);
+			ArrayList position = new ArrayList<Integer>();
+			position.add(1);
+			position.add(2);
+			Neighbour pair_neighbor = new Neighbour(position, comerade);
 			ArrayList<Integer> mypos = new ArrayList<Integer>();
 			mypos.add(7);
 			mypos.add(8);
 			Neighbour newneighbor = new Neighbour(mypos, comerade);
 			pair_outfit.neighbour.add(newneighbor);
+			
 			for(int i = 9; i < 12; i++)
 				for( int j = 0; j < outfit.neighbour.size(); j++)
 					if(outfit.neighbour.get(j).position.get(0) <= i){
 						pair_outfit.neighbour.add(outfit.neighbour.get(j));
 						break;
-					}
+					}		
+			
+			if(N11 != null && N10 != null && N10.comrade.id == N11.comrade.id)
+			{
+				if(N0.comrade.id != N11.comrade.id)
+				{
+					N0.comrade.sender.close();
+					outfit.neighbour.remove(N0);
+				}
+				N10.position = new ArrayList<Integer>();
+				N10.position.add(10);
+				N10.position.add(11);
+				N10.position.add(0);
+				outfit.neighbour.add(N10);
+			}
+			if(N4 != null && N5 != null && N4.comrade.id == N5.comrade.id && N4 != null)
+			{
+				if(N3.comrade.id != N5.comrade.id)
+				{
+					N3.comrade.sender.close();
+					outfit.neighbour.remove(N3);
+				}
+				N4.position = new ArrayList<Integer>();
+				N4.position.add(3);
+				N4.position.add(4);
+				N4.position.add(5);
+				outfit.neighbour.add(N4);
+			}
+			if(N1 != null && N2 != null && N1.comrade.id == N2.comrade.id && N1 != null)
+			{
+				if(N1.comrade.id != N0.comrade.id && N1.comrade.id != N3.comrade.id)
+				{
+					N1.comrade.sender.close();
+					outfit.neighbour.remove(N1);
+				}
+//				pair_neighbor.position = new ArrayList<Integer>();
+				N1.position.add(1);
+				N1.position.add(2);
+				outfit.neighbour.add(N1);
+			}
+			else{
+				if(N1 != null && N0 != null && N1.comrade.id != N0.comrade.id && N1 != null)
+				{
+					N1.comrade.sender.close();
+					outfit.neighbour.remove(N1);					
+					N1.position.add(1);
+					outfit.neighbour.add(N1);
+					
+					
+				}
+				if(N2 != null && N3 != null && N2.comrade.id != N3.comrade.id && N2 != null)
+				{
+					N2.comrade.sender.close();
+					outfit.neighbour.remove(N2);
+					N2.position.add(2);
+					outfit.neighbour.add(N2);
+				}
+			}
+			
 		}
 		else{
 			for(int i = 0; i < 4; i++)
@@ -255,6 +339,62 @@ public class Client {
 						pair_outfit.neighbour.add(outfit.neighbour.get(j));
 						break;
 					}
+			
+			if(N1 != null && N2 != null && N1.comrade.id == N2.comrade.id && N1 != null)
+			{
+				if(N1.comrade.id != N0.comrade.id)
+				{
+					N0.comrade.sender.close();
+					outfit.neighbour.remove(N0);
+				}
+				N1.position = new ArrayList<Integer>();
+				N1.position.add(1);
+				N1.position.add(2);
+				N1.position.add(0);
+				outfit.neighbour.add(N1);
+			}
+			if(N7 != null && N8 != null && N7.comrade.id == N8.comrade.id && N7 != null)
+			{
+				if(N9.comrade.id != N7.comrade.id)
+				{
+					N9.comrade.sender.close();
+					outfit.neighbour.remove(N9);
+				}
+				N4.position = new ArrayList<Integer>();
+				N4.position.add(3);
+				N4.position.add(4);
+				N4.position.add(5);
+				outfit.neighbour.add(N4);
+			}
+			if(N11 != null && N10 != null && N10.comrade.id == N11.comrade.id && N10 != null)
+			{
+				if(N11.comrade.id != N0.comrade.id && N11.comrade.id != N9.comrade.id)
+				{
+					N11.comrade.sender.close();
+					outfit.neighbour.remove(N11);
+				}
+//				pair_neighbor.position = new ArrayList<Integer>();
+				N11.position.add(11);
+				N11.position.add(10);
+				outfit.neighbour.add(N11);
+			}
+			else{
+				if(N11 != null && N0 != null && N11.comrade.id != N0.comrade.id && N0 != null)
+				{
+					N11.comrade.sender.close();
+					outfit.neighbour.remove(N11);					
+					N11.position.add(11);
+					outfit.neighbour.add(N11);
+					
+				}
+				if(N9 != null && N10 != null && N10.comrade.id != N9.comrade.id && N10 != null)
+				{
+					N10.comrade.sender.close();
+					outfit.neighbour.remove(N10);
+					N10.position.add(10);
+					outfit.neighbour.add(N10);
+				}
+			}
 		}
 		pair_outfit.pair = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null);
 		outfit.pair.sender.sendMsg(new JoinOutfitsMsg(outfit.myId, myPort, pair_outfit));
@@ -288,6 +428,14 @@ public class Client {
 		BoardOperation.NextMoment(outfit.myBoard, null, null, null, null, false, false, false, false);
 		server.sender.sendMsg(new RegularBoardReturnMsg(outfit.myId, 0, 0, outfit.myBoard));
 		borderCount = 0;
+	}
+	
+	private Neighbour findNeiWithPos(int pos) {
+		for(Neighbour nei: outfit.neighbour)
+			for(Integer i: nei.position)
+				if(i == pos)
+					return nei;
+		return null;
 	}
 	
 	private void sendMessageTo(int cid, Message msg) throws IOException {

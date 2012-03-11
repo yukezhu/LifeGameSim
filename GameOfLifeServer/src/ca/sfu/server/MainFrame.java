@@ -8,7 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import ca.sfu.cmpt431.facility.Board;
@@ -19,7 +18,6 @@ public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	InformationPanel infoPanel;
-	JPanel clientPanel;
 	AutomataPanel automataPanel;
 
 	Board board;
@@ -36,18 +34,23 @@ public class MainFrame extends JFrame {
 		automataPanel = new AutomataPanel();
 		automataPanel.setCellSize(1);
 		automataPanel.setBoard(board);
-		
 		automataPanel.setBackground(Color.LIGHT_GRAY);
 		
-		this.setContentPane(automataPanel);
+		setContentPane(automataPanel);
 		setVisible(true);
 				
+		infoPanel = new InformationPanel();
+		infoPanel.setVisible(true);
+		
 		Timer timer = new Timer(0, new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				automataPanel.setBoard(board);
 				BoardOperation.NextMoment(board, null, null, null, null, false, false, false, false);;
+				infoPanel.setCellNum(automataPanel.getCell());
+				infoPanel.setLifeNum(automataPanel.getAlive());
+				infoPanel.setCycleNum(automataPanel.getCycle());
 				automataPanel.repaint();
 			}
 		});
