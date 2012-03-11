@@ -1,5 +1,9 @@
 package ca.sfu.cmpt431.facility;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -212,24 +216,61 @@ public class BoardOperation {
 		list.add(down);
 		return list;
 	}
+	
+	/**
+	 * Load life game pattern from file
+	 * @param	file name
+	 * @return	Board instance
+	 */
+	public static Board LoadFile(String s)
+	{
+		try
+		{
+			FileInputStream fstream = new FileInputStream(s);
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			int height = Integer.valueOf(br.readLine());
+			int width = Integer.valueOf(br.readLine());
+			
+			Board board = new Board(height, width);
+			for(int i=0; i<height; i++)
+			{
+				String line = br.readLine();
+				while(line.length() < width) line += '.';
+				for(int j=0; j<width; j++)
+				{
+					if(line.charAt(j) == '*') board.bitmap[i][j] = true;
+					else board.bitmap[i][j] = false;
+				}
+			}
+			
+			return board;
+		} catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public static void main(String args[])
 	{
-		Board b = new Board(5, 5);
-		b = BoardOperation.Randomize(b, 0.3);
-		BoardOperation.Print(b);
-		boolean[] up = new boolean[5];
-		boolean[] down = new boolean[5];
-		boolean[] left = new boolean[5];
-		boolean[] right = new boolean[5];
-		int n = 0;
-		while(n < 10)
-		{
-			b = BoardOperation.NextMoment(b, up, down, left, right, false, false, false, false);
-			BoardOperation.Print(b);
-			n ++;
-			System.out.println();
-		}
+//		Board b = new Board(5, 5);
+//		b = BoardOperation.Randomize(b, 0.3);
+//		BoardOperation.Print(b);
+//		boolean[] up = new boolean[5];
+//		boolean[] down = new boolean[5];
+//		boolean[] left = new boolean[5];
+//		boolean[] right = new boolean[5];
+//		int n = 0;
+//		while(n < 10)
+//		{
+//			b = BoardOperation.NextMoment(b, up, down, left, right, false, false, false, false);
+//			BoardOperation.Print(b);
+//			n ++;
+//			System.out.println();
+//		}
+		Board board = BoardOperation.LoadFile("/home/yukez/map.lg");
+		BoardOperation.Print(board);
 	}
 
 }
