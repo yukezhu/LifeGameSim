@@ -224,6 +224,15 @@ public class Client {
 		}
 	}
 	
+	private void addPos(Neighbour nei, Integer pos, boolean front) {
+		if(nei == null)
+			return;
+		if(front)
+			nei.position.add(0, pos);
+		else
+			nei.position.add(pos);
+	}
+	
 	private void handleSplit(JoinSplitMsg msg) throws IOException {
 		List<Board> boards;
 		
@@ -277,50 +286,50 @@ public class Client {
 					new Neighbour(tmp, outfit.pair));
 			if(n[1] == n[2]) {
 				if(n[0] == n[1]) {
-					n[1].position.add(3);
+					addPos(n[1], 3, false);
 					deletePos(outfit, n[3], 3);
 				}
 				else if(n[2] == n[3]) {
-					pn[1].position.add(0, 0);
+					addPos(pn[1], 0, true);
 					deletePos(pout, pn[0], 0);
 				}else {
-					n[1].position.add(3);
+					addPos(n[1], 3, false);
 					deletePos(outfit, n[3], 3);
-					pn[1].position.add(0, 0);
+					addPos(pn[1], 0, true);
 					deletePos(pout, pn[0], 0);
 				}
 			}else {
-				n[1].position.add(2);
-				n[2].position.add(3);
+				addPos(n[1], 2, false);
+				addPos(n[2], 3, false);
 				deletePos(outfit, n[2], 2);
 				deletePos(outfit, n[3], 3);
-				pn[2].position.add(0, 1);
-				pn[1].position.add(0, 0);
+				addPos(pn[2], 1, true);
+				addPos(pn[1], 0, true);
 				deletePos(outfit, pn[1], 1);
 				deletePos(outfit, pn[0], 0);
 			}
 			
 			if(n[8] == n[7]) {
 				if(n[9] == n[8]) {
-					n[8].position.add(0, 6);
+					addPos(n[8], 6, true);
 					deletePos(outfit, n[6], 6);
 				}
 				else if(n[7] == n[6]) {
-					pn[8].position.add(9);
+					addPos(pn[8], 9, false);
 					deletePos(pout, pn[9], 9);
 				}else {
-					n[8].position.add(0, 6);
+					addPos(n[8], 6, true);
 					deletePos(outfit, n[6], 6);
-					pn[8].position.add(9);
+					addPos(pn[8], 9, false);
 					deletePos(pout, pn[9], 9);
 				}
 			}else {
-				n[8].position.add(0, 7);
-				n[7].position.add(0, 6);
+				addPos(n[8], 7, true);
+				addPos(n[7], 6, true);
 				deletePos(outfit, n[7], 7);
 				deletePos(outfit, n[6], 6);
-				pn[7].position.add(8);
-				pn[8].position.add(9);
+				addPos(pn[7], 8, false);
+				addPos(pn[8], 9, false);
 				deletePos(outfit, pn[8], 8);
 				deletePos(outfit, pn[9], 9);
 			}
@@ -355,50 +364,50 @@ public class Client {
 					new Neighbour(tmp, outfit.pair));
 			if(n[4] == n[5]) {
 				if(n[3] == n[4]) {
-					n[4].position.add(6);
+					addPos(n[4], 6, false);
 					deletePos(outfit, n[6], 6);
 				}
 				else if(n[5] == n[6]) {
-					pn[4].position.add(0, 3);
+					addPos(pn[4], 3, true);
 					deletePos(pout, pn[3], 3);
 				}else {
-					n[4].position.add(6);
+					addPos(n[4], 6, false);
 					deletePos(outfit, n[6], 6);
-					pn[4].position.add(0, 3);
+					addPos(pn[4], 3, true);
 					deletePos(pout, pn[3], 3);
 				}
 			}else {
-				n[4].position.add(5);
-				n[5].position.add(6);
+				addPos(n[4], 5, false);
+				addPos(n[5], 6, false);
 				deletePos(outfit, n[5], 5);
 				deletePos(outfit, n[6], 6);
-				pn[5].position.add(0, 4);
-				pn[4].position.add(0, 3);
+				addPos(pn[5], 4, true);
+				addPos(pn[4], 3, true);
 				deletePos(outfit, pn[4], 4);
 				deletePos(outfit, pn[3], 3);
 			}
 			
 			if(n[11] == n[10]) {
 				if(n[0] == n[11]) {
-					n[11].position.add(0, 9);
+					addPos(n[11], 9, true);
 					deletePos(outfit, n[9], 9);
 				}
 				else if(n[10] == n[9]) {
-					pn[11].position.add(0);
+					addPos(pn[11], 0, false);
 					deletePos(pout, pn[0], 0);
 				}else {
-					n[11].position.add(0, 9);
+					addPos(n[11], 9, true);
 					deletePos(outfit, n[9], 9);
-					pn[11].position.add(0);
+					addPos(pn[11], 0, false);
 					deletePos(pout, pn[0], 0);
 				}
 			}else {
-				n[11].position.add(0, 10);
-				n[10].position.add(0, 9);
+				addPos(n[11], 10, true);
+				addPos(n[10], 9, true);
 				deletePos(outfit, n[10], 10);
 				deletePos(outfit, n[9], 9);
-				pn[10].position.add(11);
-				pn[11].position.add(0);
+				addPos(pn[10], 11, false);
+				addPos(pn[11], 0, false);
 				deletePos(outfit, pn[11], 11);
 				deletePos(outfit, pn[0], 0);
 			}
