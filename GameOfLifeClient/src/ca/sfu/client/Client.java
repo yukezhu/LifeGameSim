@@ -75,8 +75,8 @@ public class Client {
 		server.sender.sendMsg(Request);
 		status = 1;
 		while(true){
-			System.out.println("status :" + status);
 			if(!Receiver.isEmpty()){
+				System.out.println("status :" + status);
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
 				switch(status) {
 //					case 0:
@@ -144,9 +144,12 @@ public class Client {
 		System.out.println("received outfit");
 		outfit = msg.yourOutfits;
 		myConfirmMessage = new RegularConfirmMsg(outfit.myId);
-		if(outfit.pair == null) 
+		if(outfit.pair == null){
+			System.out.println("aaaaaaa");
 			server.sender.sendMsg(myConfirmMessage);
+		}
 		else {
+			System.out.println("bbbbbb");
 			outfit.pair.sender = new MessageSender(outfit.pair.ip, outfit.pair.port);
 			outfit.pair.sender.sendMsg(myConfirmMessage);
 		}
