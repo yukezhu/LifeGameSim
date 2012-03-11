@@ -43,6 +43,7 @@ public class Server{
 		BoardOperation.Randomize(b,0.2);
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
+		panel.setCellSize(10);
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 		
