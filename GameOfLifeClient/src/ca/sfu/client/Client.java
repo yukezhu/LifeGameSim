@@ -213,6 +213,8 @@ public class Client {
 	}
 	
 	private void deletePos(Outfits out, Neighbour nei, Integer pos) {
+		if(nei == null)
+			return ;
 		nei.position.remove(pos);
 		if(nei.position.size() == 0) {
 			if(nei.comrade.sender != null){
