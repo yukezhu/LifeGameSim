@@ -31,6 +31,7 @@ public class Client {
 	private Comrade  server;
 	
 	private int myPort;
+	private String myIp;
 	private MessageReceiver Receiver;
 	private RegularConfirmMsg myConfirmMessage;
 	
@@ -66,7 +67,8 @@ public class Client {
 		}
 	}
 	
-	public void startClient() throws IOException, InterruptedException {
+	public void startClient(String ip) throws IOException, InterruptedException {
+		myIp = ip;
 		MessageSender svsdr = new MessageSender(SERVER_IP, SERVER_PORT);
 		server = new Comrade(MessageCodeDictionary.ID_SERVER, SERVER_PORT, SERVER_IP, svsdr);
 		JoinRequestMsg Request = new JoinRequestMsg(myPort);
@@ -76,7 +78,6 @@ public class Client {
 			System.out.println("status :" + status);
 			if(!Receiver.isEmpty()){
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
-				System.out.println(status);
 				switch(status) {
 //					case 0:
 //						server.sender.sendMsg(new RegularConfirmMsg(-1));
@@ -143,14 +144,11 @@ public class Client {
 		System.out.println("received outfit");
 		outfit = msg.yourOutfits;
 		myConfirmMessage = new RegularConfirmMsg(outfit.myId);
-		if(outfit.pair == null) {
+		if(outfit.pair == null) 
 			server.sender.sendMsg(myConfirmMessage);
-			System.out.println('A');
-		}
 		else {
 			outfit.pair.sender = new MessageSender(outfit.pair.ip, outfit.pair.port);
 			outfit.pair.sender.sendMsg(myConfirmMessage);
-			System.out.println('B');
 		}
 		for(Neighbour nei: outfit.neighbour) {
 			if(nei.comrade.id == outfit.pair.id)
@@ -159,7 +157,7 @@ public class Client {
 				nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
 				ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
 				nei.comrade.sender.sendMsg(
-						new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, InetAddress.getLocalHost().getHostAddress()));
+						new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp));
 			}
 		}
 	}
@@ -243,8 +241,8 @@ public class Client {
 						break;
 					}
 //			MessageSender Sender = new MessageSender(InetAddress.getLocalHost().getHostAddress(), myPort);
-			Comrade comerade = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null);
-			ArrayList position = new ArrayList<Integer>();
+			Comrade comerade = new Comrade(outfit.myId, myPort, myIp, null);
+			ArrayList<Integer> position = new ArrayList<Integer>();
 			position.add(1);
 			position.add(2);
 			Neighbour pair_neighbor = new Neighbour(position, comerade);
@@ -327,7 +325,7 @@ public class Client {
 						break;
 					}
 //			MessageSender Sender = new MessageSender(InetAddress.getLocalHost().getHostAddress(), myPort);
-			Comrade comerade = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null); 
+			Comrade comerade = new Comrade(outfit.myId, myPort, myIp, null); 
 			ArrayList<Integer> mypos = new ArrayList<Integer>();
 			mypos.add(4);
 			mypos.add(5);
@@ -396,7 +394,7 @@ public class Client {
 				}
 			}
 		}
-		pair_outfit.pair = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null);
+		pair_outfit.pair = new Comrade(outfit.myId, myPort, myIp, null);
 		outfit.pair.sender.sendMsg(new JoinOutfitsMsg(outfit.myId, myPort, pair_outfit));
 		System.out.println("split_ID"+pair_outfit.myId);
 		
