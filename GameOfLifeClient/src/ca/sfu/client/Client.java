@@ -192,7 +192,18 @@ public class Client {
 	}
 	
 	private void handleBorderMessage(RegularBorderMsg msg) {
+		int cid = msg.getClientId();
+		int nei_id = -1;
 		
+		for(int i=0; i<outfit.neighbour.size(); i++){
+			if(outfit.neighbour.get(i).comrade.id == cid){
+				nei_id = i;
+				break;
+			}
+		}
+		
+		//merge and update the global border array/variable
+		mergeBorder(msg.boarder.bits, outfit.neighbour.get(nei_id).position);
 	}
 	
 	private boolean isBorderMessageComplete() {
