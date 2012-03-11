@@ -144,7 +144,7 @@ public class Client {
 		}
 		for(Neighbour nei: outfit.neighbour) {
 			nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
-			ArrayList<Integer> mypos  = ClientHelper.ClientNeighbor(nei.position);
+			ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
 			nei.comrade.sender.sendMsg(
 					new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, InetAddress.getLocalHost().getHostAddress()));
 		}
@@ -164,31 +164,27 @@ public class Client {
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
-		int oldPos = -1;
-		for(int j = 0; j < outfit.neighbour.size(); j++){
-			for (int p = 0; p < outfit.neighbour.get(j).position.size(); p++ ){
-				for(int i = 0; i < msg.pos.size(); i++){
-					if(msg.pos.get(i) == outfit.neighbour.get(j).position.get(p) ){
-						outfit.neighbour.get(j).position.remove(p);
-					}
-				}									
+		boolean isOldFriend = false;
+		for(Neighbour nei: outfit.neighbour){
+			if(nei.comrade.id == msg.getClientId()) {
+				nei.position.clear();
+				for(Integer q: msg.pos) nei.position.add(q);
+				isOldFriend = true;
 			}
-			if(outfit.neighbour.get(j).comrade.id != msg.getClientId())
-				outfit.neighbour.remove(j);
-			else
-				oldPos = j;
+			else {
+				for (Integer p: nei.position){
+					for(Integer q: msg.pos)
+						if(p == q) nei.position.remove(q);
+				}
+				if(nei.position.size() == 0)
+					outfit.neighbour.remove(nei);
+			}
 		}
-		if(oldPos < 0) {
-			MessageSender sender = new MessageSender(msg.ip, msg.port);
-			Comrade comerade = new Comrade(msg.getClientId(), msg.port, msg.ip, sender); 
-			Neighbour newneighbor = new Neighbour(msg.pos, comerade);
-			outfit.neighbour.add(newneighbor);
+		if(!isOldFriend) {
+			Neighbour newnei = new Neighbour(msg.pos, 
+					new Comrade(msg.getClientId(), msg.port, msg.ip, new MessageSender(msg.ip, msg.port)));
+			outfit.neighbour.add(newnei);
 		}
-		else {
-			for(Integer i: msg.pos)
-				outfit.neighbour.get(oldPos).position.add(i);
-		}
-		
 	}
 	
 	private void handleSplit(JoinSplitMsg msg) {
