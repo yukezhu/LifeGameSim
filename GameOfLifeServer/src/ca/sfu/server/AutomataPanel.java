@@ -129,6 +129,7 @@ public class AutomataPanel extends JPanel  {
 	public void setBoard(Board board)
 	{
 		b = board;
+		setSize(b.width, b.height);
 	}
 	
 	public Board getBoard()
