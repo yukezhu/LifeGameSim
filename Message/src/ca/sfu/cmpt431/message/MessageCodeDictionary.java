@@ -30,8 +30,4 @@ public class MessageCodeDictionary {
 	public final static int WAIT_FOR_PAIR_CONFIRM_STATUS= -4;
 	public final static int COMPUTING_STATUS= 5;
 	
-	
-	
-	
-	
 }
