@@ -255,6 +255,7 @@ public class Client {
 						break;
 					}
 		}
+		pair_outfit.pair = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null);
 		outfit.pair.sender.sendMsg(new JoinOutfitsMsg(outfit.myId, myPort, pair_outfit));
 		
 	}
