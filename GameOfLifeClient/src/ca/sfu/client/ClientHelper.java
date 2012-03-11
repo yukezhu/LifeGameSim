@@ -1,5 +1,8 @@
 package ca.sfu.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ClientHelper {
 
@@ -8,9 +11,9 @@ public class ClientHelper {
 	 * 	@param 	neighbor information
 	 *  @return	corresponding neighbor information with respect to the node
 	 */
-	public static int[] ClientNeighbor(int[] neighbourInfo)
+	public static List<Integer> ClientNeighbor(final List<Integer> neighbourInfo)
 	{
-		int[] info = null;
+		List<Integer> info = null;
 		
 		if(ClientHelper.checkClockwise(0, 1, neighbourInfo))
 			info = ClientHelper.fillClockwise(6, 1);
@@ -71,13 +74,13 @@ public class ClientHelper {
 	 * @param length of sequences
 	 * @return generated sequence
 	 */
-	private static int[] fillClockwise(int start, int length)
+	private static List<Integer> fillClockwise(int start, int length)
 	{
-		int[] info = new int[length];
+		List<Integer> info = new ArrayList<Integer>();
 		int k = start, n = 12;
 		for(int i=0; i<length; i++)
 		{
-			info[i] = k;
+			info.add(k);
 			k = (k + 1) % n;
 		}
 		return info;
@@ -87,14 +90,14 @@ public class ClientHelper {
 	 * Check if the sequence is clockwise values
 	 * @return true or false
 	 */
-	private static boolean checkClockwise(int start, int length, final int[] info)
+	private static boolean checkClockwise(int start, int length, final List<Integer> info)
 	{
 		int n = 12;
-		if(info.length != length) return false;
+		if(info.size() != length) return false;
 		int k = start;
 		for(int i=0; i<length; i++)
 		{
-			if(info[i] != k) return false;
+			if(info.get(i) != k) return false;
 			k = (k + 1) % n;
 		}
 		return true;
@@ -104,11 +107,12 @@ public class ClientHelper {
 	{
 		for(int k = 0; k<12; k++)
 		{
-			int[] info = {k};
+			List<Integer> info = new ArrayList<Integer>();
+			info.add(k);
 			info = ClientHelper.ClientNeighbor(info);
 			System.out.print(k + " --> ");
-			for(int i=0; i<info.length; i++)
-				System.out.print(info[i] + " ");
+			for(int i=0; i<info.size(); i++)
+				System.out.print(info.get(i) + " ");
 			System.out.println();
 		}
 	}
