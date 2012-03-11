@@ -90,11 +90,12 @@ public class Server{
 						}
 						status = 3;
 						break;
+						
 					//waiting for the client to send the result back
 					//handle new adding or
 					//restart next cycle
 					case 3:
-						if(handleNewAdding(m,2))
+						if(handleNewAdding(m,3))
 							break;
 						
 						handleNewBoardInfo(m,b,3);
@@ -103,7 +104,7 @@ public class Server{
 						
 						//handle adding
 						if(handlePending()){
-							status = 4;
+							status = 2;
 							break;
 						}
 						
@@ -124,6 +125,13 @@ public class Server{
 						
 						if(waiting4confirm!=0) //still need waiting for confirmation
 							break;
+						
+						//deal with add
+						if(newClientSender.size()!=0){
+							handlePending();
+							status = 5;
+							break;
+						}
 						
 						//start
 						if(waiting4confirm==0){
@@ -171,7 +179,7 @@ public class Server{
 						//Sender2.sendMsg(auto.right());
 						status = 5;
 						break;
-					case 5:
+					case -6:
 						if(!m.getIp().equals(client2_ip))
 							System.out.println("Error!");
 						Sender1.sendMsg("left");
