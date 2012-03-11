@@ -205,7 +205,8 @@ public class Client {
 			board = BoardOperation.HorizontalCut(outfit.myBoard);
 		}	
 		outfit.myBoard = board.get(0);
-		outfit.pair.sender.close();
+		if(outfit.pair != null)
+			outfit.pair.sender.close();
 		 
 		outfit.pair = new Comrade(msg.newcomerId, msg.newcomerPort, msg.newcomerIp, new MessageSender(msg.newcomerIp, msg.newcomerPort));
 		Board pair_board;
