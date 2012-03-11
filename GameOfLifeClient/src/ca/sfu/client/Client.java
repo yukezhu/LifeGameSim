@@ -225,13 +225,21 @@ public class Client {
 		else{
 			board = BoardOperation.HorizontalCut(outfit.myBoard);
 		}	
-		outfit.myBoard = board.get(0);
+		outfit.myBoard = board.get(1);
+		
 		if(outfit.pair != null)
 			outfit.pair.sender.close();
-		 
+		
 		outfit.pair = new Comrade(msg.newcomerId, msg.newcomerPort, msg.newcomerIp, new MessageSender(msg.newcomerIp, msg.newcomerPort));
 		Board pair_board;
-		pair_board = board.get(1);
+		pair_board = board.get(0);
+		if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_HORIZONTAL){
+			outfit.top = outfit.top + pair_board.height;
+		}
+		else{
+			outfit.left = outfit.left + pair_board.width;
+		}
+			
 		Outfits pair_outfit = new Outfits(msg.newcomerId, outfit.nextClock, outfit.top, outfit.left, pair_board);
 		Neighbour N10 = findNeiWithPos(10);
 		Neighbour N11 = findNeiWithPos(11);
@@ -245,8 +253,14 @@ public class Client {
 		Neighbour N7= findNeiWithPos(7);
 		Neighbour N8 = findNeiWithPos(8);
 		Neighbour N9 = findNeiWithPos(9);
-		if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
+		if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_HORIZONTAL)
 		{
+			ArrayList<Integer> mypos1 = new ArrayList<Integer>();
+			mypos1.add(1);
+			mypos1.add(2);
+			Comrade comerade1 = new Comrade(msg.newcomerId, msg.newcomerPort, msg.newcomerIp, new MessageSender(msg.newcomerIp,msg.newcomerPort ));
+			Neighbour newneighbor1 = new Neighbour(mypos1, comerade1);
+			outfit.neighbour.add(newneighbor1);
 			for(int i = 0; i < 7; i++)
 				for( int j = 0; j < outfit.neighbour.size(); j++)
 					if(outfit.neighbour.get(j).position.get(0) <= i){
@@ -331,6 +345,12 @@ public class Client {
 			
 		}
 		else{
+			ArrayList<Integer> mypos1 = new ArrayList<Integer>();
+			mypos1.add(11);
+			mypos1.add(10);
+			Comrade comerade1 = new Comrade(msg.newcomerId, msg.newcomerPort, msg.newcomerIp, new MessageSender(msg.newcomerIp,msg.newcomerPort ));
+			Neighbour newneighbor1 = new Neighbour(mypos1, comerade1);
+			outfit.neighbour.add(newneighbor1);
 			for(int i = 0; i < 4; i++)
 				for( int j = 0; j < outfit.neighbour.size(); j++)
 					if(outfit.neighbour.get(j).position.get(0) <= i){
@@ -408,8 +428,28 @@ public class Client {
 			}
 		}
 		pair_outfit.pair = new Comrade(outfit.myId, myPort, myIp, null);
+		
 		outfit.pair.sender.sendMsg(new JoinOutfitsMsg(outfit.myId, myPort, pair_outfit));
-		System.out.println("split_ID"+pair_outfit.myId);
+		System.out.println("top and left:" + outfit.left + ", "+ outfit.top);
+		System.out.println("width and height:" + outfit.myBoard.width + ", "+ outfit.myBoard.height);
+		System.out.println("neighbor size" + outfit.neighbour.size());
+		for(Neighbour nei: outfit.neighbour){
+			System.out.println("neighborID:" + nei.comrade.id);
+			for(Integer pos: nei.position)
+				System.out.print("neighborPos:" + pos + " ");
+			System.out.println(" " );
+				
+		}
+		System.out.println("top and left:" + pair_outfit.left + ", "+ pair_outfit.top);
+		System.out.println("width and height:" + pair_outfit.myBoard.width + ", "+ pair_outfit.myBoard.height);
+		System.out.println("neighbor size" + pair_outfit.neighbour.size());
+		for(Neighbour nei: pair_outfit.neighbour){
+			System.out.println("neighborID:" + nei.comrade.id);
+			for(Integer pos: nei.position)
+				System.out.print("neighborPos:" + pos + " ");
+			System.out.println(" " );
+				
+		}
 		
 	}
 	
@@ -426,6 +466,14 @@ public class Client {
 		}
 		
 		//merge and update the global border array/variable
+		System.out.println(outfit.left);
+		for(Neighbour nei: outfit.neighbour){
+			System.out.println("neighborID:" + nei.comrade.id);
+			for(Integer pos: nei.position)
+				System.out.print("neighborPos:" + pos + " ");
+			System.out.println(" " );
+				
+		}
 		mergeBorder(msg.boarder.bits, outfit.neighbour.get(nei_id).position);
 	}
 	
