@@ -249,6 +249,7 @@ public class Client {
 			mypos.add(8);
 			Neighbour newneighbor = new Neighbour(mypos, comerade);
 			pair_outfit.neighbour.add(newneighbor);
+			
 			for(int i = 9; i < 12; i++)
 				for( int j = 0; j < outfit.neighbour.size(); j++)
 					if(outfit.neighbour.get(j).position.get(0) <= i){
@@ -256,7 +257,7 @@ public class Client {
 						break;
 					}		
 			
-			if(N10.comrade.id == N11.comrade.id)
+			if(N11 != null && N10 != null && N10.comrade.id == N11.comrade.id)
 			{
 				if(N0.comrade.id != N11.comrade.id)
 				{
@@ -269,7 +270,7 @@ public class Client {
 				N10.position.add(0);
 				outfit.neighbour.add(N10);
 			}
-			if(N4.comrade.id == N5.comrade.id)
+			if(N4 != null && N5 != null && N4.comrade.id == N5.comrade.id && N4 != null)
 			{
 				if(N3.comrade.id != N5.comrade.id)
 				{
@@ -282,7 +283,7 @@ public class Client {
 				N4.position.add(5);
 				outfit.neighbour.add(N4);
 			}
-			if(N1.comrade.id == N2.comrade.id)
+			if(N1 != null && N2 != null && N1.comrade.id == N2.comrade.id && N1 != null)
 			{
 				if(N1.comrade.id != N0.comrade.id && N1.comrade.id != N3.comrade.id)
 				{
@@ -295,7 +296,7 @@ public class Client {
 				outfit.neighbour.add(N1);
 			}
 			else{
-				if(N1.comrade.id != N0.comrade.id )
+				if(N1 != null && N0 != null && N1.comrade.id != N0.comrade.id && N1 != null)
 				{
 					N1.comrade.sender.close();
 					outfit.neighbour.remove(N1);					
@@ -304,7 +305,7 @@ public class Client {
 					
 					
 				}
-				if(N2.comrade.id != N3.comrade.id)
+				if(N2 != null && N3 != null && N2.comrade.id != N3.comrade.id && N2 != null)
 				{
 					N2.comrade.sender.close();
 					outfit.neighbour.remove(N2);
@@ -335,7 +336,7 @@ public class Client {
 						break;
 					}
 			
-			if(N1.comrade.id == N2.comrade.id)
+			if(N1 != null && N2 != null && N1.comrade.id == N2.comrade.id && N1 != null)
 			{
 				if(N1.comrade.id != N0.comrade.id)
 				{
@@ -348,7 +349,7 @@ public class Client {
 				N1.position.add(0);
 				outfit.neighbour.add(N1);
 			}
-			if(N7.comrade.id == N8.comrade.id)
+			if(N7 != null && N8 != null && N7.comrade.id == N8.comrade.id && N7 != null)
 			{
 				if(N9.comrade.id != N7.comrade.id)
 				{
@@ -361,7 +362,7 @@ public class Client {
 				N4.position.add(5);
 				outfit.neighbour.add(N4);
 			}
-			if(N10.comrade.id == N11.comrade.id)
+			if(N11 != null && N10 != null && N10.comrade.id == N11.comrade.id && N10 != null)
 			{
 				if(N11.comrade.id != N0.comrade.id && N11.comrade.id != N9.comrade.id)
 				{
@@ -374,7 +375,7 @@ public class Client {
 				outfit.neighbour.add(N11);
 			}
 			else{
-				if(N11.comrade.id != N0.comrade.id )
+				if(N11 != null && N0 != null && N11.comrade.id != N0.comrade.id && N0 != null)
 				{
 					N11.comrade.sender.close();
 					outfit.neighbour.remove(N11);					
@@ -382,7 +383,7 @@ public class Client {
 					outfit.neighbour.add(N11);
 					
 				}
-				if(N10.comrade.id != N9.comrade.id)
+				if(N9 != null && N10 != null && N10.comrade.id != N9.comrade.id && N10 != null)
 				{
 					N10.comrade.sender.close();
 					outfit.neighbour.remove(N10);
