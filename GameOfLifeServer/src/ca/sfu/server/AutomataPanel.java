@@ -134,7 +134,7 @@ public class AutomataPanel extends JPanel  {
 	public void setBoard(Board board)
 	{
 		b = board;
-		setSize(b.width, b.height);
+		setSize(b.width * cellSize, b.height * cellSize);
 	}
 	
 	public int getAlive() {
@@ -158,7 +158,7 @@ public class AutomataPanel extends JPanel  {
 	public void paint(Graphics g) {
 		super.paint(g);
 		if(b != null)
-		{
+		{	
 			int width = b.width / cellScale;
 			int height = b.height / cellScale;
 			boolean[][] bitmap = b.bitmap;
