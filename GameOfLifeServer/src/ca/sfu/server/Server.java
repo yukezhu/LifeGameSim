@@ -289,7 +289,8 @@ public class Server{
 		if(waiting4confirm==0)
 			status = nextStatus;
 		
-		BoardOperation.Merge(b, (Board)m.extracMessage(), 0, 0);
+		RegularBoardReturnMsg r = (RegularBoardReturnMsg)m.extracMessage();
+		BoardOperation.Merge(b, r.board, r.top, r.left);
 //		b = (Board)m.extracMessage();
 	}
 	

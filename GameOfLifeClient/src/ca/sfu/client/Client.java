@@ -2,6 +2,7 @@ package ca.sfu.client;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import ca.sfu.cmpt431.facility.Board;
@@ -408,14 +409,14 @@ public class Client {
 //		
 //	}
 	
-	protected boolean[] getborder(int[] array){
+	protected boolean[] getborder(List<Integer> array){
 		
 		Board b = outfit.myBoard;
 		ArrayList<Boolean> al = new ArrayList<Boolean>();
 		
 		int j;
-		for(int i=0; i<array.length; i++){
-			int a = array[i];
+		for(int i=0; i<array.size(); i++){
+			int a = array.get(i);
 			switch(a+1){
 			case 1:
 				if(al.size()!=0)
@@ -513,7 +514,7 @@ public class Client {
 	}
 
 	//comment
-	protected void mergeBorder(boolean[] aa, int[] array1){
+	protected void mergeBorder(boolean[] aa, List<Integer> array1){
 		ArrayList<Boolean> tmp = new ArrayList<Boolean>();
 		
 		Board b = outfit.myBoard;
@@ -521,11 +522,11 @@ public class Client {
 		for(int k=0; k<aa.length; k++)
 			tmp.add(aa[k]);
 		
-		for(int i=0; i<array1.length; i++){
+		for(int i=0; i<array1.size(); i++){
 			if(tmp.size()==0)
 				break;
 			
-			int num = array1[i];
+			int num = array1.get(i);
 			switch(num+1){
 			case 1:
 				upperLeft = (boolean) tmp.get(0);
