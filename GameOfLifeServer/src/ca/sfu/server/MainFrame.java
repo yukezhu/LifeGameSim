@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -30,6 +31,31 @@ public class MainFrame extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu aboutMenu = new JMenu("About");
 		JMenu windowMenu = new JMenu("Window");
+		
+		JMenuItem menuWindowZoomIn = new JMenuItem("Zoom In");
+		JMenuItem menuWindowZoomOut = new JMenuItem("Zoom Out");
+		JMenuItem menuWindowNormal = new JMenuItem("Normal");
+		menuWindowZoomIn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				automataPanel.setZoomIn();
+			}});
+		
+		
+		menuWindowZoomOut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				automataPanel.setZoomOut();
+			}});
+		
+		menuWindowNormal.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				automataPanel.setNormal();
+			}});
+		windowMenu.add(menuWindowZoomIn);
+		windowMenu.add(menuWindowZoomOut);
+		windowMenu.add(menuWindowNormal);
 		menuBar.add(aboutMenu);
 		menuBar.add(windowMenu);
 		return menuBar;
@@ -38,12 +64,12 @@ public class MainFrame extends JFrame {
 	public MainFrame()
 	{
 		super();
-		setSize(800, 800);
+		setSize(805, 860);
 		setJMenuBar(createMenuBar());
 		
 		board = new Board(800, 800);
 		BoardOperation.Randomize(board, 0.1);
-		final AutomataPanel automataPanel = new AutomataPanel();
+		automataPanel = new AutomataPanel();
 		automataPanel.setCellSize(1);
 		automataPanel.setBoard(board);
 		
@@ -75,6 +101,7 @@ public class MainFrame extends JFrame {
 	
 	public static void main(String[] args) {
 		
+		@SuppressWarnings("unused")
 		MainFrame frame = new MainFrame();
 		
 	}
