@@ -48,6 +48,8 @@ public class Client {
 	public boolean lowerLeft;
 	public boolean lowerRight;
 	
+	private int borderCount = 0;
+	
 	public Client() {
 		while(true){
 			Random r = new Random(); 
@@ -253,6 +255,7 @@ public class Client {
 	private void handleBorderMessage(RegularBorderMsg msg) {
 		int cid = msg.getClientId();
 		int nei_id = -1;
+		borderCount++;
 		
 		for(int i=0; i<outfit.neighbour.size(); i++){
 			if(outfit.neighbour.get(i).comrade.id == cid){
@@ -266,12 +269,15 @@ public class Client {
 	}
 	
 	private boolean isBorderMessageComplete() {
-		return true;
+		if(borderCount == outfit.neighbour.size())
+			return true;
+		return false;
 	}
 	
 	private void computeAndReport() throws IOException {
 		BoardOperation.NextMoment(outfit.myBoard, null, null, null, null, false, false, false, false);
 		server.sender.sendMsg(new RegularBoardReturnMsg(outfit.myId, 0, 0, outfit.myBoard));
+		borderCount = 0;
 	}
 	
 	private void sendMessageTo(int cid, Message msg) throws IOException {
