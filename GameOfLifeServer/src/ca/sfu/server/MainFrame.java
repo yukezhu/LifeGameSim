@@ -29,10 +29,12 @@ public class MainFrame extends JFrame {
 		setJMenuBar(createMenuBar());
 		setBackground(new Color(0xeb, 0xeb, 0xeb));
 		
-		board = new Board(800, 800);
-		BoardOperation.Randomize(board, 0.1);
+//		board = new Board(800, 800);
+//		BoardOperation.Randomize(board, 0.1);
+		board = BoardOperation.LoadFile("/home/yukez/LifeGameSim/Patterns/map1.lg");
+		
 		automataPanel = new AutomataPanel();
-		automataPanel.setCellSize(1);
+		automataPanel.setCellSize(2);
 		automataPanel.setBoard(board);
 		automataPanel.setBackground(new Color(0xeb, 0xeb, 0xeb));
 		

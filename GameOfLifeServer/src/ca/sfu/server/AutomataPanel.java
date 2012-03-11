@@ -134,7 +134,7 @@ public class AutomataPanel extends JPanel  {
 	public void setBoard(Board board)
 	{
 		b = board;
-		setSize(b.width, b.height);
+		setSize(b.width * cellSize, b.height * cellSize);
 	}
 	
 	public int getAlive() {
