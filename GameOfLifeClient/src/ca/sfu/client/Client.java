@@ -411,8 +411,8 @@ public class Client {
 				deletePos(outfit, pn[11], 11);
 				deletePos(outfit, pn[0], 0);
 			}
-		
-		}		
+		}
+		outfit.pair.sender.sendMsg(new JoinOutfitsMsg(outfit.myId, myPort, pout));
 	}
 	
 //	private void handleSplit(JoinSplitMsg msg) throws UnknownHostException, IOException {
