@@ -75,7 +75,7 @@ public class Client {
 		while(true){
 			if(!Receiver.isEmpty()){
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
-				System.out.println("Entreing status: " + status);
+//				System.out.println("Entreing status: " + status);
 				switch(status) {
 					case 0:
 						server.sender.sendMsg(new RegularConfirmMsg(-1));
@@ -137,6 +137,7 @@ public class Client {
 	}
 	
 	private void repairOutfit(JoinOutfitsMsg msg) throws IOException {
+		System.out.println("received outfit");
 		outfit = msg.yourOutfits;
 		myConfirmMessage = new RegularConfirmMsg(outfit.myId);
 		if(outfit.pair == null) 
@@ -192,6 +193,7 @@ public class Client {
 	
 	private void handleSplit(JoinSplitMsg msg) throws UnknownHostException, IOException {
 		
+		System.out.println("Handle split");
 		List<Board> board;
 		if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
 		{
@@ -203,8 +205,6 @@ public class Client {
 		outfit.myBoard = board.get(0);
 		Board pair_board;
 		pair_board = board.get(1);
-		MessageSender Sender3 = new MessageSender(msg.newcomerIp, msg.newcomerPort);
-//		comrade[msg.newcomerId] = new Comrade(msg.newcomerId, msg.newcomerPort, msg.newcomerIp, Sender3);
 		Outfits pair_outfit = new Outfits(msg.newcomerId, outfit.nextClock, outfit.top, outfit.left, pair_board);
 		if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
 		{
