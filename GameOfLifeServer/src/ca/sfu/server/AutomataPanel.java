@@ -158,7 +158,7 @@ public class AutomataPanel extends JPanel  {
 	public void paint(Graphics g) {
 		super.paint(g);
 		if(b != null)
-		{
+		{	
 			int width = b.width / cellScale;
 			int height = b.height / cellScale;
 			boolean[][] bitmap = b.bitmap;

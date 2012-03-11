@@ -19,7 +19,6 @@ public class ControlPanel extends JFrame {
 		
 	}
 	
-	
 	public static void main(String args[])
 	{
 		ControlPanel control = new ControlPanel();
