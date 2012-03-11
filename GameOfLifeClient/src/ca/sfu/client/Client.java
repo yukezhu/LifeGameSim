@@ -71,16 +71,16 @@ public class Client {
 		server = new Comrade(MessageCodeDictionary.ID_SERVER, SERVER_PORT, SERVER_IP, svsdr);
 		JoinRequestMsg Request = new JoinRequestMsg(myPort);
 		server.sender.sendMsg(Request);
-		status = 0;
+		status = 1;
 		while(true){
 			if(!Receiver.isEmpty()){
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
 				System.out.println(status);
 				switch(status) {
-					case 0:
-						server.sender.sendMsg(new RegularConfirmMsg(-1));
-						status = 1;
-						break;
+//					case 0:
+//						server.sender.sendMsg(new RegularConfirmMsg(-1));
+//						status = 1;
+//						break;
 					case 1:
 						repairOutfit((JoinOutfitsMsg) msg);
 						if(outfit.neighbour.size() > 0){
