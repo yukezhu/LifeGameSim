@@ -66,6 +66,7 @@ public class MainFrame extends JFrame {
 		super();
 		setSize(805, 860);
 		setJMenuBar(createMenuBar());
+		this.setBackground(Color.red);
 		
 		board = new Board(800, 800);
 		BoardOperation.Randomize(board, 0.1);
