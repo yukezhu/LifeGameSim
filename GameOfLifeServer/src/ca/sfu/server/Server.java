@@ -39,11 +39,11 @@ public class Server{
 		JFrame frame = new JFrame();
 		frame.setSize(480, 480);
 		//AutomataMsg auto = new AutomataMsg(10, 10);
-		Board b = new Board(10, 10);
-		BoardOperation.Randomize(b,0.2);
+		Board b = new Board(50, 50);
+		BoardOperation.Randomize(b,0.1);
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
-		panel.setCellSize(10);
+		panel.setCellSize(5);
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 		
@@ -265,8 +265,7 @@ public class Server{
 			//manage the heap
 			if(cid!=0){ //not the first client
 				Comrade c = regedClientSender.get(0); //get it down one level
-				regedClientSender.remove(0);
-				regedClientSender.add(c);
+				
 				//c is the pair
 				int mode;
 				if((Math.log(2*cid+1)/Math.log(2)%2)==0)
@@ -274,7 +273,11 @@ public class Server{
 				else
 					mode = MessageCodeDictionary.SPLIT_MODE_VERTICAL;
 				
-				c.sender.sendMsg(new JoinSplitMsg(cid, c.sender.hostListenningPort, c.sender.hostIp, mode));
+				System.out.println("send JoinSplitMsg");
+				c.sender.sendMsg(new JoinSplitMsg(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, mode));
+				
+				regedClientSender.remove(0);
+				regedClientSender.add(c);
 			}
 			else{
 				regedClientSender.add(new Comrade(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));
