@@ -75,7 +75,6 @@ public class Client {
 		while(true){
 			if(!Receiver.isEmpty()){
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
-//				System.out.println("Entreing status: " + status);
 				switch(status) {
 					case 0:
 						server.sender.sendMsg(new RegularConfirmMsg(-1));
@@ -123,10 +122,12 @@ public class Client {
 						}
 						break;
 					case 5:
-						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
+						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM){
+							System.out.println(msg.getMessageCode());
 							System.out.println("type error, expect confirm message");
+						}
 						else
-							sendMessageTo(msg.getClientId(), myConfirmMessage);
+							server.sender.sendMsg(myConfirmMessage);
 						break;
 					default:
 						System.out.println("Received unexpectd message.");
@@ -257,6 +258,7 @@ public class Client {
 		}
 		pair_outfit.pair = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null);
 		outfit.pair.sender.sendMsg(new JoinOutfitsMsg(outfit.myId, myPort, pair_outfit));
+		System.out.println("split_ID"+pair_outfit.myId);
 		
 	}
 	

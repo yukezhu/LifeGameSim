@@ -16602,3 +16602,6 @@ org.eclipse.osgi.framework.internal.core.AbstractBundle$BundleStatusException
 	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:559)
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:514)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1311)
+
+!ENTRY org.eclipse.ui 4 4 2012-03-10 18:40:53.105
+!MESSAGE Referenced part does not exist yet: org.eclipse.ui.views.ProblemView.
