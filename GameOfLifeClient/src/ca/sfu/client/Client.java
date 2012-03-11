@@ -1,6 +1,7 @@
 package ca.sfu.client;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -47,6 +48,8 @@ public class Client {
 	public boolean lowerLeft;
 	public boolean lowerRight;
 	
+	private int borderCount = 0;
+	
 	public Client() {
 		while(true){
 			Random r = new Random(); 
@@ -68,16 +71,15 @@ public class Client {
 		server = new Comrade(MessageCodeDictionary.ID_SERVER, SERVER_PORT, SERVER_IP, svsdr);
 		JoinRequestMsg Request = new JoinRequestMsg(myPort);
 		server.sender.sendMsg(Request);
-		status = 0;
+		status = 1;
 		while(true){
 			if(!Receiver.isEmpty()){
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
-				System.out.println("Entreing status: " + status);
 				switch(status) {
-					case 0:
-						server.sender.sendMsg(new RegularConfirmMsg(-1));
-						status = 1;
-						break;
+//					case 0:
+//						server.sender.sendMsg(new RegularConfirmMsg(-1));
+//						status = 1;
+//						break;
 					case 1:
 						repairOutfit((JoinOutfitsMsg) msg);
 						if(outfit.neighbour.size() > 0){
@@ -120,10 +122,12 @@ public class Client {
 						}
 						break;
 					case 5:
-						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
+						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM){
+							System.out.println(msg.getMessageCode());
 							System.out.println("type error, expect confirm message");
+						}
 						else
-							sendMessageTo(msg.getClientId(), myConfirmMessage);
+							server.sender.sendMsg(myConfirmMessage);
 						break;
 					default:
 						System.out.println("Received unexpectd message.");
@@ -134,6 +138,7 @@ public class Client {
 	}
 	
 	private void repairOutfit(JoinOutfitsMsg msg) throws IOException {
+		System.out.println("received outfit");
 		outfit = msg.yourOutfits;
 		myConfirmMessage = new RegularConfirmMsg(outfit.myId);
 		if(outfit.pair == null) 
@@ -144,7 +149,7 @@ public class Client {
 		}
 		for(Neighbour nei: outfit.neighbour) {
 			nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
-			ArrayList<Integer> mypos  = ClientHelper.ClientNeighbor(nei.position);
+			ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
 			nei.comrade.sender.sendMsg(
 					new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, InetAddress.getLocalHost().getHostAddress()));
 		}
@@ -164,48 +169,125 @@ public class Client {
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
-		int oldPos = -1;
-		for(int j = 0; j < outfit.neighbour.size(); j++){
-			for (int p = 0; p < outfit.neighbour.get(j).position.size(); p++ ){
-				for(int i = 0; i < msg.pos.size(); i++){
-					if(msg.pos.get(i) == outfit.neighbour.get(j).position.get(p) ){
-						outfit.neighbour.get(j).position.remove(p);
-					}
-				}									
+		boolean isOldFriend = false;
+		for(Neighbour nei: outfit.neighbour){
+			if(nei.comrade.id == msg.getClientId()) {
+				nei.position.clear();
+				for(Integer q: msg.pos) nei.position.add(q);
+				isOldFriend = true;
 			}
-			if(outfit.neighbour.get(j).comrade.id != msg.getClientId())
-				outfit.neighbour.remove(j);
-			else
-				oldPos = j;
+			else {
+				for (Integer p: nei.position){
+					for(Integer q: msg.pos)
+						if(p == q) nei.position.remove(q);
+				}
+				if(nei.position.size() == 0){
+					nei.comrade.sender.close();
+					outfit.neighbour.remove(nei);
+				}
+			}
 		}
-		if(oldPos < 0) {
-			MessageSender sender = new MessageSender(msg.ip, msg.port);
-			Comrade comerade = new Comrade(msg.getClientId(), msg.port, msg.ip, sender); 
-			Neighbour newneighbor = new Neighbour(msg.pos, comerade);
-			outfit.neighbour.add(newneighbor);
+		if(!isOldFriend) {
+			Neighbour newnei = new Neighbour(msg.pos, 
+					new Comrade(msg.getClientId(), msg.port, msg.ip, new MessageSender(msg.ip, msg.port)));
+			outfit.neighbour.add(newnei);
 		}
-		else {
-			for(Integer i: msg.pos)
-				outfit.neighbour.get(oldPos).position.add(i);
-		}
-		
 	}
 	
-	private void handleSplit(JoinSplitMsg msg) {
+	private void handleSplit(JoinSplitMsg msg) throws UnknownHostException, IOException {
+		
+		System.out.println("Handle split");
+		List<Board> board;
+		if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
+		{
+			board = BoardOperation.VerticalCut(outfit.myBoard);
+		}
+		else{
+			board = BoardOperation.HorizontalCut(outfit.myBoard);
+		}	
+		outfit.myBoard = board.get(0);
+		if(outfit.pair != null)
+			outfit.pair.sender.close();
+		 
+		outfit.pair = new Comrade(msg.newcomerId, msg.newcomerPort, msg.newcomerIp, new MessageSender(msg.newcomerIp, msg.newcomerPort));
+		Board pair_board;
+		pair_board = board.get(1);
+		Outfits pair_outfit = new Outfits(msg.newcomerId, outfit.nextClock, outfit.top, outfit.left, pair_board);
+		if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
+		{
+			for(int i = 0; i < 7; i++)
+				for( int j = 0; j < outfit.neighbour.size(); j++)
+					if(outfit.neighbour.get(j).position.get(0) <= i){
+						pair_outfit.neighbour.add(outfit.neighbour.get(j));
+						break;
+					}
+//			MessageSender Sender = new MessageSender(InetAddress.getLocalHost().getHostAddress(), myPort);
+			Comrade comerade = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null); 
+			ArrayList<Integer> mypos = new ArrayList<Integer>();
+			mypos.add(7);
+			mypos.add(8);
+			Neighbour newneighbor = new Neighbour(mypos, comerade);
+			pair_outfit.neighbour.add(newneighbor);
+			for(int i = 9; i < 12; i++)
+				for( int j = 0; j < outfit.neighbour.size(); j++)
+					if(outfit.neighbour.get(j).position.get(0) <= i){
+						pair_outfit.neighbour.add(outfit.neighbour.get(j));
+						break;
+					}
+		}
+		else{
+			for(int i = 0; i < 4; i++)
+				for( int j = 0; j < outfit.neighbour.size(); j++)
+					if(outfit.neighbour.get(j).position.get(0) <= i){
+						pair_outfit.neighbour.add(outfit.neighbour.get(j));
+						break;
+					}
+//			MessageSender Sender = new MessageSender(InetAddress.getLocalHost().getHostAddress(), myPort);
+			Comrade comerade = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null); 
+			ArrayList<Integer> mypos = new ArrayList<Integer>();
+			mypos.add(4);
+			mypos.add(5);
+			Neighbour newneighbor = new Neighbour(mypos, comerade);
+			pair_outfit.neighbour.add(newneighbor);
+			for(int i = 5; i < 12; i++)
+				for( int j = 0; j < outfit.neighbour.size(); j++)
+					if(outfit.neighbour.get(j).position.get(0) <= i){
+						pair_outfit.neighbour.add(outfit.neighbour.get(j));
+						break;
+					}
+		}
+		pair_outfit.pair = new Comrade(outfit.myId, myPort, InetAddress.getLocalHost().getHostAddress(), null);
+		outfit.pair.sender.sendMsg(new JoinOutfitsMsg(outfit.myId, myPort, pair_outfit));
+		System.out.println("split_ID"+pair_outfit.myId);
 		
 	}
 	
 	private void handleBorderMessage(RegularBorderMsg msg) {
+		int cid = msg.getClientId();
+		int nei_id = -1;
+		borderCount++;
 		
+		for(int i=0; i<outfit.neighbour.size(); i++){
+			if(outfit.neighbour.get(i).comrade.id == cid){
+				nei_id = i;
+				break;
+			}
+		}
+		
+		//merge and update the global border array/variable
+		mergeBorder(msg.boarder.bits, outfit.neighbour.get(nei_id).position);
 	}
 	
 	private boolean isBorderMessageComplete() {
-		return true;
+		if(borderCount == outfit.neighbour.size())
+			return true;
+		return false;
 	}
 	
 	private void computeAndReport() throws IOException {
 		BoardOperation.NextMoment(outfit.myBoard, null, null, null, null, false, false, false, false);
 		server.sender.sendMsg(new RegularBoardReturnMsg(outfit.myId, 0, 0, outfit.myBoard));
+		borderCount = 0;
 	}
 	
 	private void sendMessageTo(int cid, Message msg) throws IOException {
@@ -370,9 +452,9 @@ public class Client {
 //										
 //					// split
 //					case MessageCodeDictionary.SPLIT_STATUS:
-//						JoinSplitMsg joinsplitmsg = (JoinSplitMsg)msgIp.extracMessage();
+//						msg msg = (msg)msgIp.extracMessage();
 //						List<Board> board;
-//						if (joinsplitmsg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
+//						if (msg.splitMode == MessageCodeDictionary.SPLIT_MODE_VERTICAL)
 //						{
 //							board = BoardOperation.VerticalCut(myboard);
 //						}
@@ -380,12 +462,12 @@ public class Client {
 //							board = BoardOperation.HorizontalCut(myboard);
 //						}	
 //						myboard = board.get(0);
-//						MessageSender Sender3 = new MessageSender(joinsplitmsg.newcomerIp, joinsplitmsg.newcomerPort);
-//						comrade[joinsplitmsg.newcomerId] = new Comrade(joinsplitmsg.newcomerId, joinsplitmsg.newcomerPort, joinsplitmsg.newcomerIp, Sender3);
+//						MessageSender Sender3 = new MessageSender(msg.newcomerIp, msg.newcomerPort);
+//						comrade[msg.newcomerId] = new Comrade(msg.newcomerId, msg.newcomerPort, msg.newcomerIp, Sender3);
 //						Outfits pair_outfit = new Outfits(pair_id, outfit.nextClock, outfit.top, outfit.left, myboard.height, myboard.width);
 //						
 //						JoinOutfitsMsg JOM = new JoinOutfitsMsg(cid, port, pair_outfit);
-//						comrade[joinsplitmsg.newcomerId].sender.sendMsg(JOM);
+//						comrade[msg.newcomerId].sender.sendMsg(JOM);
 //						status = MessageCodeDictionary.WAIT_FOR_PAIR_CONFIRM_STATUS;
 //						break;
 //					//wait for pair's confirm
