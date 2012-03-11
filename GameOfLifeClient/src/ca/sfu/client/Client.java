@@ -162,15 +162,31 @@ public class Client {
 		}
 	}
 	
-	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) {
-		
-				for(int j = 0; j < outfit.neighbour.size(); j++){
-					for (int p = 0; p < outfit.neighbour.get(j).position.size(); p++ ){
-						if(i == outfit.neighbour.get(j).position.get(p)){
-							outfit.neighbour.get(j).comrade.id = msg.getClientId();
-						}									
+	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
+		int oldPos = -1;
+		for(int j = 0; j < outfit.neighbour.size(); j++){
+			for (int p = 0; p < outfit.neighbour.get(j).position.size(); p++ ){
+				for(int i = 0; i < msg.pos.size(); i++){
+					if(msg.pos.get(i) == outfit.neighbour.get(j).position.get(p) ){
+						outfit.neighbour.get(j).position.remove(p);
 					}
-				}																
+				}									
+			}
+			if(outfit.neighbour.get(j).comrade.id != msg.getClientId())
+				outfit.neighbour.remove(j);
+			else
+				oldPos = j;
+		}
+		if(oldPos < 0) {
+			MessageSender sender = new MessageSender(msg.ip, msg.port);
+			Comrade comerade = new Comrade(msg.getClientId(), msg.port, msg.ip, sender); 
+			Neighbour newneighbor = new Neighbour(msg.pos, comerade);
+			outfit.neighbour.add(newneighbor);
+		}
+		else {
+			for(Integer i: msg.pos)
+				outfit.neighbour.get(oldPos).position.add(i);
+		}
 		
 	}
 	
