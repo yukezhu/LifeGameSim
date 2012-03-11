@@ -38,7 +38,7 @@ public class Client {
 	private int status;
 	private Outfits outfit;
 	
-	int neiUpdCount;
+	private int neiUpdCount;
 
 	public boolean[] up ;
 	public boolean[] down;
@@ -85,16 +85,15 @@ public class Client {
 //						break;
 					case 1:
 						repairOutfit((JoinOutfitsMsg) msg);
-						if(outfit.neighbour.size() > 0){
+						sendNeiUpdMsg();
+						if(neiUpdCount > 0)
 							status = 2;
-							neiUpdCount = 0;
-						}
 						else
 							status = 3;
 						break;
 					case 2:
-						neiUpdCount++;
-						if(neiUpdCount == outfit.neighbour.size()){
+						neiUpdCount--;
+						if(neiUpdCount <= 0){
 							server.sender.sendMsg(myConfirmMessage);
 							status = 3;
 						}
@@ -164,6 +163,16 @@ public class Client {
 						new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp));
 			}
 		}
+	}
+	
+	private void sendNeiUpdMsg() throws IOException {
+		neiUpdCount = 0;
+		for(Neighbour nei: outfit.neighbour)
+			if(nei.comrade.id != outfit.pair.id) {
+				nei.comrade.sender.sendMsg(new RegularUpdateNeighbourMsg(outfit.myId, 
+						(ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position), myPort, myIp));
+				neiUpdCount++;
+			}
 	}
 	
 	private void sendBorderToNeighbours() throws IOException {
