@@ -123,7 +123,6 @@ public class Client {
 						break;
 					case 5:
 						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM){
-							System.out.println(msg.getMessageCode());
 							System.out.println("type error, expect confirm message");
 						}
 						else
@@ -143,11 +142,9 @@ public class Client {
 		outfit = msg.yourOutfits;
 		myConfirmMessage = new RegularConfirmMsg(outfit.myId);
 		if(outfit.pair == null){
-			System.out.println("aaaaaaa");
 			server.sender.sendMsg(myConfirmMessage);
 		}
 		else {
-			System.out.println("bbbbbb");
 			outfit.pair.sender = new MessageSender(outfit.pair.ip, outfit.pair.port);
 			outfit.pair.sender.sendMsg(myConfirmMessage);
 		}
@@ -251,14 +248,14 @@ public class Client {
 			
 			deletePos(pout, pn[10], 10);
 			deletePos(pout, pn[11], 11);
-			tmp.clear();
+			tmp = new ArrayList<Integer>();
 			tmp.add(10);
 			tmp.add(11);
 			pout.neighbour.add(
 					new Neighbour(tmp, new Comrade(outfit.myId, myPort, myIp, null)));
 			deletePos(outfit, n[4], 4);
 			deletePos(outfit, n[5], 5);
-			tmp.clear();
+			tmp = new ArrayList<Integer>();
 			tmp.add(4);
 			tmp.add(5);
 			outfit.neighbour.add(
@@ -329,14 +326,14 @@ public class Client {
 			
 			deletePos(pout, pn[1], 1);
 			deletePos(pout, pn[2], 2);
-			tmp.clear();
+			tmp = new ArrayList<Integer>();
 			tmp.add(1);
 			tmp.add(2);
 			pout.neighbour.add(
 					new Neighbour(tmp, new Comrade(outfit.myId, myPort, myIp, null)));
 			deletePos(outfit, n[7], 7);
 			deletePos(outfit, n[8], 8);
-			tmp.clear();
+			tmp = new ArrayList<Integer>();
 			tmp.add(7);
 			tmp.add(8);
 			outfit.neighbour.add(
@@ -461,15 +458,16 @@ public class Client {
 		System.out.println("Top:  " + out.top);
 		System.out.println("Left: " + out.left);
 		System.out.println("Width:" + out.myBoard.width);
+		System.out.println("Heig: " + out.myBoard.height);
 		System.out.println("Neighbour size: " + out.neighbour.size());
 		int cnt = 1;
 		for(Neighbour nei: out.neighbour){
-			System.out.print("Nei #" + cnt++ + "  Id: " + nei.comrade.id +"Pos:");
+			System.out.print("Nei #" + cnt++ + "  Id: " + nei.comrade.id +"  Pos:");
 			for(Integer in: nei.position)
 				System.out.print(" " + in);
 			System.out.println("");
 		}
-		System.out.print("Pair Id: " + out.pair.id);
+		System.out.println("Pair Id: " + out.pair.id);
 		
 	}
 	
