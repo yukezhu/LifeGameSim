@@ -108,8 +108,8 @@ public class Client {
 						else if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
 							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
 						else if (msgType == MessageCodeDictionary.JOIN_SPLIT) {
-							handleSplit((JoinSplitMsg) msg);
 							System.out.println("!!!!!!!!!\nReceived split command\n!!!!!!!!!\n");
+							handleSplit((JoinSplitMsg) msg);
 							status = 5;
 						}
 						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
