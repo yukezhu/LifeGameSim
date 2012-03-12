@@ -117,6 +117,7 @@ public class MessageReceiver {
 		SocketChannel clientChannel = (SocketChannel)key.channel();
 		
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
+		buffer.limit(BufferSize);
 		buffer.clear();
 		long bytesRead = clientChannel.read(buffer);
 		System.out.println("receiving message length:" + bytesRead);
