@@ -433,7 +433,6 @@ public class Client {
 	private void computeAndReport() throws IOException {
 		BoardOperation.NextMoment(outfit.myBoard, null, null, null, null, false, false, false, false);
 		server.sender.sendMsg(new RegularBoardReturnMsg(outfit.myId, outfit.top, outfit.left, outfit.myBoard));
-		BoardOperation.Print(outfit.myBoard);
 		borderCount = 0;
 	}
 	
