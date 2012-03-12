@@ -74,7 +74,7 @@ public class Client {
 		status = 1;
 		while(true){
 			if(!Receiver.isEmpty()){
-				System.out.println("status :" + status);
+//				System.out.println("status :" + status);
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
 				switch(status) {
 //					case 0:
@@ -412,15 +412,15 @@ public class Client {
 		}
 		
 		//merge and update the global border array/variable
-		System.out.println(outfit.left);
-		for(Neighbour nei: outfit.neighbour){
-			System.out.println("neighborID:" + nei.comrade.id);
-			System.out.println("border size:" + msg.boarder.bits.length);
-			for(Integer pos: nei.position)
-				System.out.print("neighborPos:" + pos + " ");
-			System.out.println(" " );
-				
-		}
+//		System.out.println(outfit.left);
+//		for(Neighbour nei: outfit.neighbour){
+//			System.out.println("neighborID:" + nei.comrade.id);
+//			System.out.println("border size:" + msg.boarder.bits.length);
+//			for(Integer pos: nei.position)
+//				System.out.print("neighborPos:" + pos + " ");
+//			System.out.println(" " );
+//				
+//		}
 		mergeBorder(msg.boarder.bits, outfit.neighbour.get(nei_id).position);
 	}
 	
