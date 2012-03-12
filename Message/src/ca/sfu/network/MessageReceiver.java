@@ -119,7 +119,7 @@ public class MessageReceiver {
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
 		buffer.clear();
 		long bytesRead = clientChannel.read(buffer);
-		
+		System.out.println("receiving message length:" + bytesRead);
 		if(bytesRead != -1){
 			buffer.flip();
 //			System.out.println(bytesRead);
