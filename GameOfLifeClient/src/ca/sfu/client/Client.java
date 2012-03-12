@@ -158,6 +158,10 @@ public class Client {
 						new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp));
 			}
 		}
+		up = new boolean[outfit.myBoard.width];
+		down = new boolean[outfit.myBoard.width];
+		left = new boolean[outfit.myBoard.height];
+		right = new boolean[outfit.myBoard.height];
 	}
 	
 	private void sendNeiUpdMsg() throws IOException {
