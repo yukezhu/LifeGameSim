@@ -43,6 +43,7 @@ public class MessageSender{
 		byte[] arr = bOut.toByteArray();
 		ByteBuffer bb = ByteBuffer.wrap(arr);
 		out.close();
+		System.out.println("message length: " + arr.length);
 		socketChannel.write(bb);
 	}
 	
