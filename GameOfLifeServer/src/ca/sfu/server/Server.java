@@ -55,6 +55,7 @@ public class Server{
 			if(!Receiver.isEmpty()) {
 				System.out.println(status);
 				m = Receiver.getNextMessageWithIp();
+				System.out.println("waiting:"+waiting4confirm);
 				
 				switch(status) {
 					//waiting for first client
@@ -92,7 +93,7 @@ public class Server{
 						
 						handleNewBoardInfo(m,b,3);
 						frame.repaint();
-						BoardOperation.Print(b);
+//						BoardOperation.Print(b);
 						
 						//handle adding
 						if(handlePending()){
@@ -267,10 +268,12 @@ public class Server{
 					mode = MessageCodeDictionary.SPLIT_MODE_VERTICAL;
 				
 				System.out.println("send JoinSplitMsg");
+				System.out.println(newClientSender.get(0).hostIp);
 				c.sender.sendMsg(new JoinSplitMsg(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, mode));
 				
 				regedClientSender.remove(0);
 				regedClientSender.add(c);
+				regedClientSender.add(new Comrade(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));
 				waiting4confirm++;
 			}
 			else{
