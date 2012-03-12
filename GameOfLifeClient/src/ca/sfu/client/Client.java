@@ -215,7 +215,7 @@ public class Client {
 	private void handleSplit(JoinSplitMsg msg) throws IOException {
 		List<Board> boards;
 		
-		Outfits pout = new Outfits(msg.getClientId(), outfit.nextClock, 0, 0, null);
+		Outfits pout = new Outfits(msg.newcomerId, outfit.nextClock, 0, 0, null);
 		ArrayList<Neighbour> pnei = new ArrayList<Neighbour>();
 		for(Neighbour tn: outfit.neighbour)
 			pnei.add(new Neighbour(
