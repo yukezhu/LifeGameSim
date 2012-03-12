@@ -411,6 +411,7 @@ public class Client {
 		System.out.println(outfit.left);
 		for(Neighbour nei: outfit.neighbour){
 			System.out.println("neighborID:" + nei.comrade.id);
+			System.out.println("border size:" + msg.boarder.bits.length);
 			for(Integer pos: nei.position)
 				System.out.print("neighborPos:" + pos + " ");
 			System.out.println(" " );
