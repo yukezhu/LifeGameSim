@@ -1344,3 +1344,6 @@ Command-line arguments:  -os linux -ws gtk -arch x86
 
 !ENTRY com.android.ide.eclipse.ddms 4 0 2012-03-12 11:29:37.639
 !MESSAGE DDMS files not found: /home/xieyaox/platform-tools/adb /home/xieyaox/tools/hprof-conv /home/xieyaox/tools/traceview 
+
+!ENTRY org.eclipse.ui 4 4 2012-03-12 13:36:42.468
+!MESSAGE Referenced part does not exist yet: org.eclipse.ui.views.ProblemView.
