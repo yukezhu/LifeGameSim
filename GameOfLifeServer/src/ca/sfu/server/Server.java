@@ -39,7 +39,7 @@ public class Server{
 		JFrame frame = new JFrame();
 		frame.setSize(480, 480);
 		//AutomataMsg auto = new AutomataMsg(10, 10);
-		Board b = new Board(50, 50);
+		Board b = new Board(100, 100);
 		BoardOperation.Randomize(b,0.1);
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
@@ -74,8 +74,9 @@ public class Server{
 					case 2:
 						if(handleNewAdding(m,2))
 							break;
-						
+										
 						handleConfirm(m,3); //expect only one message responding for JoinOutfitsMsg
+						
 						//send you a start
 						for (Comrade var : regedClientSender) {
 							var.sender.sendMsg(new RegularNextClockMsg(nextClock));
