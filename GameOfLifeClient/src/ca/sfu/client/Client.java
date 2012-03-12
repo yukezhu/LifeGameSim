@@ -109,6 +109,7 @@ public class Client {
 							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
 						else if (msgType == MessageCodeDictionary.JOIN_SPLIT) {
 							handleSplit((JoinSplitMsg) msg);
+							System.out.println("!!!!!!!!!\nReceived split command\n!!!!!!!!!\n");
 							status = 5;
 						}
 						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
