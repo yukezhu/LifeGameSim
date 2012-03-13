@@ -42,11 +42,11 @@ public class Server{
 //		Board b = new Board(50, 50);
 //		BoardOperation.Randomize(b,0.1);
 		
-		Board b = BoardOperation.LoadFile("/home/luchangl/sfuhome/LifeGameSim/ten.lg");
+		Board b = BoardOperation.LoadFile("/Users/leafpicker/Developer/Github/LifeGameSim/Patterns/gun.lg");
 		
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
-		panel.setCellSize(10);
+		panel.setCellSize(2);
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 		
