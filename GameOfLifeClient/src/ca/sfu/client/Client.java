@@ -29,7 +29,7 @@ public class Client {
 	private Comrade  server;
 	
 	private int myPort;
-	private String myIp = "142.58.35.242";
+	private String myIp = "142.58.35.83";
 	private MessageReceiver Receiver;
 	private RegularConfirmMsg myConfirmMessage;
 	
