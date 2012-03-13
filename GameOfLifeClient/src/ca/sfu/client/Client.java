@@ -25,11 +25,11 @@ import ca.sfu.network.MessageSender;
 public class Client {
 
 	private static final int SERVER_PORT = 6560;
-	private static final String SERVER_IP = "142.58.35.83";
+	private String SERVER_IP;
 	private Comrade  server;
 	
 	private int myPort;
-	private String myIp = "142.58.35.242";
+	private String myIp;
 	private MessageReceiver Receiver;
 	private RegularConfirmMsg myConfirmMessage;
 	
@@ -65,7 +65,9 @@ public class Client {
 		}
 	}
 	
-	public void startClient() throws IOException, InterruptedException {
+	public void startClient(String sip, String myip) throws IOException, InterruptedException {
+		SERVER_IP = sip;
+		myIp = myip;
 		MessageSender svsdr = new MessageSender(SERVER_IP, SERVER_PORT);
 		server = new Comrade(MessageCodeDictionary.ID_SERVER, SERVER_PORT, SERVER_IP, svsdr);
 		JoinRequestMsg Request = new JoinRequestMsg(myPort);
