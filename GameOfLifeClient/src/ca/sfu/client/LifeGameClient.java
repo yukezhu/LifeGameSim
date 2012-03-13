@@ -10,7 +10,7 @@ public class LifeGameClient extends JFrame {
 		try {
 			if(args.length < 2)
 			{
-				System.out.println("Usage: client [server ip] [host ip]");
+				System.out.println("Usage: client.jar [server ip] [host ip]");
 			} else
 			{
 				Client c = new Client();
