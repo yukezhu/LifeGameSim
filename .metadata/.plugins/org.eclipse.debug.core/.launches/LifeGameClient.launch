@@ -7,6 +7,6 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="ca.sfu.client.LifeGameClient"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="142.58.35.19"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="142.58.160.122 142.58.35.242"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="GameOfLifeClient"/>
 </launchConfiguration>
