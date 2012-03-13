@@ -38,15 +38,15 @@ public class Server{
 		// UI
 		JFrame frame = new JFrame();
 		frame.setSize(480, 480);
-		//AutomataMsg auto = new AutomataMsg(10, 10);
-//		Board b = new Board(50, 50);
-//		BoardOperation.Randomize(b,0.1);
+//		AutomataMsg auto = new AutomataMsg(50, 50);
+		Board b = new Board(50, 50);
+		BoardOperation.Randomize(b,0.1);
 		
-		Board b = BoardOperation.LoadFile("/Users/leafpicker/Developer/Github/LifeGameSim/Patterns/gun.lg");
+//		Board b = BoardOperation.LoadFile("/Users/leafpicker/Developer/Github/LifeGameSim/Patterns/gun.lg");
 		
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
-		panel.setCellSize(2);
+		panel.setCellSize(5);
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 		
@@ -56,9 +56,9 @@ public class Server{
 		
 		while(true) {
 			if(!Receiver.isEmpty()) {
-				System.out.println(status);
+//				System.out.println(status);
 				m = Receiver.getNextMessageWithIp();
-				System.out.println("waiting:"+waiting4confirm);
+//				System.out.println("waiting:"+waiting4confirm);
 				
 				switch(status) {
 					//waiting for first client
@@ -106,7 +106,7 @@ public class Server{
 //						Thread.sleep(5000);
 						frame.repaint();
 //						BoardOperation.Print(b);
-						System.out.println("repaint");
+//						System.out.println("repaint");
 						
 						//handle adding
 						if(handlePending()){
@@ -117,7 +117,7 @@ public class Server{
 						//start
 						if(waiting4confirm==0){
 							for (Comrade var : regedClientSender) {
-								System.out.println("sending start");
+//								System.out.println("sending start");
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
 							}
@@ -255,7 +255,7 @@ public class Server{
 		if(msg.getMessageCode()==MessageCodeDictionary.JOIN_REQUEST){
 			JoinRequestMsg join = (JoinRequestMsg)m.extracMessage();
 			newClientSender.add(new MessageSender(m.getIp(), join.clientPort));
-			System.out.println("adding new to pending");
+			System.out.println("adding a new client to pending list");
 			//if it is a new adding request, we need to go to nextStatus
 			//most time it should be the same status
 			status = nextStatus;
@@ -280,12 +280,13 @@ public class Server{
 				else
 					mode = MessageCodeDictionary.SPLIT_MODE_VERTICAL;
 				
-				System.out.println(cid);
-				System.out.println((Math.log(2*cid+1)/Math.log(2))%2);
-				System.out.println("mode"+mode);
+//				System.out.println(cid);
+//				System.out.println((Math.log(2*cid+1)/Math.log(2))%2);
+//				System.out.println("mode"+mode);
+				System.out.println("Sending a split command to "+ c.id+", new client id: "+cid+", split mode: "+(mode==0?"vertical":"horizontal"));
 				
-				System.out.println("send JoinSplitMsg");
-				System.out.println(newClientSender.get(0).hostIp);
+//				System.out.println("send JoinSplitMsg");
+//				System.out.println(newClientSender.get(0).hostIp);
 				c.sender.sendMsg(new JoinSplitMsg(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, mode));
 				
 				regedClientSender.remove(0);
@@ -310,7 +311,7 @@ public class Server{
 	
 	protected void handleNewBoardInfo(MessageWithIp m, Board b, int nextStatus){
 		waiting4confirm--;
-		System.out.println("getting a result");
+//		System.out.println("getting a result");
 		
 		if(waiting4confirm==0)
 			status = nextStatus;
@@ -323,7 +324,7 @@ public class Server{
 	//getting a new confirm message, if there is no waiting confirm, go to nextStatus
 	protected void handleConfirm(MessageWithIp m, int nextStatus){
 		waiting4confirm--;
-		System.out.println("getting a confirm");
+//		System.out.println("getting a confirm");
 		if(waiting4confirm==0)
 			status = nextStatus;
 	}
