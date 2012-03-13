@@ -19,6 +19,7 @@ public class Outfits implements Serializable {
 	
 	public Outfits(int id, int clk, int t, int l, int h, int w) {
 		myId = id;
+		nextClock = clk;
 		myBoard = new Board(h, w);
 		neighbour = new ArrayList<Neighbour>();
 		pair = null;
@@ -26,6 +27,7 @@ public class Outfits implements Serializable {
 	
 	public Outfits(int id, int clk, int t, int l, Board bd) {
 		myId = id;
+		nextClock = clk;
 		myBoard = bd;
 		neighbour = new ArrayList<Neighbour>();
 		pair = null;
