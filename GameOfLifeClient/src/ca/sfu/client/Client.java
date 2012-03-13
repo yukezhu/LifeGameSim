@@ -25,11 +25,11 @@ import ca.sfu.network.MessageSender;
 public class Client {
 
 	private static final int SERVER_PORT = 6560;
-	private static final String SERVER_IP = "127.0.0.1";
+	private static final String SERVER_IP = "142.58.35.83";
 	private Comrade  server;
 	
 	private int myPort;
-	private String myIp = "127.0.0.1";
+	private String myIp = "142.58.35.122";
 	private MessageReceiver Receiver;
 	private RegularConfirmMsg myConfirmMessage;
 	
