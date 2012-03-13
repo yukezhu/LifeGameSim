@@ -25,11 +25,11 @@ import ca.sfu.network.MessageSender;
 public class Client {
 
 	private static final int SERVER_PORT = 6560;
-	private static final String SERVER_IP = "142.58.35.83";
+	private static final String SERVER_IP = "142.58.35.242";
 	private Comrade  server;
 	
 	private int myPort;
-	private String myIp = "142.58.35.122";
+	private String myIp = "142.58.35.83";
 	private MessageReceiver Receiver;
 	private RegularConfirmMsg myConfirmMessage;
 	
@@ -213,6 +213,15 @@ public class Client {
 			outfit.neighbour.add(newnei);
 		}
 		sendMsgToId(myConfirmMessage, msg.getClientId());
+		System.out.println("Neighbour after updating");
+		System.out.println("Neighbour size: " + outfit.neighbour.size());
+		int cnt = 1;
+		for(Neighbour nei: outfit.neighbour) {
+			System.out.println("Neighbour #" + cnt++ +"  position:");
+			for(Integer in: nei.position)
+				System.out.print(" " + in);
+			System.out.println("");
+		}
 	}
 	
 	private void handleSplit(JoinSplitMsg msg) throws IOException {
@@ -606,13 +615,19 @@ public class Client {
 			tmp.add(aa[i]);
 		} //error
 		
+		System.out.println("incoming size:"+tmp.size());
+		for(int i=0; i<array1.size(); i++){
+			System.out.print(array1.get(i));
+		}
+		System.out.println();
+		
 		Board b = outfit.myBoard;
-
 		
 		for(int i=0; i<array1.size(); i++){
 			if(tmp.size()==0)
 				break;
 			
+			System.out.println("size"+tmp.size());
 			
 			int num = array1.get(i);
 			
@@ -671,12 +686,14 @@ public class Client {
 				break;
 			case 11:
 				for(int p=b.height-1; p>=b.height/2; p--){
+					System.out.println("11 board "+outfit.myBoard.height+" p "+p);
 					left[p] = (boolean)tmp.get(0);
 					tmp.remove(0);
 				}
 				break;
 			case 12:
 				for(int p=b.height/2-1; p>=0; p--){
+					System.out.println("12 board "+outfit.myBoard.height+" p "+p);
 					left[p] = (boolean)tmp.get(0);
 					tmp.remove(0);
 				}
