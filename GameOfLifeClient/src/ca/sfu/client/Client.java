@@ -29,7 +29,7 @@ public class Client {
 	private Comrade  server;
 	
 	private int myPort;
-	private String myIp = "142.58.35.83";
+	private String myIp = "142.58.35.242";
 	private MessageReceiver Receiver;
 	private RegularConfirmMsg myConfirmMessage;
 	
@@ -187,23 +187,50 @@ public class Client {
 		
 		
 		boolean isOldFriend = false;
-		for(Neighbour nei: outfit.neighbour){
+		
+		for(int i = 0; i < outfit.neighbour.size(); i++) {
+			Neighbour nei = outfit.neighbour.get(i);
 			if(nei.comrade.id == msg.getClientId()) {
 				nei.position.clear();
 				for(Integer q: msg.pos) nei.position.add(q);
 				isOldFriend = true;
 			}
 			else {
-				for (Integer p: nei.position){
-					for(Integer q: msg.pos)
-						if(p.equals(q)) nei.position.remove(q);
+				for(int j = 0; j < nei.position.size(); j++){
+					int p = nei.position.get(j);
+					for(int k = 0; k < msg.pos.size(); k++)
+						if(msg.pos.get(k).equals(p)) {
+							nei.position.remove(j);
+							j--;
+						}
 				}
 				if(nei.position.size() == 0){
+//					System.out.println("removing " + nei.comrade.id + "from neighbour");
 					nei.comrade.sender.close();
-					outfit.neighbour.remove(nei);
+					outfit.neighbour.remove(i);
+					i--;
 				}
 			}
 		}
+		
+//		for(Neighbour nei: (List<Neighbour>)outfit.neighbour.clone()){
+//			if(nei.comrade.id == msg.getClientId()) {
+//				nei.position.clear();
+//				for(Integer q: msg.pos) nei.position.add(q);
+//				isOldFriend = true;
+//			}
+//			else {
+//				for (Integer p: (List<Integer>)nei.position.clone()){
+//					for(Integer q: msg.pos)
+//						if(p.equals(q)) nei.position.remove(q);
+//				}
+//				if(nei.position.size() == 0){
+//					nei.comrade.sender.close();
+//					outfit.neighbour.remove(nei);
+//				}
+//			}
+//		}
+		
 		if(!isOldFriend) {
 			Neighbour newnei = new Neighbour(msg.pos, 
 					new Comrade(msg.getClientId(), msg.port, msg.ip, new MessageSender(msg.ip, msg.port)));
@@ -462,8 +489,8 @@ public class Client {
 		if(nei.position.size() == 0) {
 			if(nei.comrade.sender != null){
 				nei.comrade.sender.close();
-				out.neighbour.remove(nei);
 			}
+			out.neighbour.remove(nei);
 		}
 	}
 	
