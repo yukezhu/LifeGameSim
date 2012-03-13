@@ -77,10 +77,6 @@ public class Client {
 //				if(outfit != null)
 //					System.out.println("time:" + outfit.nextClock + "  status:" + status + "  messgetype:"+ msg.getMessageCode());
 				switch(status) {
-//					case 0:
-//						server.sender.sendMsg(new RegularConfirmMsg(-1));
-//						status = 1;
-//						break;
 					case 1:
 						repairOutfit((JoinOutfitsMsg) msg);
 						if(neiUpdCount > 0)
@@ -212,24 +208,6 @@ public class Client {
 				}
 			}
 		}
-		
-//		for(Neighbour nei: (List<Neighbour>)outfit.neighbour.clone()){
-//			if(nei.comrade.id == msg.getClientId()) {
-//				nei.position.clear();
-//				for(Integer q: msg.pos) nei.position.add(q);
-//				isOldFriend = true;
-//			}
-//			else {
-//				for (Integer p: (List<Integer>)nei.position.clone()){
-//					for(Integer q: msg.pos)
-//						if(p.equals(q)) nei.position.remove(q);
-//				}
-//				if(nei.position.size() == 0){
-//					nei.comrade.sender.close();
-//					outfit.neighbour.remove(nei);
-//				}
-//			}
-//		}
 		
 		if(!isOldFriend) {
 			Neighbour newnei = new Neighbour(msg.pos, 
@@ -627,11 +605,15 @@ public class Client {
 			}
 		}
 		
+		BoardOperation.Print(b);
+		
+		System.out.println("sending:");
 		boolean[] a = new boolean[al.size()];
 		for(int k=0; k<a.length; k++){
 			a[k]=(boolean)al.get(k);
-//			System.out.print(al.get(k));
+			System.out.print(al.get(k)+" ");
 		}
+		System.out.println();
 		
 		return a;
 	}
@@ -640,9 +622,12 @@ public class Client {
 	protected void mergeBorder(boolean[] aa, List<Integer> array1){
 		ArrayList<Boolean> tmp = new ArrayList<Boolean>();
 		
+		System.out.println("receiving:");
 		for(int i=0; i<aa.length; i++){
 			tmp.add(aa[i]);
+			System.out.print(aa[i]+" ");
 		} //error
+		System.out.println();
 		
 //		System.out.println("incoming size:"+tmp.size());
 //		for(int i=0; i<array1.size(); i++){
