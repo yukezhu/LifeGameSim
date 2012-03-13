@@ -323,8 +323,8 @@ public class Client {
 				deletePos(outfit, n[3], 3);
 				addPos(pn[2], 1, true);
 				addPos(pn[1], 0, true);
-				deletePos(outfit, pn[1], 1);
-				deletePos(outfit, pn[0], 0);
+				deletePos(pout, pn[1], 1);
+				deletePos(pout, pn[0], 0);
 			}
 			
 			if(n[8] == n[7]) {
@@ -348,8 +348,8 @@ public class Client {
 				deletePos(outfit, n[6], 6);
 				addPos(pn[7], 8, false);
 				addPos(pn[8], 9, false);
-				deletePos(outfit, pn[8], 8);
-				deletePos(outfit, pn[9], 9);
+				deletePos(pout, pn[8], 8);
+				deletePos(pout, pn[9], 9);
 			}
 		}
 		else {
@@ -401,8 +401,8 @@ public class Client {
 				deletePos(outfit, n[6], 6);
 				addPos(pn[5], 4, true);
 				addPos(pn[4], 3, true);
-				deletePos(outfit, pn[4], 4);
-				deletePos(outfit, pn[3], 3);
+				deletePos(pout, pn[4], 4);
+				deletePos(pout, pn[3], 3);
 			}
 			
 			if(n[11] == n[10]) {
@@ -426,8 +426,8 @@ public class Client {
 				deletePos(outfit, n[9], 9);
 				addPos(pn[10], 11, false);
 				addPos(pn[11], 0, false);
-				deletePos(outfit, pn[11], 11);
-				deletePos(outfit, pn[0], 0);
+				deletePos(pout, pn[11], 11);
+				deletePos(pout, pn[0], 0);
 			}
 		}
 		System.out.println("My outfit after spliting:");
@@ -490,6 +490,7 @@ public class Client {
 			if(nei.comrade.sender != null){
 				nei.comrade.sender.close();
 			}
+			System.out.println("myid: " + out.myId +  "  removing " + nei.comrade.id + "from neighbour");
 			out.neighbour.remove(nei);
 		}
 	}
