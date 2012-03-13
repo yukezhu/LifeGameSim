@@ -28,27 +28,32 @@ public class BoardOperation {
 	public static Board NextMoment(Board b, boolean[] up, boolean[] down, boolean[] left, boolean[] right, boolean upperLeft, boolean upperRight, boolean lowerLeft, boolean lowerRight) throws IllegalArgumentException
 	{
 		IllegalArgumentException exception = new java.lang.IllegalArgumentException();
+		boolean leftBorder = false, rightBorder = false, upBorder = false, downBorder = false;
 		
 		if(left == null)
 		{
+			leftBorder = true;
 			left = new boolean[b.height];
 			for(int i=0; i<b.height; i++)
 				left[i] = false;
 		}
 		if(right == null)
 		{
+			rightBorder = true;
 			right = new boolean[b.height];
 			for(int i=0; i<b.height; i++)
 				right[i] = false;
 		}
 		if(up == null)
 		{
+			upBorder = true;
 			up = new boolean[b.width];
 			for(int i=0; i<b.width; i++)
 				up[i] = false;
 		}
 		if(down == null)
 		{
+			downBorder = true;
 			down = new boolean[b.width];
 			for(int i=0; i<b.width; i++)
 				down[i] = false;
@@ -90,6 +95,11 @@ public class BoardOperation {
 		for(int i=1; i<=height; i++)
 			for(int j=1; j<=width; j++)
 			{
+				if((j == 1 && leftBorder) || (j == width && rightBorder) || (i == 1 && upBorder) || (i == height && downBorder))
+				{
+					b.bitmap[i-1][j-1] = false;
+					continue;
+				}
 				int counter = 0;
 				for(int k=0; k<8; k++)
 				{
