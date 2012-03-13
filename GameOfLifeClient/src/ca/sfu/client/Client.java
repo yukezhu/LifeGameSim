@@ -213,6 +213,15 @@ public class Client {
 			outfit.neighbour.add(newnei);
 		}
 		sendMsgToId(myConfirmMessage, msg.getClientId());
+		System.out.println("Neighbour after updating");
+		System.out.println("Neighbour size: " + outfit.neighbour.size());
+		int cnt = 1;
+		for(Neighbour nei: outfit.neighbour) {
+			System.out.println("Neighbour #" + cnt++ +"  position:");
+			for(Integer in: nei.position)
+				System.out.print(" " + in);
+			System.out.println("");
+		}
 	}
 	
 	private void handleSplit(JoinSplitMsg msg) throws IOException {
