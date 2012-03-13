@@ -39,7 +39,7 @@ public class Server{
 		JFrame frame = new JFrame();
 		frame.setSize(480, 480);
 		//AutomataMsg auto = new AutomataMsg(10, 10);
-		Board b = new Board(100, 100);
+		Board b = new Board(50, 50);
 		BoardOperation.Randomize(b,0.1);
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
