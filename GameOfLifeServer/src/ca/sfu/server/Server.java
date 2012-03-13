@@ -39,11 +39,14 @@ public class Server{
 		JFrame frame = new JFrame();
 		frame.setSize(480, 480);
 		//AutomataMsg auto = new AutomataMsg(10, 10);
-		Board b = new Board(50, 50);
-		BoardOperation.Randomize(b,0.1);
+//		Board b = new Board(50, 50);
+//		BoardOperation.Randomize(b,0.1);
+		
+		Board b = BoardOperation.LoadFile("/home/luchangl/sfuhome/LifeGameSim/ten.lg");
+		
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
-		panel.setCellSize(5);
+		panel.setCellSize(10);
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 		
@@ -100,7 +103,7 @@ public class Server{
 							break;
 						}
 						
-//						Thread.sleep(5000);
+						Thread.sleep(5000);
 						frame.repaint();
 //						BoardOperation.Print(b);
 						System.out.println("repaint");
@@ -272,7 +275,7 @@ public class Server{
 				
 				//c is the pair
 				int mode;
-				if((((int)(Math.log(2*cid+1)/Math.log(2)))%2)==0)
+				if((((int)(Math.log(2*cid+1)/Math.log(2)))%2)!=0)
 					mode = MessageCodeDictionary.SPLIT_MODE_HORIZONTAL;
 				else
 					mode = MessageCodeDictionary.SPLIT_MODE_VERTICAL;
