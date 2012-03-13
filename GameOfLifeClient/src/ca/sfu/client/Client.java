@@ -615,6 +615,12 @@ public class Client {
 			tmp.add(aa[i]);
 		} //error
 		
+		System.out.println("incoming size:"+tmp.size());
+		for(int i=0; i<array1.size(); i++){
+			System.out.print(array1.get(i));
+		}
+		System.out.println();
+		
 		Board b = outfit.myBoard;
 		
 		for(int i=0; i<array1.size(); i++){
@@ -680,13 +686,14 @@ public class Client {
 				break;
 			case 11:
 				for(int p=b.height-1; p>=b.height/2; p--){
+					System.out.println("11 board "+outfit.myBoard.height+" p "+p);
 					left[p] = (boolean)tmp.get(0);
 					tmp.remove(0);
 				}
 				break;
 			case 12:
 				for(int p=b.height/2-1; p>=0; p--){
-					System.out.println("board "+outfit.myBoard.height+" p "+p);
+					System.out.println("12 board "+outfit.myBoard.height+" p "+p);
 					left[p] = (boolean)tmp.get(0);
 					tmp.remove(0);
 				}
