@@ -103,6 +103,7 @@ public class Server{
 //						Thread.sleep(5000);
 						frame.repaint();
 //						BoardOperation.Print(b);
+						System.out.println("repaint");
 						
 						//handle adding
 						if(handlePending()){
