@@ -607,12 +607,12 @@ public class Client {
 		} //error
 		
 		Board b = outfit.myBoard;
-
 		
 		for(int i=0; i<array1.size(); i++){
 			if(tmp.size()==0)
 				break;
 			
+			System.out.println("size"+tmp.size());
 			
 			int num = array1.get(i);
 			
@@ -677,6 +677,7 @@ public class Client {
 				break;
 			case 12:
 				for(int p=b.height/2-1; p>=0; p--){
+					System.out.println("board "+outfit.myBoard.height+" p "+p);
 					left[p] = (boolean)tmp.get(0);
 					tmp.remove(0);
 				}
