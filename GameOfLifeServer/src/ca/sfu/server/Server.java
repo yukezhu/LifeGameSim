@@ -77,12 +77,15 @@ public class Server{
 										
 						handleConfirm(m,3); //expect only one message responding for JoinOutfitsMsg
 						
-						//send you a start
-						for (Comrade var : regedClientSender) {
-							var.sender.sendMsg(new RegularNextClockMsg(nextClock));
-							waiting4confirm++;
+						if(waiting4confirm == 0){
+							//send you a start
+							for (Comrade var : regedClientSender) {
+								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
+								waiting4confirm++;
+							}
+							status = 3;
 						}
-						status = 3;
+						
 						break;
 						
 					//waiting for the client to send the result back
@@ -93,6 +96,11 @@ public class Server{
 							break;
 						
 						handleNewBoardInfo(m,b,3);
+						if(waiting4confirm!=0){
+							break;
+						}
+						
+//						Thread.sleep(5000);
 						frame.repaint();
 //						BoardOperation.Print(b);
 						
@@ -263,10 +271,14 @@ public class Server{
 				
 				//c is the pair
 				int mode;
-				if((Math.log(2*cid+1)/Math.log(2)%2)==0)
+				if((((int)(Math.log(2*cid+1)/Math.log(2)))%2)==0)
 					mode = MessageCodeDictionary.SPLIT_MODE_HORIZONTAL;
 				else
 					mode = MessageCodeDictionary.SPLIT_MODE_VERTICAL;
+				
+				System.out.println(cid);
+				System.out.println((Math.log(2*cid+1)/Math.log(2))%2);
+				System.out.println("mode"+mode);
 				
 				System.out.println("send JoinSplitMsg");
 				System.out.println(newClientSender.get(0).hostIp);

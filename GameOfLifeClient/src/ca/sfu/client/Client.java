@@ -25,11 +25,11 @@ import ca.sfu.network.MessageSender;
 public class Client {
 
 	private static final int SERVER_PORT = 6560;
-	private static final String SERVER_IP = "142.58.35.62";
+	private static final String SERVER_IP = "127.0.0.1";
 	private Comrade  server;
 	
 	private int myPort;
-	private String myIp;
+	private String myIp = "127.0.0.1";
 	private MessageReceiver Receiver;
 	private RegularConfirmMsg myConfirmMessage;
 	
@@ -65,8 +65,7 @@ public class Client {
 		}
 	}
 	
-	public void startClient(String ip) throws IOException, InterruptedException {
-		myIp = ip;
+	public void startClient() throws IOException, InterruptedException {
 		MessageSender svsdr = new MessageSender(SERVER_IP, SERVER_PORT);
 		server = new Comrade(MessageCodeDictionary.ID_SERVER, SERVER_PORT, SERVER_IP, svsdr);
 		JoinRequestMsg Request = new JoinRequestMsg(myPort);
@@ -74,7 +73,7 @@ public class Client {
 		status = 1;
 		while(true){
 			if(!Receiver.isEmpty()){
-//				System.out.println("status :" + status);
+				System.out.println("status :" + status);
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
 				switch(status) {
 //					case 0:
@@ -86,13 +85,17 @@ public class Client {
 						sendNeiUpdMsg();
 						if(neiUpdCount > 0)
 							status = 2;
-						else
+						else {
+							outfit.pair.sender.sendMsg(myConfirmMessage);//error
+							System.out.println("!!!!!");
 							status = 3;
-						break;
+						}
+							break;
 					case 2:
 						neiUpdCount--;
 						if(neiUpdCount <= 0){
-							server.sender.sendMsg(myConfirmMessage);
+							outfit.pair.sender.sendMsg(myConfirmMessage);//error
+							System.out.println("!!!!!");
 							status = 3;
 						}
 						break;
@@ -124,7 +127,7 @@ public class Client {
 						break;
 					case 5:
 						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM){
-							System.out.println("type error, expect confirm message");
+							System.out.println("type error, expect confirm message, received: " + msg.getMessageCode());
 						}
 						else
 							server.sender.sendMsg(myConfirmMessage);
@@ -142,13 +145,10 @@ public class Client {
 		System.out.println("received outfit");
 		outfit = msg.yourOutfits;
 		myConfirmMessage = new RegularConfirmMsg(outfit.myId);
-		if(outfit.pair == null){
-			server.sender.sendMsg(myConfirmMessage);
-		}
-		else {
+		if(outfit.pair == null)
+			outfit.pair = new Comrade(MessageCodeDictionary.ID_SERVER, SERVER_PORT, SERVER_IP, server.sender);
+		else
 			outfit.pair.sender = new MessageSender(outfit.pair.ip, outfit.pair.port);
-			outfit.pair.sender.sendMsg(myConfirmMessage);
-		}
 		for(Neighbour nei: outfit.neighbour) {
 			if(nei.comrade.id == outfit.pair.id)
 				nei.comrade.sender = outfit.pair.sender;
@@ -212,6 +212,7 @@ public class Client {
 					new Comrade(msg.getClientId(), msg.port, msg.ip, new MessageSender(msg.ip, msg.port)));
 			outfit.neighbour.add(newnei);
 		}
+		sendMsgToId(myConfirmMessage, msg.getClientId());
 	}
 	
 	private void handleSplit(JoinSplitMsg msg) throws IOException {
@@ -422,6 +423,7 @@ public class Client {
 //			System.out.println(" " );
 //				
 //		}
+		
 		mergeBorder(msg.boarder.bits, outfit.neighbour.get(nei_id).position);
 	}
 	
@@ -435,6 +437,12 @@ public class Client {
 		BoardOperation.NextMoment(outfit.myBoard, null, null, null, null, false, false, false, false);
 		server.sender.sendMsg(new RegularBoardReturnMsg(outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		borderCount = 0;
+	}
+	
+	private void sendMsgToId(Message msg, int id) throws IOException {
+		for(Neighbour nei: outfit.neighbour)
+			if(nei.comrade.id == id)
+				nei.comrade.sender.sendMsg(msg);
 	}
 	
 	private void deletePos(Outfits out, Neighbour nei, Integer pos) {
@@ -584,6 +592,7 @@ public class Client {
 		boolean[] a = new boolean[al.size()];
 		for(int k=0; k<a.length; k++){
 			a[k]=(boolean)al.get(k);
+//			System.out.print(al.get(k));
 		}
 		
 		return a;
@@ -593,16 +602,20 @@ public class Client {
 	protected void mergeBorder(boolean[] aa, List<Integer> array1){
 		ArrayList<Boolean> tmp = new ArrayList<Boolean>();
 		
+		for(int i=0; i<aa.length; i++){
+			tmp.add(aa[i]);
+		} //error
+		
 		Board b = outfit.myBoard;
 
-		for(int k=0; k<aa.length; k++)
-			tmp.add(aa[k]);
 		
 		for(int i=0; i<array1.size(); i++){
 			if(tmp.size()==0)
 				break;
 			
+			
 			int num = array1.get(i);
+			
 			switch(num+1){
 			case 1:
 				upperLeft = (boolean) tmp.get(0);
