@@ -98,6 +98,9 @@ public class Client {
 					case 3:
 						int msgType = msg.getMessageCode();
 						if(msgType == MessageCodeDictionary.REGULAR_NEXTCLOCK) {
+							
+							//init
+							
 							sendBorderToNeighbours();
 							if(isBorderMessageComplete())
 								computeAndReport();
@@ -170,6 +173,15 @@ public class Client {
 				sendborder.bits = getborder(outfit.neighbour.get(j).position);
 				RegularBorderMsg sendbordermsg = new RegularBorderMsg(outfit.myId, sendborder);	
 				outfit.neighbour.get(j).comrade.sender.sendMsg(sendbordermsg);
+				
+				System.out.println("sending border to " + outfit.neighbour.get(j).comrade.id);
+				for(int k=0; k<sendborder.bits.length; k++){
+					if(sendborder.bits[k])
+						System.out.print("@");
+					else
+						System.out.print(".");
+				}
+				System.out.println();
 
 		}
 	}
@@ -408,6 +420,11 @@ public class Client {
 				deletePos(pout, pn[0], 0);
 			}
 		}
+		up = new boolean[outfit.myBoard.width];
+		down = new boolean[outfit.myBoard.width];
+		left = new boolean[outfit.myBoard.height];
+		right = new boolean[outfit.myBoard.height];
+		
 		System.out.println("My outfit after spliting:");
 		outiftInfo(outfit);
 		System.out.println("Pair's outfit after spliting:");
@@ -605,15 +622,15 @@ public class Client {
 			}
 		}
 		
-		BoardOperation.Print(b);
+//		BoardOperation.Print(b);
 		
-		System.out.println("sending");
+//		System.out.println("sending");
 		boolean[] a = new boolean[al.size()];
 		for(int k=0; k<a.length; k++){
 			a[k]=(boolean)al.get(k);
-			System.out.print(al.get(k)+" ");
+//			System.out.print(al.get(k)+" ");
 		}
-		System.out.println();
+//		System.out.println();
 		
 		return a;
 	}
@@ -636,15 +653,6 @@ public class Client {
 //		System.out.println();
 		
 		Board b = outfit.myBoard;
-		
-		up = new boolean[outfit.myBoard.width];
-		down = new boolean[outfit.myBoard.width];
-		left = new boolean[outfit.myBoard.height];
-		right = new boolean[outfit.myBoard.height];
-		upperLeft = false;
-		upperRight = false;
-		lowerRight = false;
-		lowerLeft = false;
 		
 		
 		for(int i=0; i<array1.size(); i++){
@@ -725,11 +733,13 @@ public class Client {
 			}
 		}
 		
-		System.out.println("lowerleft:");
-//		for(int i=0; i<left.length; i++){
-//			System.out.print(left[i]+" ");
-//		}
-		System.out.println(lowerLeft);
+		System.out.println("down:");
+		for(int i=0; i<down.length; i++){
+			System.out.print(down[i]+" ");
+		}
+		System.out.println();
+		
+		System.out.println(upperRight);
 	}
 	
 }
