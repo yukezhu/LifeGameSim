@@ -448,7 +448,7 @@ public class Client {
 	}
 	
 	private void computeAndReport() throws IOException {
-		BoardOperation.NextMoment(outfit.myBoard, null, null, null, null, false, false, false, false);
+		BoardOperation.NextMoment(outfit.myBoard, up, down, left, right, upperLeft, upperRight, lowerLeft, lowerRight);
 		server.sender.sendMsg(new RegularBoardReturnMsg(outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		outfit.nextClock ++;
 		borderCount = 0;
@@ -607,7 +607,7 @@ public class Client {
 		
 		BoardOperation.Print(b);
 		
-		System.out.println("sending:");
+		System.out.println("sending");
 		boolean[] a = new boolean[al.size()];
 		for(int k=0; k<a.length; k++){
 			a[k]=(boolean)al.get(k);
@@ -714,6 +714,12 @@ public class Client {
 				break;
 			}
 		}
+		
+		System.out.println("left:");
+		for(int i=0; i<left.length; i++){
+			System.out.print(left[i]+" ");
+		}
+		System.out.println("");
 	}
 	
 }
