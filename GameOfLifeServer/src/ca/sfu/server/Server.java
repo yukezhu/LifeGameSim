@@ -39,14 +39,14 @@ public class Server{
 		JFrame frame = new JFrame();
 		frame.setSize(480, 480);
 //		AutomataMsg auto = new AutomataMsg(50, 50);
-		Board b = new Board(50, 50);
-		BoardOperation.Randomize(b,0.1);
+//		Board b = new Board(50, 50);
+//		BoardOperation.Randomize(b,0.1);
 		
-//		Board b = BoardOperation.LoadFile("/Users/leafpicker/Developer/Github/LifeGameSim/Patterns/gun.lg");
+		Board b = BoardOperation.LoadFile("/Users/leafpicker/Developer/Github/LifeGameSim/Patterns/oscillator1.lg");
 		
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
-		panel.setCellSize(5);
+		panel.setCellSize(3);
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 		
@@ -103,7 +103,7 @@ public class Server{
 							break;
 						}
 						
-//						Thread.sleep(5000);
+						Thread.sleep(50);
 						frame.repaint();
 //						BoardOperation.Print(b);
 //						System.out.println("repaint");
