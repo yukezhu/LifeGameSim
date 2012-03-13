@@ -9,7 +9,7 @@ public class LifeGameClient extends JFrame {
 	{
 		try {
 			Client c = new Client();
-			c.startClient(args[0]);
+			c.startClient();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

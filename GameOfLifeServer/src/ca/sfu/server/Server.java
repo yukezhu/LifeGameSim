@@ -55,40 +55,37 @@ public class Server{
 			if(!Receiver.isEmpty()) {
 				System.out.println(status);
 				m = Receiver.getNextMessageWithIp();
+				System.out.println("waiting:"+waiting4confirm);
 				
 				switch(status) {
 					//waiting for first client
 					case 0:
 						handleNewAdding(m,1);
 						handlePending();
-						status = 1;
-						break;
-					//waiting for confirm from first client
-					//send it the outfit
-					case 1:
-						if(handleNewAdding(m,1)) //!every status, handle an unexpected new adding message first
-							break; // if it is a new adding request, go to status 1 to wait the confirm msg again
-						
-						handleConfirm(m,2); //expect only one confirm message
-						
-						//send the board
+						//send it the outfit
 						regedClientSender.get(0).sender.sendMsg(new JoinOutfitsMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
 						waiting4confirm++;
 						status = 2;
+						
 						break;
+					
 					//wait for the confirm
 					//start a cycle
 					case 2:
 						if(handleNewAdding(m,2))
 							break;
-						
+										
 						handleConfirm(m,3); //expect only one message responding for JoinOutfitsMsg
-						//send you a start
-						for (Comrade var : regedClientSender) {
-							var.sender.sendMsg(new RegularNextClockMsg(nextClock));
-							waiting4confirm++;
+						
+						if(waiting4confirm == 0){
+							//send you a start
+							for (Comrade var : regedClientSender) {
+								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
+								waiting4confirm++;
+							}
+							status = 3;
 						}
-						status = 3;
+						
 						break;
 						
 					//waiting for the client to send the result back
@@ -99,8 +96,14 @@ public class Server{
 							break;
 						
 						handleNewBoardInfo(m,b,3);
+						if(waiting4confirm!=0){
+							break;
+						}
+						
+//						Thread.sleep(5000);
 						frame.repaint();
-						BoardOperation.Print(b);
+//						BoardOperation.Print(b);
+						System.out.println("repaint");
 						
 						//handle adding
 						if(handlePending()){
@@ -111,6 +114,7 @@ public class Server{
 						//start
 						if(waiting4confirm==0){
 							for (Comrade var : regedClientSender) {
+								System.out.println("sending start");
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
 							}
@@ -268,26 +272,33 @@ public class Server{
 				
 				//c is the pair
 				int mode;
-				if((Math.log(2*cid+1)/Math.log(2)%2)==0)
+				if((((int)(Math.log(2*cid+1)/Math.log(2)))%2)==0)
 					mode = MessageCodeDictionary.SPLIT_MODE_HORIZONTAL;
 				else
 					mode = MessageCodeDictionary.SPLIT_MODE_VERTICAL;
 				
+				System.out.println(cid);
+				System.out.println((Math.log(2*cid+1)/Math.log(2))%2);
+				System.out.println("mode"+mode);
+				
 				System.out.println("send JoinSplitMsg");
+				System.out.println(newClientSender.get(0).hostIp);
 				c.sender.sendMsg(new JoinSplitMsg(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, mode));
 				
 				regedClientSender.remove(0);
 				regedClientSender.add(c);
+				regedClientSender.add(new Comrade(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));
+				waiting4confirm++;
 			}
 			else{
 				regedClientSender.add(new Comrade(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));
-				regedClientSender.get(cid).sender.sendMsg(new RegularConfirmMsg(-1));
+				//regedClientSender.get(cid).sender.sendMsg(new RegularConfirmMsg(-1));
 			}
 			
 			//remove the pending one
 			newClientSender.remove(0);
 			
-			waiting4confirm++;
+			
 			System.out.println("register a new client");
 			return true;
 		}

@@ -31,7 +31,7 @@ public class MainFrame extends JFrame {
 		
 //		board = new Board(800, 800);
 //		BoardOperation.Randomize(board, 0.1);
-		board = BoardOperation.LoadFile("/home/yukez/LifeGameSim/Patterns/gun.lg");
+		board = BoardOperation.LoadFile("/home/yukez/LifeGameSim/Patterns/HerschelLoop.lg");
 		
 		automataPanel = new AutomataPanel();
 		automataPanel.setCellSize(3);
@@ -57,7 +57,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		timer.setDelay(200);
+		timer.setDelay(50);
 		timer.start();
 		
 		setTitle("Automata");
