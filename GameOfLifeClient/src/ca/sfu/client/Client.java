@@ -98,9 +98,6 @@ public class Client {
 					case 3:
 						int msgType = msg.getMessageCode();
 						if(msgType == MessageCodeDictionary.REGULAR_NEXTCLOCK) {
-							
-							//init
-							
 							sendBorderToNeighbours();
 							if(isBorderMessageComplete())
 								computeAndReport();
@@ -172,27 +169,10 @@ public class Client {
 				sendborder.bits = getborder(outfit.neighbour.get(j).position);
 				RegularBorderMsg sendbordermsg = new RegularBorderMsg(outfit.myId, sendborder);	
 				outfit.neighbour.get(j).comrade.sender.sendMsg(sendbordermsg);
-				
-//				System.out.println("sending border to " + outfit.neighbour.get(j).comrade.id);
-//				for(int k=0; k<sendborder.bits.length; k++){
-//					if(sendborder.bits[k])
-//						System.out.print("@");
-//					else
-//						System.out.print(".");
-//				}
-//				System.out.println();
-
 		}
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
-//		System.out.println("\nReceived neighbour update message from " + msg.getClientId());
-//		System.out.print("It saids it's my:");
-//		for(Integer in: msg.pos)
-//			System.out.print(" " + in);
-//		System.out.print("\n");
-		
-		
 		boolean isOldFriend = false;
 		
 		for(int i = 0; i < outfit.neighbour.size(); i++) {
@@ -212,7 +192,6 @@ public class Client {
 						}
 				}
 				if(nei.position.size() == 0){
-//					System.out.println("removing " + nei.comrade.id + "from neighbour");
 					nei.comrade.sender.close();
 					outfit.neighbour.remove(i);
 					i--;
@@ -227,8 +206,7 @@ public class Client {
 		}
 		sendMsgToId(myConfirmMessage, msg.getClientId());
 		
-		
-		System.out.println("After update");
+		System.out.println("After neighbour update");
 		System.out.println("Neighbour size: " + outfit.neighbour.size());
 		int cnt = 1;
 		for(Neighbour nei: outfit.neighbour) {
@@ -243,7 +221,6 @@ public class Client {
 		List<Board> boards;
 		
 		Outfits pout = new Outfits(msg.newcomerId, outfit.nextClock, 0, 0, null);
-		System.out.println("NEXTCLK: " + pout.nextClock);
 		ArrayList<Neighbour> pnei = new ArrayList<Neighbour>();
 		for(Neighbour tn: outfit.neighbour)
 			pnei.add(new Neighbour(
@@ -346,7 +323,6 @@ public class Client {
 			Board top, bottom;
 			top = boards.get(0);
 			bottom = boards.get(1);
-
 			
 			outfit.myBoard = top;
 			
@@ -442,17 +418,6 @@ public class Client {
 				break;
 			}
 		}
-		
-		//merge and update the global border array/variable
-//		System.out.println(outfit.left);
-//		for(Neighbour nei: outfit.neighbour){
-//			System.out.println("neighborID:" + nei.comrade.id);
-//			System.out.println("border size:" + msg.boarder.bits.length);
-//			for(Integer pos: nei.position)
-//				System.out.print("neighborPos:" + pos + " ");
-//			System.out.println(" " );
-//				
-//		}
 		
 		mergeBorder(msg.boarder.bits, outfit.neighbour.get(nei_id).position);
 	}
@@ -637,20 +602,12 @@ public class Client {
 			tmp.add(aa[i]);
 		}
 		
-//		System.out.println("incoming size:"+tmp.size());
-//		for(int i=0; i<array1.size(); i++){
-//			System.out.print(array1.get(i));
-//		}
-//		System.out.println();
-		
 		Board b = outfit.myBoard;
 		
 		
 		for(int i=0; i<array1.size(); i++){
 			if(tmp.size()==0)
 				break;
-			
-//			System.out.println("size"+tmp.size());
 			
 			int num = array1.get(i);
 			
@@ -709,14 +666,12 @@ public class Client {
 				break;
 			case 11:
 				for(int p=b.height-1; p>=b.height/2; p--){
-//					System.out.println("11 board "+outfit.myBoard.height+" p "+p);
 					left[p] = (boolean)tmp.get(0);
 					tmp.remove(0);
 				}
 				break;
 			case 12:
 				for(int p=b.height/2-1; p>=0; p--){
-//					System.out.println("12 board "+outfit.myBoard.height+" p "+p);
 					left[p] = (boolean)tmp.get(0);
 					tmp.remove(0);
 				}

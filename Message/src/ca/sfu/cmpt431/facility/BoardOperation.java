@@ -118,16 +118,6 @@ public class BoardOperation {
 					b.bitmap[i-1][j-1] = false;
 				}
 			}
-		
-		for(int i=0; i<=height+1; i++){
-			for(int j=0; j<=width+1; j++){
-				if(prebitmap[i][j])
-					System.out.print("@");
-				else
-					System.out.print(".");
-			}
-			System.out.println();
-		}
 		return b;
 	}
 
