@@ -115,6 +115,7 @@ public class MessageReceiver {
   
 	private void handleRead(SelectionKey key) throws IOException {
 		SocketChannel clientChannel = (SocketChannel)key.channel();
+		
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
 		buffer.clear();
 		long bytesRead = clientChannel.read(buffer);
@@ -122,28 +123,21 @@ public class MessageReceiver {
 		if(bytesRead != -1){
 			buffer.flip();
 //			System.out.println(bytesRead);
-			MessageProcessing:
-			while(true)
-			{
-				try {
-					ByteArrayInputStream bi = new ByteArrayInputStream(buffer.array());
-					ObjectInputStream oi = new ObjectInputStream(bi);
-					Object msg = oi.readObject();
-	
-					msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
-					bi.close();
-					oi.close();
-					break MessageProcessing;
-	//					System.out.println(msg.getClass().toString());
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (Exception e)
-				{
-					e.printStackTrace();
-				}
+			try {
+				ByteArrayInputStream bi = new ByteArrayInputStream(buffer.array());
+				ObjectInputStream oi = new ObjectInputStream(bi);
+				Object msg = oi.readObject();
+
+				msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
+				bi.close();
+				oi.close();
+//					System.out.println(msg.getClass().toString());
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+			
 			key.interestOps(SelectionKey.OP_READ);
 		}
 	}

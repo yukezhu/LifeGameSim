@@ -103,7 +103,7 @@ public class Server{
 							break;
 						}
 						
-						Thread.sleep(5000);
+//						Thread.sleep(5000);
 						frame.repaint();
 //						BoardOperation.Print(b);
 						System.out.println("repaint");
