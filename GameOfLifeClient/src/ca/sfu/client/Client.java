@@ -521,7 +521,7 @@ public class Client {
 			case 1:
 				if(al.size()!=0)
 					break;
-				al.add(b.bitmap[0][0]);
+				al.add(0,b.bitmap[0][0]);
 				break;
 			case 2:
 				j = 0;
@@ -529,7 +529,7 @@ public class Client {
 				if(al.size() != 0)
 					j = 1;
 				for(; j<=b.width/2; j++)
-					al.add(b.bitmap[0][j]);
+					al.add(0,b.bitmap[0][j]);
 				break;
 			case 3:
 				//if it is 2 already
@@ -538,13 +538,13 @@ public class Client {
 					j=j+2;
 				
 				for(; j<b.width; j++)
-					al.add(b.bitmap[0][j]);
+					al.add(0,b.bitmap[0][j]);
 				break;
 			case 4:
 				//if it is 3 already
 				if(al.size() != 0)
 					break;
-				al.add(b.bitmap[0][b.width-1]);
+				al.add(0,b.bitmap[0][b.width-1]);
 				break;
 			case 5:
 				j = 0;
@@ -552,7 +552,7 @@ public class Client {
 				if(al.size()!=0)
 					j=1;
 				for(; j<=b.height/2; j++)
-					al.add(b.bitmap[j][b.width-1]);
+					al.add(0,b.bitmap[j][b.width-1]);
 				break;
 			case 6:
 				j = b.height/2-1;
@@ -560,13 +560,13 @@ public class Client {
 				if(al.size()!=0)
 					j=j+2;
 				for(; j<b.height; j++)
-					al.add(b.bitmap[j][b.width-1]);
+					al.add(0,b.bitmap[j][b.width-1]);
 				break;
 			case 7:
 				//if it is 6 already
 				if(al.size()!=0)
 					break;
-				al.add(b.bitmap[b.height-1][b.width-1]);
+				al.add(0,b.bitmap[b.height-1][b.width-1]);
 				break;
 			case 8:
 				j = b.width - 1;
@@ -574,33 +574,33 @@ public class Client {
 				if(al.size()!=0)
 					j--;
 				for(; j>=b.width/2-1; j--)
-					al.add(b.bitmap[b.height-1][j]);
+					al.add(0,b.bitmap[b.height-1][j]);
 				break;
 			case 9:
 				j = b.width/2;
 				if(al.size()!=0)
 					j=j-2;
 				for(; j>=0; j--)
-					al.add(b.bitmap[b.height-1][j]);
+					al.add(0,b.bitmap[b.height-1][j]);
 				break;
 			case 10:
 				if(al.size()!=0)
 					break;
-				al.add(b.bitmap[b.height-1][0]);
+				al.add(0,b.bitmap[b.height-1][0]);
 				break;
 			case 11:
 				j = b.height-1;
 				if(al.size()!=0)
 					j--;
 				for(; j>=b.height/2-1; j--)
-					al.add(b.bitmap[j][0]);
+					al.add(0,b.bitmap[j][0]);
 				break;
 			case 12:
 				j = b.height/2;
 				if(al.size()!=0)
 					j=j-2;
 				for(; j>=0; j--)
-					al.add(b.bitmap[j][0]);
+					al.add(0,b.bitmap[j][0]);
 				break;
 			}
 		}
@@ -636,6 +636,16 @@ public class Client {
 //		System.out.println();
 		
 		Board b = outfit.myBoard;
+		
+		up = new boolean[outfit.myBoard.width];
+		down = new boolean[outfit.myBoard.width];
+		left = new boolean[outfit.myBoard.height];
+		right = new boolean[outfit.myBoard.height];
+		upperLeft = false;
+		upperRight = false;
+		lowerRight = false;
+		lowerLeft = false;
+		
 		
 		for(int i=0; i<array1.size(); i++){
 			if(tmp.size()==0)
@@ -715,11 +725,11 @@ public class Client {
 			}
 		}
 		
-		System.out.println("left:");
-		for(int i=0; i<left.length; i++){
-			System.out.print(left[i]+" ");
-		}
-		System.out.println("");
+		System.out.println("lowerleft:");
+//		for(int i=0; i<left.length; i++){
+//			System.out.print(left[i]+" ");
+//		}
+		System.out.println(lowerLeft);
 	}
 	
 }

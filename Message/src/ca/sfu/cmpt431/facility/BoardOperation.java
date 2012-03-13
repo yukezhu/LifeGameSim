@@ -62,6 +62,7 @@ public class BoardOperation {
 		if(up.length != b.width || down.length != b.width)
 		{
 			System.err.println("Up & down border lengths fail to match the board.");
+			System.err.println("up:"+up.length+",down:"+down.length);
 			throw exception;
 		}
 		if(left.length != b.height || right.length != b.height)
