@@ -262,23 +262,19 @@ public class BoardOperation {
 		}
 	}
 
+	/**
+	 * Compress the board bitmap
+	 * @param 	Board to be compressed
+	 * @return	Compressed data
+	 */
+	public static Board CompressBoard(Board b)
+	{
+		return null;
+	}
+	
+	
 	public static void main(String args[])
 	{
-//		Board b = new Board(5, 5);
-//		b = BoardOperation.Randomize(b, 0.3);
-//		BoardOperation.Print(b);
-//		boolean[] up = new boolean[5];
-//		boolean[] down = new boolean[5];
-//		boolean[] left = new boolean[5];
-//		boolean[] right = new boolean[5];
-//		int n = 0;
-//		while(n < 10)
-//		{
-//			b = BoardOperation.NextMoment(b, up, down, left, right, false, false, false, false);
-//			BoardOperation.Print(b);
-//			n ++;
-//			System.out.println();
-//		}
 		Board board = BoardOperation.LoadFile("/home/yukez/map.lg");
 		BoardOperation.Print(board);
 	}
