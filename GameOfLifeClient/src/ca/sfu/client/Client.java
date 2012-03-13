@@ -84,16 +84,14 @@ public class Client {
 						if(neiUpdCount > 0)
 							status = 2;
 						else {
-							outfit.pair.sender.sendMsg(myConfirmMessage);//error
-							System.out.println("!!!!!");
+							outfit.pair.sender.sendMsg(myConfirmMessage);
 							status = 3;
 						}
 							break;
 					case 2:
 						neiUpdCount--;
 						if(neiUpdCount <= 0){
-							outfit.pair.sender.sendMsg(myConfirmMessage);//error
-							System.out.println("!!!!!");
+							outfit.pair.sender.sendMsg(myConfirmMessage);
 							status = 3;
 						}
 						break;
@@ -112,7 +110,6 @@ public class Client {
 						else if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
 							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
 						else if (msgType == MessageCodeDictionary.JOIN_SPLIT) {
-							System.out.println("\n!!!!!!!!!\nReceived split command\n!!!!!!!!!");
 							handleSplit((JoinSplitMsg) msg);
 							status = 5;
 						}
@@ -176,24 +173,24 @@ public class Client {
 				RegularBorderMsg sendbordermsg = new RegularBorderMsg(outfit.myId, sendborder);	
 				outfit.neighbour.get(j).comrade.sender.sendMsg(sendbordermsg);
 				
-				System.out.println("sending border to " + outfit.neighbour.get(j).comrade.id);
-				for(int k=0; k<sendborder.bits.length; k++){
-					if(sendborder.bits[k])
-						System.out.print("@");
-					else
-						System.out.print(".");
-				}
-				System.out.println();
+//				System.out.println("sending border to " + outfit.neighbour.get(j).comrade.id);
+//				for(int k=0; k<sendborder.bits.length; k++){
+//					if(sendborder.bits[k])
+//						System.out.print("@");
+//					else
+//						System.out.print(".");
+//				}
+//				System.out.println();
 
 		}
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
-		System.out.println("\nReceived neighbour update message from " + msg.getClientId());
-		System.out.print("It saids it's my:");
-		for(Integer in: msg.pos)
-			System.out.print(" " + in);
-		System.out.print("\n");
+//		System.out.println("\nReceived neighbour update message from " + msg.getClientId());
+//		System.out.print("It saids it's my:");
+//		for(Integer in: msg.pos)
+//			System.out.print(" " + in);
+//		System.out.print("\n");
 		
 		
 		boolean isOldFriend = false;
@@ -487,7 +484,6 @@ public class Client {
 			if(nei.comrade.sender != null){
 				nei.comrade.sender.close();
 			}
-			System.out.println("myid: " + out.myId +  "  removing " + nei.comrade.id + "from neighbour");
 			out.neighbour.remove(nei);
 		}
 	}
@@ -624,15 +620,11 @@ public class Client {
 			}
 		}
 		
-//		BoardOperation.Print(b);
 		
-//		System.out.println("sending");
 		boolean[] a = new boolean[al.size()];
 		for(int k=0; k<a.length; k++){
 			a[k]=(boolean)al.get(k);
-//			System.out.print(al.get(k)+" ");
 		}
-//		System.out.println();
 		
 		return a;
 	}
@@ -641,12 +633,9 @@ public class Client {
 	protected void mergeBorder(boolean[] aa, List<Integer> array1){
 		ArrayList<Boolean> tmp = new ArrayList<Boolean>();
 		
-		System.out.println("receiving:");
 		for(int i=0; i<aa.length; i++){
 			tmp.add(aa[i]);
-			System.out.print(aa[i]+" ");
-		} //error
-		System.out.println();
+		}
 		
 //		System.out.println("incoming size:"+tmp.size());
 //		for(int i=0; i<array1.size(); i++){
@@ -735,13 +724,6 @@ public class Client {
 			}
 		}
 		
-		System.out.println("down:");
-		for(int i=0; i<down.length; i++){
-			System.out.print(down[i]+" ");
-		}
-		System.out.println();
-		
-		System.out.println(upperRight);
 	}
 	
 }
