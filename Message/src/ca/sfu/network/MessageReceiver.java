@@ -140,18 +140,21 @@ public class MessageReceiver {
 			for(int i = 0; i < cursor; i++)
 				tmpbuf[i] = buffer.array()[i + 4];
 		}
+		else {
+			return ;
+		}
 		System.out.println("cursor: " + cursor);
 		System.out.println("length: " + length);
 		
 		while(cursor < length) {
 			buffer.clear();
 			bytesRead = clientChannel.read(buffer);
+			System.out.println("cursor: " + cursor);
 			if(bytesRead > 0) {
 				System.out.println("Appending buffer.");
 				System.out.println("receiving chunck length:" + bytesRead);
 				buffer.flip();
 				byte [] data = buffer.array();
-				System.out.println("cursor: " + cursor);
 				for(int i = 0; i < bytesRead; i++)
 					tmpbuf[cursor + i] = data[i];
 				cursor += bytesRead;
