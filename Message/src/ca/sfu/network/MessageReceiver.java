@@ -134,6 +134,9 @@ public class MessageReceiver {
 				buffer.flip();
 				try {
 					tmpbuf.put(buffer.array());
+					
+					System.out.println(tmpbuf.limit());
+					
 					ByteArrayInputStream bi = new ByteArrayInputStream(tmpbuf.array());
 					ObjectInputStream oi = new ObjectInputStream(bi);
 					Object msg = oi.readObject();
@@ -149,7 +152,7 @@ public class MessageReceiver {
 					e.printStackTrace();
 				} catch (Exception e) {
 					System.out.println("Appending buffer.");
-					e.printStackTrace();
+//					e.printStackTrace();
 				}
 				
 				key.interestOps(SelectionKey.OP_READ);
