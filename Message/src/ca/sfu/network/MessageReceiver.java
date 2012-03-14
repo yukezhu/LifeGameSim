@@ -23,7 +23,8 @@ public class MessageReceiver {
 	
 	private SynchronizedMsgQueue msgQueue;
 	
-	private ByteBuffer tmpbuf;
+//	private ByteBuffer tmpbuf;
+	private byte [] tmpbuf;
   
 	public static void main(String[] args) throws IOException, InterruptedException{
 		MessageReceiver ms = new MessageReceiver(1978);
@@ -45,7 +46,8 @@ public class MessageReceiver {
 		
 		msgQueue = new SynchronizedMsgQueue(QueueSize);
 		
-		tmpbuf = ByteBuffer.allocate(BufferSize);
+//		tmpbuf = ByteBuffer.allocate(BufferSize);
+		tmpbuf = new byte[BufferSize];
 		
 		new ListeningThread();
 		
@@ -122,8 +124,9 @@ public class MessageReceiver {
 //		ByteBuffer buffer = ByteBuffer.wrap(tmpbuf);
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
 		
-		tmpbuf.clear();
-		System.out.println("Stuck");
+//		tmpbuf.clear();
+//		System.out.println("Stuck");
+		int cursor = 0;
 		
 		ReceiveMessageObject:
 		while(true) {
@@ -133,11 +136,16 @@ public class MessageReceiver {
 				System.out.println("receiving message length:" + bytesRead);
 				buffer.flip();
 				try {
-					tmpbuf.put(buffer.array());
+//					tmpbuf.put(buffer.array());
+//					System.out.println(tmpbuf.limit());
+					byte [] data = buffer.array();
+					for(int i = 0; i < bytesRead; i++)
+						tmpbuf[cursor + i] = data[i];
+					cursor += bytesRead;
+					System.out.println("data length now: " + cursor);
 					
-					System.out.println(tmpbuf.limit());
-					
-					ByteArrayInputStream bi = new ByteArrayInputStream(tmpbuf.array());
+//					ByteArrayInputStream bi = new ByteArrayInputStream(tmpbuf.array());
+					ByteArrayInputStream bi = new ByteArrayInputStream(tmpbuf);
 					ObjectInputStream oi = new ObjectInputStream(bi);
 					Object msg = oi.readObject();
 	
