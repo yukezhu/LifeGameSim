@@ -57,9 +57,9 @@ public class MessageSender{
 		int written = 0;
 		while(written < len + 4) {
 			written += socketChannel.write(bb);
-			System.out.println("actual data written" + written + "\n");
+			System.out.println("actual data written" + written);
 		}
-		System.out.println("successfully send the message.");
+		System.out.println("successfully send the message.\n");
 		
 		out.close();
 	}
