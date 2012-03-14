@@ -125,14 +125,14 @@ public class MessageReceiver {
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
 		
 //		tmpbuf.clear();
-//		System.out.println("Stuck");
+		System.out.println("Stuck");
 		int cursor = 0;
 		
 		ReceiveMessageObject:
 		while(true) {
 			buffer.clear();
 			long bytesRead = clientChannel.read(buffer);
-			if(bytesRead != 0 && bytesRead != -1){
+			if(bytesRead <= 0){
 				System.out.println("receiving message length:" + bytesRead);
 				buffer.flip();
 				try {
