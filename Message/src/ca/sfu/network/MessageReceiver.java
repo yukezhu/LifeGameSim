@@ -125,51 +125,49 @@ public class MessageReceiver {
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
 		
 //		tmpbuf.clear();
-		System.out.println("Stuck");
-		int cursor = 0;
+//		System.out.println("Stuck");
 		
-		ReceiveMessageObject:
-		while(true) {
+		int cursor = 0;
+		int length = 0;
+		int bytesRead = 0;
+		
+		buffer.clear();
+		bytesRead = clientChannel.read(buffer);
+		System.out.println("receiving chunck length:" + bytesRead);
+		if(bytesRead > 0) {
+			buffer.flip();
+			ByteArrayInputStream bi = new ByteArrayInputStream(buffer.array());
+			ObjectInputStream oi = new ObjectInputStream(bi);
+			length = oi.readInt();
+			cursor = oi.read(tmpbuf);
+		}
+		
+		while(cursor < length) {
 			buffer.clear();
-			int bytesRead = clientChannel.read(buffer);
-			if(bytesRead > 0){
-				System.out.println("receiving message length:" + bytesRead);
+			bytesRead = clientChannel.read(buffer);
+			if(bytesRead > 0) {
+				System.out.println("Appending buffer.");
+				System.out.println("receiving chunck length:" + bytesRead);
 				buffer.flip();
-				try {
-//					tmpbuf.put(buffer.array());
-//					System.out.println(tmpbuf.limit());
-					byte [] data = buffer.array();
-					for(int i = 0; i < bytesRead; i++)
-						tmpbuf[cursor + i] = data[i];
-					cursor += bytesRead;
-					System.out.println("data length now: " + cursor);
-					
-//					ByteArrayInputStream bi = new ByteArrayInputStream(tmpbuf.array());
-					ByteArrayInputStream bi = new ByteArrayInputStream(tmpbuf);
-					ObjectInputStream oi = new ObjectInputStream(bi);
-					Object msg = oi.readObject();
-	
-					msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
-					bi.close();
-					oi.close();
-					
-					System.out.println(msg.getClass().toString());
-					System.out.println("Hash code: " + msg.hashCode());
-					
-					
-					System.out.println("Successfully decode message.\n");
-					break ReceiveMessageObject;
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					System.out.println("Appending buffer.");
-//					e.printStackTrace();
-				}
-				
-				key.interestOps(SelectionKey.OP_READ);
+				byte [] data = buffer.array();
+				for(int i = 0; i < bytesRead; i++)
+					tmpbuf[cursor + i] = data[i];
+				cursor += bytesRead;
+				System.out.println("data length now: " + cursor);
 			}
+		}
+		
+		try {
+			ByteArrayInputStream bi = new ByteArrayInputStream(tmpbuf);
+			ObjectInputStream oi = new ObjectInputStream(bi);
+			Object msg = oi.readObject();
+			msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
+			bi.close();
+			oi.close();
+			System.out.println("Successfully decode message.\n");
+		} catch (Exception e) {
+			System.out.println("Appending buffer.");
+			e.printStackTrace();
 		}
 	}
 }

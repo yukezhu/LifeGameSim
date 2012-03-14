@@ -41,8 +41,13 @@ public class MessageSender{
 		out.writeObject(msg);
 		out.flush();
 		byte[] arr = bOut.toByteArray();
+		
+		System.out.println("sending message of size " + arr.length);
+		ByteBuffer lb = ByteBuffer.allocate(4);
+		lb.putInt(arr.length);
+		socketChannel.write(lb);
+		
 		ByteBuffer bb = ByteBuffer.wrap(arr);
-		System.out.println("sending message of size " + arr.length);	
 		out.close();
 		System.out.println("Hash code: " + msg.hashCode());
 		socketChannel.write(bb);
