@@ -133,7 +133,7 @@ public class MessageReceiver {
 		buffer.clear();
 		bytesRead = clientChannel.read(buffer);
 		if(bytesRead > 0) {
-			System.out.println("receiving chunck length:" + bytesRead);
+//			System.out.println("receiving chunck length:" + bytesRead);
 			buffer.flip();
 			length = buffer.getInt();
 			cursor = bytesRead - 4;
@@ -143,22 +143,22 @@ public class MessageReceiver {
 		else {
 			return ;
 		}
-		System.out.println("cursor: " + cursor);
-		System.out.println("length: " + length);
+//		System.out.println("cursor: " + cursor);
+//		System.out.println("length: " + length);
 		
 		while(key.isReadable() && cursor < length) {
 			buffer.clear();
 			bytesRead = clientChannel.read(buffer);
 			System.out.println("cursor: " + cursor);
 			if(bytesRead > 0) {
-				System.out.println("Appending buffer.");
-				System.out.println("receiving chunck length:" + bytesRead);
+//				System.out.println("Appending buffer.");
+//				System.out.println("receiving chunck length:" + bytesRead);
 				buffer.flip();
 				byte [] data = buffer.array();
 				for(int i = 0; i < bytesRead; i++)
 					tmpbuf[cursor + i] = data[i];
 				cursor += bytesRead;
-				System.out.println("data length now: " + cursor);
+//				System.out.println("data length now: " + cursor);
 			}
 		}
 		
@@ -169,7 +169,7 @@ public class MessageReceiver {
 			msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
 			bi.close();
 			oi.close();
-			System.out.println("Successfully decode message, type: " + msg.getClass().toString() + "\n");
+//			System.out.println("Successfully decode message, type: " + msg.getClass().toString() + "\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
