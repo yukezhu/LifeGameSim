@@ -9,7 +9,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
 public class MessageSender{
-
+	
 	private Selector selector = null;
 
 	SocketChannel socketChannel;
@@ -40,16 +40,18 @@ public class MessageSender{
 		ObjectOutputStream out = new ObjectOutputStream(bOut);
 		out.writeObject(msg);
 		out.flush();
-		byte[] arr = bOut.toByteArray();
+		byte [] data = bOut.toByteArray();
+		
+		
+		ByteArrayOutputStream bo = new ByteArrayOutputStream();
+		bo.write(data.length);
+		bo.write(data);
+		byte [] arr = bo.toByteArray();
 		
 		System.out.println("sending message of size " + arr.length);
-		ByteBuffer lb = ByteBuffer.allocate(4);
-		lb.putInt(arr.length);
-		socketChannel.write(lb);
 		
 		ByteBuffer bb = ByteBuffer.wrap(arr);
 		out.close();
-		System.out.println("Hash code: " + msg.hashCode());
 		socketChannel.write(bb);
 	}
 	
