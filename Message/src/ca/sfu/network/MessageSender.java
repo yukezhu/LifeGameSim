@@ -9,6 +9,9 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
 public class MessageSender{
+
+	private static final int BufferSize = 1048576;
+	private static byte [] tmpbuf = new byte[BufferSize];
 	
 	private Selector selector = null;
 
@@ -38,22 +41,22 @@ public class MessageSender{
 	public void sendMsg (Object msg) throws IOException{
 		ByteArrayOutputStream bOut = new ByteArrayOutputStream();
 		ObjectOutputStream out = new ObjectOutputStream(bOut);
-		byte [] lenbuf = new byte[4];
-		out.write(lenbuf);
 		out.writeObject(msg);
 		out.flush();
-		out.close();
 		byte [] arr = bOut.toByteArray();
 		
-		int len = arr.length - 4;
+		int len = arr.length;
 		for(int i = 0; i < 4; i++)
-			arr[i] = (byte) (len >> ((3 - i) * 8));
+			tmpbuf[i] = (byte) (len >> ((3 - i) * 8));
+		for(int i = 0; i < arr.length; i++)
+			tmpbuf[i + 4] = arr[i];
 		
 		System.out.println("sending message of size " + arr.length);
 		
-		ByteBuffer bb = ByteBuffer.wrap(arr);
-		out.close();
+		ByteBuffer bb = ByteBuffer.wrap(tmpbuf, 0, len + 4);
 		socketChannel.write(bb);
+		
+		out.close();
 	}
 	
 	public boolean isOpen() {

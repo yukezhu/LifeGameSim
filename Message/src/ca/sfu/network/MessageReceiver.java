@@ -168,7 +168,6 @@ public class MessageReceiver {
 			oi.close();
 			System.out.println("Successfully decode message.\n");
 		} catch (Exception e) {
-			System.out.println("Appending buffer.");
 			e.printStackTrace();
 		}
 	}
