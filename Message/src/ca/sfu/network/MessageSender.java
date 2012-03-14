@@ -54,13 +54,6 @@ public class MessageSender{
 		ByteBuffer bb = ByteBuffer.wrap(arr);
 		out.close();
 		socketChannel.write(bb);
-		
-		int mylen = 0;
-		for(int i = 0; i < 4; i++) {
-			mylen <<= 8;
-			mylen |= (int) arr[i];
-		}
-		System.out.println("sending message of size " + mylen);
 	}
 	
 	public boolean isOpen() {
