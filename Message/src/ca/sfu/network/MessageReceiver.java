@@ -149,7 +149,7 @@ public class MessageReceiver {
 		while(key.isReadable() && cursor < length) {
 			buffer.clear();
 			bytesRead = clientChannel.read(buffer);
-			System.out.println("cursor: " + cursor);
+//			System.out.println("cursor: " + cursor);
 			if(bytesRead > 0) {
 //				System.out.println("Appending buffer.");
 //				System.out.println("receiving chunck length:" + bytesRead);
