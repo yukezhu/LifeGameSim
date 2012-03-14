@@ -137,10 +137,9 @@ public class MessageReceiver {
 		if(bytesRead > 0) {
 			buffer.flip();
 			length = buffer.getInt();
+			cursor = bytesRead - 4;
 			ByteArrayInputStream bi = new ByteArrayInputStream(buffer.array());
-//			ObjectInputStream oi = new ObjectInputStream(bi);
-//			length = oi.readInt();
-			cursor = bi.read(tmpbuf);
+			bi.read(tmpbuf);
 		}
 		
 		while(cursor < length) {
@@ -151,6 +150,7 @@ public class MessageReceiver {
 				System.out.println("receiving chunck length:" + bytesRead);
 				buffer.flip();
 				byte [] data = buffer.array();
+				System.out.println("cursor: " + cursor);
 				for(int i = 0; i < bytesRead; i++)
 					tmpbuf[cursor + i] = data[i];
 				cursor += bytesRead;
