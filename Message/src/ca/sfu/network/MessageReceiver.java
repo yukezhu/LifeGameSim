@@ -137,8 +137,8 @@ public class MessageReceiver {
 			buffer.flip();
 			length = buffer.getInt();
 			cursor = bytesRead - 4;
-			ByteArrayInputStream bi = new ByteArrayInputStream(buffer.array());
-			bi.read(tmpbuf);
+			for(int i = 0; i < cursor; i++)
+				tmpbuf[i] = buffer.array()[i];
 		}
 		System.out.println("cursor: " + cursor);
 		System.out.println("length: " + length);
