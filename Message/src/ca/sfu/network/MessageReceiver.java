@@ -136,10 +136,11 @@ public class MessageReceiver {
 		System.out.println("receiving chunck length:" + bytesRead);
 		if(bytesRead > 0) {
 			buffer.flip();
+			length = buffer.getInt();
 			ByteArrayInputStream bi = new ByteArrayInputStream(buffer.array());
-			ObjectInputStream oi = new ObjectInputStream(bi);
-			length = oi.readInt();
-			cursor = oi.read(tmpbuf);
+//			ObjectInputStream oi = new ObjectInputStream(bi);
+//			length = oi.readInt();
+			cursor = bi.read(tmpbuf);
 		}
 		
 		while(cursor < length) {
