@@ -132,7 +132,7 @@ public class MessageReceiver {
 		while(true) {
 			buffer.clear();
 			int bytesRead = clientChannel.read(buffer);
-			if(bytesRead <= 0){
+			if(bytesRead > 0){
 				System.out.println("receiving message length:" + bytesRead);
 				buffer.flip();
 				try {
