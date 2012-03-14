@@ -141,6 +141,8 @@ public class MessageReceiver {
 			ByteArrayInputStream bi = new ByteArrayInputStream(buffer.array());
 			bi.read(tmpbuf);
 		}
+		System.out.println("cursor: " + cursor);
+		System.out.println("length: " + length);
 		
 		while(cursor < length) {
 			buffer.clear();
