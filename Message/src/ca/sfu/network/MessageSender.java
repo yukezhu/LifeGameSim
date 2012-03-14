@@ -52,10 +52,14 @@ public class MessageSender{
 			tmpbuf[i + 4] = arr[i];
 		
 		System.out.println("sending message of size " + arr.length);
-		
 		ByteBuffer bb = ByteBuffer.wrap(tmpbuf, 0, len + 4);
-		int num = socketChannel.write(bb);
-		System.out.println("actual data written" + num + "\n");
+		
+		int written = 0;
+		while(written < len + 4) {
+			written += socketChannel.write(bb);
+			System.out.println("actual data written" + written + "\n");
+		}
+		System.out.println("successfully send the message.");
 		
 		out.close();
 	}
