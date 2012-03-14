@@ -42,7 +42,10 @@ public class MessageSender{
 		out.flush();
 		byte[] arr = bOut.toByteArray();
 		ByteBuffer bb = ByteBuffer.wrap(arr);
+
 		System.out.println("sending message of size " + arr.length);
+		System.out.println(arr);
+		
 		out.close();
 		socketChannel.write(bb);
 	}
