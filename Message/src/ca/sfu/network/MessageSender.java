@@ -1,6 +1,8 @@
 package ca.sfu.network;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -47,6 +49,7 @@ public class MessageSender{
 		out = new ObjectOutputStream(bOut);
 		out.writeInt(len - 4);
 		out.flush();
+		out.close();
 		byte [] arr = bOut.toByteArray();
 		
 		System.out.println("sending message of size " + arr.length);
@@ -54,6 +57,10 @@ public class MessageSender{
 		ByteBuffer bb = ByteBuffer.wrap(arr);
 		out.close();
 		socketChannel.write(bb);
+		
+		ByteArrayInputStream bi = new ByteArrayInputStream(arr);
+		ObjectInputStream oi = new ObjectInputStream(bi);
+		System.out.println("length written is: " + oi.readInt());
 	}
 	
 	public boolean isOpen() {
