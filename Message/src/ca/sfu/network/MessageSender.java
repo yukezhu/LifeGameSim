@@ -54,7 +54,8 @@ public class MessageSender{
 		System.out.println("sending message of size " + arr.length);
 		
 		ByteBuffer bb = ByteBuffer.wrap(tmpbuf, 0, len + 4);
-		socketChannel.write(bb);
+		int num = socketChannel.write(bb);
+		System.out.println("actual data written" + num + "\n");
 		
 		out.close();
 	}
