@@ -123,12 +123,13 @@ public class MessageReceiver {
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
 		
 		tmpbuf.clear();
+		System.out.println("Stuck");
 		
 		ReceiveMessageObject:
 		while(true) {
 			buffer.clear();
 			long bytesRead = clientChannel.read(buffer);
-			if(bytesRead != -1){
+			if(bytesRead != 0 && bytesRead != -1){
 				System.out.println("receiving message length:" + bytesRead);
 				buffer.flip();
 				try {
@@ -148,6 +149,7 @@ public class MessageReceiver {
 					e.printStackTrace();
 				} catch (Exception e) {
 					System.out.println("Appending buffer.");
+					e.printStackTrace();
 				}
 				
 				key.interestOps(SelectionKey.OP_READ);
