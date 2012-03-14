@@ -23,7 +23,7 @@ public class MessageReceiver {
 	
 	private SynchronizedMsgQueue msgQueue;
 	
-	private byte [] tmpbuf;
+	private ByteBuffer tmpbuf;
   
 	public static void main(String[] args) throws IOException, InterruptedException{
 		MessageReceiver ms = new MessageReceiver(1978);
@@ -45,7 +45,7 @@ public class MessageReceiver {
 		
 		msgQueue = new SynchronizedMsgQueue(QueueSize);
 		
-		tmpbuf = new byte[BufferSize];
+		tmpbuf = ByteBuffer.allocate(BufferSize);
 		
 		new ListeningThread();
 		
@@ -119,32 +119,39 @@ public class MessageReceiver {
   
 	private void handleRead(SelectionKey key) throws IOException {
 		SocketChannel clientChannel = (SocketChannel)key.channel();
-		ByteBuffer buffer = ByteBuffer.wrap(tmpbuf);
-//		ByteBuffer buffer = (ByteBuffer)key.attachment();
-		buffer.clear();
-		long bytesRead = clientChannel.read(buffer);
+//		ByteBuffer buffer = ByteBuffer.wrap(tmpbuf);
+		ByteBuffer buffer = (ByteBuffer)key.attachment();
 		
-//		int cursor = 0;
+		tmpbuf.clear();
 		
-		if(bytesRead != -1){
-			System.out.println("receiving message length:" + bytesRead);
-			buffer.flip();
-			try {
-				ByteArrayInputStream bi = new ByteArrayInputStream(buffer.array());
-				ObjectInputStream oi = new ObjectInputStream(bi);
-				Object msg = oi.readObject();
-
-				msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
-				bi.close();
-				oi.close();
+		ReceiveMessageObject:
+		while(true) {
+			buffer.clear();
+			long bytesRead = clientChannel.read(buffer);
+			if(bytesRead != -1){
+				System.out.println("receiving message length:" + bytesRead);
+				buffer.flip();
+				try {
+					tmpbuf.put(buffer.array());
+					ByteArrayInputStream bi = new ByteArrayInputStream(tmpbuf.array());
+					ObjectInputStream oi = new ObjectInputStream(bi);
+					Object msg = oi.readObject();
+	
+					msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
+					bi.close();
+					oi.close();
 //					System.out.println(msg.getClass().toString());
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+					break ReceiveMessageObject;
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					System.out.println("Appending buffer.");
+				}
+				
+				key.interestOps(SelectionKey.OP_READ);
 			}
-			
-			key.interestOps(SelectionKey.OP_READ);
 		}
 	}
 }
