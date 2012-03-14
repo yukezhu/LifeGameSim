@@ -38,15 +38,16 @@ public class MessageSender{
 	public void sendMsg (Object msg) throws IOException{
 		ByteArrayOutputStream bOut = new ByteArrayOutputStream();
 		ObjectOutputStream out = new ObjectOutputStream(bOut);
+		out.writeInt(0);
 		out.writeObject(msg);
 		out.flush();
-		byte [] data = bOut.toByteArray();
+		int len = bOut.toByteArray().length;
 		
-		
-		ByteArrayOutputStream bo = new ByteArrayOutputStream();
-		bo.write(data.length);
-		bo.write(data);
-		byte [] arr = bo.toByteArray();
+		out.close();
+		out = new ObjectOutputStream(bOut);
+		out.writeInt(len - 4);
+		out.flush();
+		byte [] arr = bOut.toByteArray();
 		
 		System.out.println("sending message of size " + arr.length);
 		
