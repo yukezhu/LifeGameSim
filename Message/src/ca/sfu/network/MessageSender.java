@@ -8,6 +8,8 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
+import ca.sfu.cmpt431.message.Message;
+
 public class MessageSender{
 
 	private Selector selector = null;
@@ -19,9 +21,9 @@ public class MessageSender{
 	public int hostListenningPort;
 
 	public static void main(String[] args) throws IOException{
-		MessageSender client = new MessageSender("142.58.35.130",1990);
-		String msg = "hello";	
-		client.sendMsg(msg);
+//		MessageSender client = new MessageSender("142.58.35.130",1990);
+//		String msg = "hello";	
+//		client.sendMsg(msg);
 	}
 
 	public MessageSender(String HostIp, int HostListenningPort) throws IOException{
@@ -35,7 +37,7 @@ public class MessageSender{
 		socketChannel.register(selector, SelectionKey.OP_READ);
 	}
 
-	public void sendMsg (Object msg) throws IOException{
+	public void sendMsg (Message msg) throws IOException{
 		ByteArrayOutputStream bOut = new ByteArrayOutputStream();
 		ObjectOutputStream out = new ObjectOutputStream(bOut);
 		out.writeObject(msg);
@@ -44,6 +46,7 @@ public class MessageSender{
 		ByteBuffer bb = ByteBuffer.wrap(arr);
 		System.out.println("sending message of size " + arr.length);	
 		out.close();
+		System.out.println("Hash code: " + msg.hashCode());
 		socketChannel.write(bb);
 	}
 	

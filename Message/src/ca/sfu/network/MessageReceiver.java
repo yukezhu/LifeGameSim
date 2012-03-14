@@ -152,7 +152,11 @@ public class MessageReceiver {
 					msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
 					bi.close();
 					oi.close();
+					
 					System.out.println(msg.getClass().toString());
+					System.out.println("Hash code: " + msg.hashCode());
+					
+					
 					System.out.println("Successfully decode message.\n");
 					break ReceiveMessageObject;
 				} catch (ClassNotFoundException e) {
