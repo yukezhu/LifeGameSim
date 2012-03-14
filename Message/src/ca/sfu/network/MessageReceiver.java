@@ -153,6 +153,7 @@ public class MessageReceiver {
 					bi.close();
 					oi.close();
 //					System.out.println(msg.getClass().toString());
+					System.out.println("Successfully decode message.\n");
 					break ReceiveMessageObject;
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
