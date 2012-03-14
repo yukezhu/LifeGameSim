@@ -138,7 +138,7 @@ public class MessageReceiver {
 			length = buffer.getInt();
 			cursor = bytesRead - 4;
 			for(int i = 0; i < cursor; i++)
-				tmpbuf[i] = buffer.array()[i];
+				tmpbuf[i] = buffer.array()[i + 4];
 		}
 		System.out.println("cursor: " + cursor);
 		System.out.println("length: " + length);
@@ -166,7 +166,7 @@ public class MessageReceiver {
 			msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
 			bi.close();
 			oi.close();
-			System.out.println("Successfully decode message.\n");
+			System.out.println("Successfully decode message, type: " + msg.getClass().toString() + "\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
