@@ -39,14 +39,14 @@ public class Server{
 		JFrame frame = new JFrame();
 		frame.setSize(480, 480);
 //		AutomataMsg auto = new AutomataMsg(50, 50);
-		Board b = new Board(120, 120);
-		BoardOperation.Randomize(b,0.1);
+//		Board b = new Board(120, 120);
+//		BoardOperation.Randomize(b,0.1);
 		
-//		Board b = BoardOperation.LoadFile("/home/xieyaox/HerschelLoop.lg");
+		Board b = BoardOperation.LoadFile("/home/xieyaox/HerschelLoop2.lg");
 		
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
-		panel.setCellSize(3);
+		panel.setCellSize(2);
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 		
