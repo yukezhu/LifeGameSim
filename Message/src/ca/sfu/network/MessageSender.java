@@ -60,6 +60,7 @@ public class MessageSender{
 			mylen <<= 8;
 			mylen |= (int) arr[i];
 		}
+		System.out.println("sending message of size " + mylen);
 	}
 	
 	public boolean isOpen() {
