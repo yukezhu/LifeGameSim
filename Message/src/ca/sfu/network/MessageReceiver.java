@@ -22,6 +22,8 @@ public class MessageReceiver {
 	private ServerSocketChannel listenerChannel;
 	
 	private SynchronizedMsgQueue msgQueue;
+	
+	private byte [] tmpbuf;
   
 	public static void main(String[] args) throws IOException, InterruptedException{
 		MessageReceiver ms = new MessageReceiver(1978);
@@ -42,6 +44,8 @@ public class MessageReceiver {
 		listenerChannel.register(selector, SelectionKey.OP_ACCEPT);
 		
 		msgQueue = new SynchronizedMsgQueue(QueueSize);
+		
+		tmpbuf = new byte[BufferSize];
 		
 		new ListeningThread();
 		
@@ -115,14 +119,16 @@ public class MessageReceiver {
   
 	private void handleRead(SelectionKey key) throws IOException {
 		SocketChannel clientChannel = (SocketChannel)key.channel();
-		
-		ByteBuffer buffer = (ByteBuffer)key.attachment();
+		ByteBuffer buffer = ByteBuffer.wrap(tmpbuf);
+//		ByteBuffer buffer = (ByteBuffer)key.attachment();
 		buffer.clear();
 		long bytesRead = clientChannel.read(buffer);
+		
+//		int cursor = 0;
+		
 		if(bytesRead != -1){
 			System.out.println("receiving message length:" + bytesRead);
 			buffer.flip();
-//			System.out.println(bytesRead);
 			try {
 				ByteArrayInputStream bi = new ByteArrayInputStream(buffer.array());
 				ObjectInputStream oi = new ObjectInputStream(bi);
