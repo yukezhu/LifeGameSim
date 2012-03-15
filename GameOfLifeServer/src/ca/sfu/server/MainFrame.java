@@ -17,21 +17,18 @@ public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
-	InformationPanel infoPanel;
 	AutomataPanel automataPanel;
 
 	Board board;
 	
-	public MainFrame()
+	public MainFrame(Board b)
 	{
 		super();
 		setSize(800, 850);
 		setJMenuBar(createMenuBar());
 		setBackground(new Color(0xeb, 0xeb, 0xeb));
 		
-//		board = new Board(800, 800);
-//		BoardOperation.Randomize(board, 0.1);
-		board = BoardOperation.LoadFile("/home/yukez/LifeGameSim/Patterns/HerschelLoop.lg");
+		board = b;
 		
 		automataPanel = new AutomataPanel();
 		automataPanel.setCellSize(3);
@@ -40,19 +37,39 @@ public class MainFrame extends JFrame {
 		
 		setContentPane(automataPanel);
 		setVisible(true);
-				
-		infoPanel = new InformationPanel();
-		infoPanel.setVisible(true);
 		
+		setTitle("Automata");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	
+	/**
+	 * Default constructor
+	 * Mainly used for unit testing
+	 */
+	public MainFrame()
+	{
+		super();
+		setSize(800, 850);
+		setJMenuBar(createMenuBar());
+		setBackground(new Color(0xeb, 0xeb, 0xeb));
+		
+		board = new Board(800, 800);
+		BoardOperation.Randomize(board, 0.1);
+		
+		automataPanel = new AutomataPanel();
+		automataPanel.setCellSize(3);
+		automataPanel.setBoard(board);
+		automataPanel.setBackground(new Color(0xeb, 0xeb, 0xeb));
+		
+		setContentPane(automataPanel);
+		setVisible(true);
+						
 		Timer timer = new Timer(0, new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				automataPanel.setBoard(board);
 				BoardOperation.NextMoment(board, null, null, null, null, false, false, false, false);;
-				infoPanel.setCellNum(automataPanel.getCell());
-				infoPanel.setLifeNum(automataPanel.getAlive());
-				infoPanel.setCycleNum(automataPanel.getCycle());
 				automataPanel.repaint();
 			}
 		});
@@ -102,6 +119,16 @@ public class MainFrame extends JFrame {
 		menuBar.add(aboutMenu);
 		menuBar.add(windowMenu);
 		return menuBar;
+	}
+	
+	public void setBoard(Board board)
+	{
+		this.board = board;
+	}
+	
+	public Board getBoard()
+	{
+		return this.board;
 	}
 	
 	public static void main(String[] args) {

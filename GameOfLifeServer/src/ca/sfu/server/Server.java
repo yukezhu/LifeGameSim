@@ -2,12 +2,17 @@ package ca.sfu.server;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
-import ca.sfu.cmpt431.facility.*;
-import ca.sfu.cmpt431.message.*;
-import ca.sfu.cmpt431.message.join.*;
-import ca.sfu.cmpt431.message.regular.*;
+import ca.sfu.cmpt431.facility.Board;
+import ca.sfu.cmpt431.facility.BoardOperation;
+import ca.sfu.cmpt431.facility.Comrade;
+import ca.sfu.cmpt431.facility.Outfits;
+import ca.sfu.cmpt431.message.Message;
+import ca.sfu.cmpt431.message.MessageCodeDictionary;
+import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
+import ca.sfu.cmpt431.message.join.JoinRequestMsg;
+import ca.sfu.cmpt431.message.join.JoinSplitMsg;
+import ca.sfu.cmpt431.message.regular.RegularBoardReturnMsg;
+import ca.sfu.cmpt431.message.regular.RegularNextClockMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
 import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
@@ -28,6 +33,10 @@ public class Server{
 	
 	private int status;
 	
+	/* UI widgets */
+	MainFrame frame = null;
+	InformationPanel infoPanel = null;
+	
 	public Server() throws IOException {
 		Receiver = new MessageReceiver(LISTEN_PORT);
 		status = 0;
@@ -36,21 +45,11 @@ public class Server{
 	protected void startServer() throws IOException, ClassNotFoundException, InterruptedException
 	{
 		// UI
-		JFrame frame = new JFrame();
-		frame.setSize(500, 500);
-//		AutomataMsg auto = new AutomataMsg(50, 50);
-		Board b = new Board(500, 500);
-		BoardOperation.Randomize(b,0.1);
-		
-//		Board b = BoardOperation.LoadFile("/home/xieyaox/HerschelLoop2.lg");
-		
-		AutomataPanel panel = new AutomataPanel();
-		panel.setBoard(b);
-		panel.setCellSize(1);
-		frame.setContentPane(panel);
-		frame.setVisible(true);
+		Board b = BoardOperation.LoadFile("HerschelLoop2.lg");
 		
 		System.out.println("UI");
+		frame = new MainFrame(b);
+		infoPanel = new InformationPanel();
 		
 		MessageWithIp m;
 		
