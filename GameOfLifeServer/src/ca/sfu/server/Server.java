@@ -385,10 +385,21 @@ public class Server{
 			//it is the last node, or the pair of last node
 			//ask the last pair merge
 			int s = regedClientSender.size();
-			int pair_id =(s%2==0)?((s-4)>=0?regedClientSender.get(s-4).id:-1):regedClientSender.get(0).id;
-			if(isLastPair(pair_id)!=-1)
-				pair_id = -1; //you pair can not be your neighbour, occurs when there is 2 clients
-			regedClientSender.get(regedClientSender.size()-1-isLastPair(cid)).sender.sendMsg(new MergeLastMsg(pair_id));
+			int pair_index = (s%2==0)?((s-4)>=0?(s-4):-1):0;
+			
+			if(isLastPair(pair_index)!=-1)
+				pair_index = -1; //you pair can not be your neighbour, occurs when there is 2 clients
+			
+			int pair_cid = -1;
+			String pair_ip = "";
+			int pair_port = -1;
+			if(pair_index!=-1){
+				pair_cid = regedClientSender.get(pair_index).id;
+				pair_ip = regedClientSender.get(pair_index).ip;
+				pair_port = regedClientSender.get(pair_index).port;
+			}
+			
+			regedClientSender.get(regedClientSender.size()-1-isLastPair(cid)).sender.sendMsg(new MergeLastMsg(pair_cid, pair_ip, pair_port));
 			//wait for a confirm, still need a LeaveReceiverMsg
 			return isLastPair(cid)+1; //1 if last or 2 if second last
 		}
@@ -396,10 +407,22 @@ public class Server{
 			//ask the last node merge first,give it a new pair id
 			//ask the last node to replace
 			int s = regedClientSender.size();
-			int pair_id =(s%2==0)?((s-4)>=0?regedClientSender.get(s-4).id:-1):regedClientSender.get(0).id;
-			if(isLastPair(pair_id)!=-1)
-				pair_id = -1; //you pair can not be your neighbour
-			regedClientSender.get(regedClientSender.size()-1).sender.sendMsg(new MergeLastMsg(pair_id));
+			
+			int pair_index = (s%2==0)?((s-4)>=0?(s-4):-1):0;
+			
+			if(isLastPair(pair_index)!=-1)
+				pair_index = -1; //you pair can not be your neighbour, occurs when there is 2 clients
+			
+			int pair_cid = -1;
+			String pair_ip = "";
+			int pair_port = -1;
+			if(pair_index!=-1){
+				pair_cid = regedClientSender.get(pair_index).id;
+				pair_ip = regedClientSender.get(pair_index).ip;
+				pair_port = regedClientSender.get(pair_index).port;
+			}
+			
+			regedClientSender.get(regedClientSender.size()-1).sender.sendMsg(new MergeLastMsg(pair_cid, pair_ip, pair_port));
 			//wait for a confirm, still need a LeaveReceiverMsg
 			return 3;
 		}
