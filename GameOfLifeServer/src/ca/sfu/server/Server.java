@@ -69,7 +69,7 @@ public class Server{
 				switch(status) {
 					//waiting for first client
 					case 0:
-						handleNewAdding(m,1);
+						handleNewAddingLeaving(m,1);
 						handlePending();
 						//send it the outfit
 						regedClientSender.get(0).sender.sendMsg(new JoinOutfitsMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
@@ -80,7 +80,7 @@ public class Server{
 					//wait for the confirm
 					//start a cycle
 					case 2:
-						if(handleNewAdding(m,2))
+						if(handleNewAddingLeaving(m,2))
 							break;
 										
 						handleConfirm(m,3); //expect only one message responding for JoinOutfitsMsg
@@ -100,7 +100,7 @@ public class Server{
 					//handle new adding or
 					//restart next cycle
 					case 3:
-						if(handleNewAdding(m,3))
+						if(handleNewAddingLeaving(m,3))
 							break;
 						
 						handleNewBoardInfo(m,b,3);
@@ -130,7 +130,7 @@ public class Server{
 						break;
 					//new addings (not the first client)
 					case 4:
-						if(handleNewAdding(m,4))
+						if(handleNewAddingLeaving(m,4))
 							break;
 						
 						handleConfirm(m,-1);
@@ -254,7 +254,7 @@ public class Server{
 	}
 	
 	//store all the adding request into an array
-	protected boolean handleNewAdding(MessageWithIp m, int nextStatus) throws IOException{
+	protected boolean handleNewAddingLeaving(MessageWithIp m, int nextStatus) throws IOException{
 		//check if m is a new adding request message
 		Message msg = (Message) m.extracMessage();
 		if(msg.getMessageCode()==MessageCodeDictionary.JOIN_REQUEST){
@@ -266,7 +266,14 @@ public class Server{
 			status = nextStatus;
 			return true;
 		}
+		else if(msg.getMessageCode()==0){
+			//TODO
+		}
 		return false;
+	}
+	
+	protected boolean handleLeaving(){
+		if()
 	}
 	
 	//deal with the pending adding request
