@@ -43,7 +43,7 @@ public class MessageSender{
 		ObjectOutputStream out = new ObjectOutputStream(bOut);
 		out.writeObject(msg);
 		out.flush();
-		byte [] arr = bOut.toByteArray();
+		byte [] arr = MessageCompressor.compress(bOut.toByteArray());
 		
 		int len = arr.length;
 		for(int i = 0; i < 4; i++)
@@ -51,16 +51,13 @@ public class MessageSender{
 		for(int i = 0; i < arr.length; i++)
 			tmpbuf[i + 4] = arr[i];
 		
-//		System.out.println("sending message of size " + arr.length);
+		
 		ByteBuffer bb = ByteBuffer.wrap(tmpbuf, 0, len + 4);
 		
 		int written = 0;
 		while(written < len + 4) {
 			written += socketChannel.write(bb);
-//			System.out.println("actual data written" + written);
-		}
-//		System.out.println("successfully send the message.\n");
-		
+		}		
 		out.close();
 	}
 	
