@@ -11,6 +11,7 @@ import ca.sfu.cmpt431.message.MessageCodeDictionary;
 import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.join.JoinSplitMsg;
+import ca.sfu.cmpt431.message.merge.MergeLastMsg;
 import ca.sfu.cmpt431.message.regular.RegularBoardReturnMsg;
 import ca.sfu.cmpt431.message.regular.RegularNextClockMsg;
 import ca.sfu.network.MessageReceiver;
@@ -266,14 +267,58 @@ public class Server{
 			status = nextStatus;
 			return true;
 		}
-		else if(msg.getMessageCode()==0){
+		else if(msg.getMessageCode()==MessageCodeDictionary.LEAVE_REQUEST){
 			//TODO
+			toLeave.add(msg.getClientId());
+			System.out.println("a client want to leave, pending now");
+			return true;
 		}
 		return false;
 	}
 	
-	protected boolean handleLeaving(){
-		if()
+	protected int handleLeaving() throws IOException{
+		int cid = toLeave.get(0);
+		if(newClientSender.size()!=0){
+			//ask a new client to replace it immediately
+		}
+		else if(regedClientSender.size()==1){
+			//there is only one client and no adding
+			//ask him to leave directly
+			
+		}
+		else if(isLastPair(cid)!=-1){
+			//it is the last node, or the pair of last node
+			//ask the last pair merge
+			int s = regedClientSender.size();
+			int pair_id =(s%2==0)?((s-4)>=0?regedClientSender.get(s-4).id:-1):regedClientSender.get(0).id;
+			if(isLastPair(pair_id)!=-1)
+				pair_id = -1; //you pair can not be your neighbour, occurs when there is 2 clients
+			regedClientSender.get(regedClientSender.size()-1-isLastPair(cid)).sender.sendMsg(new MergeLastMsg(pair_id));
+			//wait for a confirm
+			return isLastPair(cid)+1; //1 if last or 2 if second last
+		}
+		else{
+			//ask the last node merge first,give it a new pair id
+			//ask the last node to replace
+			int s = regedClientSender.size();
+			int pair_id =(s%2==0)?((s-4)>=0?regedClientSender.get(s-4).id:-1):regedClientSender.get(0).id;
+			if(isLastPair(pair_id)!=-1)
+				pair_id = -1; //you pair can not be your neighbour
+			regedClientSender.get(regedClientSender.size()-1).sender.sendMsg(new MergeLastMsg(pair_id));
+			//wait for a confirm
+			return 3;
+		}
+		return -1;
+	}
+	
+	private int isLastPair(int cid){
+		int s = regedClientSender.size();
+		if(regedClientSender.get(s-1).id == cid)
+			return 0;
+		else if(regedClientSender.get(s-2).id == cid)
+			return 1;
+		else
+			return -1;
 	}
 	
 	//deal with the pending adding request
