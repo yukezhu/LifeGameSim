@@ -117,12 +117,12 @@ public class Client {
 						}
 						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 							handleBorderMessage((RegularBorderMsg) msg);
-						else if (msgType == MessageCodeDictionary.MERGE_LAST) {
-							outfit.pair.sender.sendMsg(new MergeOutfit(outfit.myId, ((MergeLastMsg)msg).thePair, outfit));
-							status = 7;
+						else if (msgType == MessageCodeDictionary.MERGE_LAST)
+							passOutfitsToPair((MergeLastMsg)msg);
+						else if (msgType == MessageCodeDictionary.MERGE_OUTFIT) {
+							MergeOutfit mmsg = (MergeOutfit)msg;
+							handleMerge(outfit, mmsg.yourPair, mmsg.pairIp, mmsg.pairPort);
 						}
-						else if (msgType == MessageCodeDictionary.MERGE_OUTFIT)
-							handleMerge(outfit, ((MergeOutfit)msg).yourPair);
 						break;
 					case 4:
 						handleBorderMessage((RegularBorderMsg) msg);
@@ -137,11 +137,8 @@ public class Client {
 						status = 3;
 						break;
 					case 6:
-						if (msg.getMessageCode() == MessageCodeDictionary.MERGE_LAST) {
-//							set to null
-//							outfit.pair.sender.sendMsg(new MergeOutfit(outfit.myId, ((MergeLastMsg)msg).thePair, outfit));
-							status = 7;
-						}
+						if (msg.getMessageCode() == MessageCodeDictionary.MERGE_LAST) 
+							passOutfitsToPair((MergeLastMsg)msg);
 						else 
 							System.exit(0);
 						break;
@@ -160,8 +157,16 @@ public class Client {
 		}
 	}
 	
+	private void passOutfitsToPair(MergeLastMsg msg) throws IOException {
+		MessageSender sender = outfit.pair.sender;
+		outfit.pair = null;
+		for(Neighbour nei: outfit.neighbour)
+			nei.comrade.sender = null;
+		sender.sendMsg(new MergeOutfit(outfit.myId, outfit, msg.newpair, msg.pairIp, msg.pairPort));
+		status = 7;
+	}
+	
 	private void repairOutfit(JoinOutfitsMsg msg) throws IOException {
-		System.out.println("received outfit");
 		outfit = msg.yourOutfits;
 		myConfirmMessage = new RegularConfirmMsg(outfit.myId);
 		if(outfit.pair == null)
@@ -182,6 +187,8 @@ public class Client {
 		down = new boolean[outfit.myBoard.width];
 		left = new boolean[outfit.myBoard.height];
 		right = new boolean[outfit.myBoard.height];
+		System.out.println("received outfit:");
+		outiftInfo(outfit);
 	}
 	
 	private void sendBorderToNeighbours() throws IOException {
@@ -189,14 +196,14 @@ public class Client {
 		Border sendborder;	
 		for(int j = 0; j < neighborCount; j++)
 		{
-				sendborder = new Border();
-				sendborder.bits = getborder(outfit.neighbour.get(j).position);
-				RegularBorderMsg sendbordermsg = new RegularBorderMsg(outfit.myId, sendborder);	
-				outfit.neighbour.get(j).comrade.sender.sendMsg(sendbordermsg);
+			sendborder = new Border();
+			sendborder.bits = getborder(outfit.neighbour.get(j).position);
+			RegularBorderMsg sendbordermsg = new RegularBorderMsg(outfit.myId, sendborder);	
+			outfit.neighbour.get(j).comrade.sender.sendMsg(sendbordermsg);
 		}
 	}
 	
-	private void handleMerge(Outfits pout, int newpair) throws IOException {
+	private void handleMerge(Outfits pout, int newpair, String nip, int nport) throws IOException {
 		Neighbour [] pn = new Neighbour[12];
 		for(int i = 0; i < 12; i++)
 			pn[i] = findNeiWithPos(pout, i);
@@ -262,9 +269,13 @@ public class Client {
 			}
 		}
 		
-		if(hasNeighbour(outfit, newpair)) {
-			outfit.pair = neighbourWithId(newpair).
-		}
+		if(hasNeighbour(outfit, newpair))
+			outfit.pair = findNeiWithId(outfit, newpair).comrade;
+		else 
+			outfit.pair = new Comrade(newpair, nport, nip, new MessageSender(nip, nport));
+		
+		System.out.println("After merging:");
+		outiftInfo(outfit);
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
@@ -497,8 +508,6 @@ public class Client {
 		
 		System.out.println("My outfit after spliting:");
 		outiftInfo(outfit);
-		System.out.println("Pair's outfit after spliting:");
-		outiftInfo(pout);
 		outfit.pair.sender.sendMsg(new JoinOutfitsMsg(outfit.myId, myPort, pout));
 	}
 	
