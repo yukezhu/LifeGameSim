@@ -122,7 +122,7 @@ public class Client {
 							status = 7;
 						}
 						else if (msgType == MessageCodeDictionary.MERGE_OUTFIT)
-							handleMerge(outfit);
+							handleMerge(outfit, ((MergeOutfit)msg).yourPair);
 						break;
 					case 4:
 						handleBorderMessage((RegularBorderMsg) msg);
@@ -130,23 +130,27 @@ public class Client {
 							computeAndReport();
 						break;
 					case 5:
-						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM){
+						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
 							System.out.println("type error, expect confirm message, received: " + msg.getMessageCode());
-						}
 						else
 							server.sender.sendMsg(myConfirmMessage);
 						status = 3;
 						break;
 					case 6:
 						if (msg.getMessageCode() == MessageCodeDictionary.MERGE_LAST) {
-							outfit.pair.sender.sendMsg(new MergeOutfit(outfit.myId, ((MergeLastMsg)msg).thePair, outfit));
+//							set to null
+//							outfit.pair.sender.sendMsg(new MergeOutfit(outfit.myId, ((MergeLastMsg)msg).thePair, outfit));
 							status = 7;
 						}
 						else 
 							System.exit(0);
 						break;
 					case 7:
-						
+						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
+							System.out.println("type error, expect confirm message, received: " + msg.getMessageCode());
+						else
+							server.sender.sendMsg(myConfirmMessage);
+						status = 6;
 						break;
 					default:
 						System.out.println("Received unexpectd message.");
@@ -192,8 +196,58 @@ public class Client {
 		}
 	}
 	
-	private void handleMerge(Outfits pout) {
+	private void handleMerge(Outfits pout, int newpair) throws IOException {
+		Neighbour [] pn = new Neighbour[12];
+		for(int i = 0; i < 12; i++)
+			pn[i] = findNeiWithPos(pout, i);
 		
+		Neighbour [] n = new Neighbour[12];
+		for(int i = 0; i < 12; i++)
+			n[i] = findNeiWithPos(outfit, i);
+		// reverse of vertical split
+		if(pout.top == outfit.top) {
+			if(n[1].comrade.id != pn[1].comrade.id) {
+				deletePos(outfit, n[1], 2);
+				addPos(n[3], 2, true);
+			}
+			if(n[8].comrade.id != pn[8].comrade.id) {
+				deletePos(outfit, n[8], 7);
+				addPos(n[6], 7, false);
+			}
+			for(int i = 3; i <= 6; i++) {
+				if(hasNeighbour(outfit, n[i].comrade.id)) {
+					deletePos(outfit, n[i], i);
+				}
+				if(pn[i] != null) {
+					if(hasNeighbour(pout, pn[i].comrade.id)) {
+						outfit.neighbour.add(pn[i]);
+						pout.neighbour.remove(pn[i]);
+					}
+				}
+			}
+		}
+		// reverse of horizontal split
+		else {
+			if(n[4].comrade.id != pn[4].comrade.id) {
+				deletePos(outfit, n[4], 5);
+				addPos(n[3], 2, true);
+			}
+			if(n[8].comrade.id != pn[8].comrade.id) {
+				deletePos(outfit, n[8], 7);
+				addPos(n[6], 7, false);
+			}
+			for(int i = 3; i <= 6; i++) {
+				if(hasNeighbour(outfit, n[i].comrade.id)) {
+					deletePos(outfit, n[i], i);
+				}
+				if(pn[i] != null) {
+					if(hasNeighbour(pout, pn[i].comrade.id)) {
+						outfit.neighbour.add(pn[i]);
+						pout.neighbour.remove(pn[i]);
+					}
+				}
+			}
+		}
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
@@ -477,6 +531,10 @@ public class Client {
 				nei.comrade.sender.sendMsg(msg);
 	}
 	
+	private void repairNeighbour(Neighbour nei) throws IOException {
+		nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
+	}
+	
 	private void deletePos(Outfits out, Neighbour nei, Integer pos) {
 		if(nei == null)
 			return ;
@@ -496,6 +554,13 @@ public class Client {
 			nei.position.add(0, pos);
 		else
 			nei.position.add(pos);
+	}
+	
+	private boolean hasNeighbour(Outfits out, int id) {
+		for(Neighbour nei: out.neighbour)
+			if(nei.comrade.id == id)
+				return true;
+		return false;
 	}
 	
 	private void outiftInfo(Outfits out) {
