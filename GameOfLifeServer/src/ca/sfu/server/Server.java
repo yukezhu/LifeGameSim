@@ -87,8 +87,16 @@ public class Server{
 										
 						handleConfirm(m,3); //expect only one message responding for JoinOutfitsMsg
 						
+						if(!newClientSender.isEmpty()){
+							handlePending();
+							status = 2;
+							break;
+						}
+						
 						if(waiting4confirm == 0){
 							//send you a start
+							System.out.println("sending start");
+							infoPanel.setCycleNum(frame.automataPanel.getCycle());
 							for (Comrade var : regedClientSender) {
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
@@ -116,13 +124,12 @@ public class Server{
 							frame.repaint();
 							infoPanel.setCellNum(frame.automataPanel.getCell());
 							infoPanel.setLifeNum(frame.automataPanel.getAlive());
-							infoPanel.setCycleNum(frame.automataPanel.getCycle());
-							infoPanel.setClientNum(regedClientSender.size());
+							
 							infoPanel.setTargetNum("localhost");
 							
 							phase = LEAVE;
 //							BoardOperation.Print(b);
-//							System.out.println("repaint");
+							System.out.println("repaint");
 						}
 						
 						if(phase == LEAVE){
@@ -202,10 +209,12 @@ public class Server{
 						//start
 						if(waiting4confirm==0){
 							for (Comrade var : regedClientSender) {
-//								System.out.println("sending start");
+								
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
 							}
+							System.out.println("sending start");
+							infoPanel.setCycleNum(frame.automataPanel.getCycle());
 							phase = COMPUTE;
 						}
 						break;
@@ -227,6 +236,7 @@ public class Server{
 						}
 						
 						//start
+						System.out.println("sending start!!!!!!!!!");
 						if(waiting4confirm==0){
 							for (Comrade var : regedClientSender) {
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
@@ -451,15 +461,9 @@ public class Server{
 	//manage the heap
 	protected boolean handlePending() throws IOException{
 		//you can add at most N new clients in a cycle, N is the number of all clients existing before
-		int count = 0;
-		int n = regedClientSender.size();
 		
-		while(!newClientSender.isEmpty()){
+		if(!newClientSender.isEmpty()){
 			int cid = regedClientSender.size();
-			
-			count++;
-			if(count>n && n!=0)
-				return true;
 			
 			//manage the heap
 			if(cid!=0){ //not the first client
@@ -496,6 +500,9 @@ public class Server{
 			
 			
 			System.out.println("register a new client");
+			
+			infoPanel.setClientNum(regedClientSender.size());
+			
 			return true;
 		}
 		return false;
