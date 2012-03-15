@@ -28,6 +28,9 @@ public class Server{
 	private String client2_ip;
 	private ArrayList<MessageSender> newClientSender = new ArrayList<MessageSender>();
 	private ArrayList<Comrade>  regedClientSender = new ArrayList<Comrade>();
+	
+	private ArrayList<Integer> toLeave = new ArrayList<Integer>();
+	
 	private int waiting4confirm = 0;
 	private int nextClock = 0;
 	
@@ -269,8 +272,17 @@ public class Server{
 	//deal with the pending adding request
 	//manage the heap
 	protected boolean handlePending() throws IOException{
+		//you can add at most N new clients in a cycle, N is the number of all clients existing before
+		int count = 0;
+		int n = regedClientSender.size();
+		
 		while(!newClientSender.isEmpty()){
 			int cid = regedClientSender.size();
+			
+			count++;
+			if(count>n)
+				return true;
+			
 			//manage the heap
 			if(cid!=0){ //not the first client
 				Comrade c = regedClientSender.get(0); //get it down one level
