@@ -37,16 +37,16 @@ public class Server{
 	{
 		// UI
 		JFrame frame = new JFrame();
-		frame.setSize(480, 480);
+		frame.setSize(500, 500);
 //		AutomataMsg auto = new AutomataMsg(50, 50);
-//		Board b = new Board(120, 120);
-//		BoardOperation.Randomize(b,0.1);
+		Board b = new Board(500, 500);
+		BoardOperation.Randomize(b,0.1);
 		
-		Board b = BoardOperation.LoadFile("/home/xieyaox/HerschelLoop2.lg");
+//		Board b = BoardOperation.LoadFile("/home/xieyaox/HerschelLoop2.lg");
 		
 		AutomataPanel panel = new AutomataPanel();
 		panel.setBoard(b);
-		panel.setCellSize(2);
+		panel.setCellSize(1);
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 		
@@ -103,7 +103,7 @@ public class Server{
 							break;
 						}
 						
-						Thread.sleep(50);
+//						Thread.sleep(50);
 						frame.repaint();
 //						BoardOperation.Print(b);
 //						System.out.println("repaint");
