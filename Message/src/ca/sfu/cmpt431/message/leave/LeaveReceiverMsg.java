@@ -11,7 +11,10 @@ public class LeaveReceiverMsg extends Message {
 	public int rcvport;
 	public String rcvip;
 	
-	public LeaveReceiverMsg() {
+	public LeaveReceiverMsg(int id, int port, String ip) {
 		super(MessageCodeDictionary.ID_SERVER, MessageCodeDictionary.LEAVE_RECEIVER);
+		rcvid = id;
+		rcvport = port;
+		rcvip = ip;
 	}
 }
