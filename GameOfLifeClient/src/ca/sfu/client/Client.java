@@ -56,11 +56,11 @@ public class Client {
 			try{
 				System.out.println("trying port " + myPort);
 				Receiver = new MessageReceiver(myPort);
-				System.out.println("port " + myPort + "is ok");
+				System.out.println("port " + myPort + " is ok");
 				break;
 			}
 			catch(Exception e){
-				System.out.println("port " + myPort + "is occupied");
+				System.out.println("port " + myPort + " is occupied");
 			}
 		}
 	}
