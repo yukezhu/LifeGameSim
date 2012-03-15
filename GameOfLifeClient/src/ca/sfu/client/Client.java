@@ -1,5 +1,7 @@
 package ca.sfu.client;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,6 +17,9 @@ import ca.sfu.cmpt431.message.MessageCodeDictionary;
 import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.join.JoinSplitMsg;
+import ca.sfu.cmpt431.message.leave.LeaveRequestMsg;
+import ca.sfu.cmpt431.message.merge.MergeLastMsg;
+import ca.sfu.cmpt431.message.merge.MergeOutfit;
 import ca.sfu.cmpt431.message.regular.RegularBoardReturnMsg;
 import ca.sfu.cmpt431.message.regular.RegularBorderMsg;
 import ca.sfu.cmpt431.message.regular.RegularConfirmMsg;
@@ -112,13 +117,17 @@ public class Client {
 						}
 						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 							handleBorderMessage((RegularBorderMsg) msg);
+						else if (msgType == MessageCodeDictionary.MERGE_LAST) {
+							outfit.pair.sender.sendMsg(new MergeOutfit(outfit.myId, ((MergeLastMsg)msg).thePair, outfit));
+							status = 7;
+						}
+						else if (msgType == MessageCodeDictionary.MERGE_OUTFIT)
+							handleMerge(outfit);
 						break;
 					case 4:
 						handleBorderMessage((RegularBorderMsg) msg);
-						if(isBorderMessageComplete()) {
+						if(isBorderMessageComplete())
 							computeAndReport();
-							status = 3;
-						}
 						break;
 					case 5:
 						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM){
@@ -127,6 +136,17 @@ public class Client {
 						else
 							server.sender.sendMsg(myConfirmMessage);
 						status = 3;
+						break;
+					case 6:
+						if (msg.getMessageCode() == MessageCodeDictionary.MERGE_LAST) {
+							outfit.pair.sender.sendMsg(new MergeOutfit(outfit.myId, ((MergeLastMsg)msg).thePair, outfit));
+							status = 7;
+						}
+						else 
+							System.exit(0);
+						break;
+					case 7:
+						
 						break;
 					default:
 						System.out.println("Received unexpectd message.");
@@ -170,6 +190,10 @@ public class Client {
 				RegularBorderMsg sendbordermsg = new RegularBorderMsg(outfit.myId, sendborder);	
 				outfit.neighbour.get(j).comrade.sender.sendMsg(sendbordermsg);
 		}
+	}
+	
+	private void handleMerge(Outfits pout) {
+		
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
@@ -433,6 +457,18 @@ public class Client {
 		server.sender.sendMsg(new RegularBoardReturnMsg(outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		outfit.nextClock ++;
 		borderCount = 0;
+		status = 3;
+		
+		// whether to leave
+		System.out.println("Do you want to leave?\n0: no    1: yes");
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String res = br.readLine();
+		if(Integer.parseInt(res) == 1) {
+			server.sender.sendMsg(new LeaveRequestMsg(outfit.myId));
+			status = 6;
+		}
+		else
+			status = 3;
 	}
 	
 	private void sendMsgToId(Message msg, int id) throws IOException {
