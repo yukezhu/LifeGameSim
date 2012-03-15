@@ -68,12 +68,6 @@ public class Server{
 			if(!Receiver.isEmpty()) {
 				m = Receiver.getNextMessageWithIp();
 				
-				infoPanel.setCellNum(frame.automataPanel.getCell());
-				infoPanel.setLifeNum(frame.automataPanel.getAlive());
-				infoPanel.setCycleNum(frame.automataPanel.getCycle());
-				infoPanel.setClientNum(regedClientSender.size());
-				infoPanel.setTargetNum("localhost");
-				
 				switch(status) {
 					//waiting for first client
 					case 0:
@@ -120,6 +114,12 @@ public class Server{
 							
 //							Thread.sleep(50);
 							frame.repaint();
+							infoPanel.setCellNum(frame.automataPanel.getCell());
+							infoPanel.setLifeNum(frame.automataPanel.getAlive());
+							infoPanel.setCycleNum(frame.automataPanel.getCycle());
+							infoPanel.setClientNum(regedClientSender.size());
+							infoPanel.setTargetNum("localhost");
+							
 							phase = LEAVE;
 //							BoardOperation.Print(b);
 //							System.out.println("repaint");
@@ -162,6 +162,7 @@ public class Server{
 								}
 								else{
 									//error
+									System.out.println("error.");
 								}
 								toLeave.remove(0);
 							}
