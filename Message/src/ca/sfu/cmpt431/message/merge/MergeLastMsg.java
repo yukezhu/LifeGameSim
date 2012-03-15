@@ -7,11 +7,15 @@ public class MergeLastMsg extends Message{
 
 	private static final long serialVersionUID = 1L;
 	
-	public int thePair;
+	public int newpair;
+	public String pairIp;
+	public int pairPort;
 	
-	public MergeLastMsg(int pair) {
+	public MergeLastMsg(int pair, String ip, int port) {
 		super(MessageCodeDictionary.ID_SERVER, MessageCodeDictionary.MERGE_LAST);
-		thePair = pair;
+		newpair = pair;
+		pairIp = ip;
+		pairPort = port;
 	}
 	
 }

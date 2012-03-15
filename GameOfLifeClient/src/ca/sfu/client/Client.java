@@ -204,8 +204,15 @@ public class Client {
 		Neighbour [] n = new Neighbour[12];
 		for(int i = 0; i < 12; i++)
 			n[i] = findNeiWithPos(outfit, i);
+		
+		Board newboard;
+		
 		// reverse of vertical split
 		if(pout.top == outfit.top) {
+			newboard = new Board(outfit.myBoard.height, outfit.myBoard.width + pout.myBoard.width);
+			BoardOperation.Merge(newboard, outfit.myBoard, 0, 0);
+			BoardOperation.Merge(newboard, pout.myBoard, 0, outfit.myBoard.width + 1);
+			
 			if(n[1].comrade.id != pn[1].comrade.id) {
 				deletePos(outfit, n[1], 2);
 				addPos(n[3], 2, true);
@@ -222,21 +229,26 @@ public class Client {
 					if(hasNeighbour(pout, pn[i].comrade.id)) {
 						outfit.neighbour.add(pn[i]);
 						pout.neighbour.remove(pn[i]);
+						repairNeighbour(pn[i]);
 					}
 				}
 			}
 		}
 		// reverse of horizontal split
 		else {
+			newboard = new Board(outfit.myBoard.height + pout.myBoard.height, outfit.myBoard.width);
+			BoardOperation.Merge(newboard, outfit.myBoard, 0, 0);
+			BoardOperation.Merge(newboard, pout.myBoard, outfit.myBoard.height + 1, 0);
+			
 			if(n[4].comrade.id != pn[4].comrade.id) {
 				deletePos(outfit, n[4], 5);
-				addPos(n[3], 2, true);
+				addPos(n[6], 5, true);
 			}
-			if(n[8].comrade.id != pn[8].comrade.id) {
-				deletePos(outfit, n[8], 7);
-				addPos(n[6], 7, false);
+			if(n[11].comrade.id != pn[11].comrade.id) {
+				deletePos(outfit, n[11], 10);
+				addPos(n[9], 10, false);
 			}
-			for(int i = 3; i <= 6; i++) {
+			for(int i = 6; i <= 9; i++) {
 				if(hasNeighbour(outfit, n[i].comrade.id)) {
 					deletePos(outfit, n[i], i);
 				}
@@ -244,9 +256,14 @@ public class Client {
 					if(hasNeighbour(pout, pn[i].comrade.id)) {
 						outfit.neighbour.add(pn[i]);
 						pout.neighbour.remove(pn[i]);
+						repairNeighbour(pn[i]);
 					}
 				}
 			}
+		}
+		
+		if(hasNeighbour(outfit, newpair)) {
+			outfit.pair = neighbourWithId(newpair).
 		}
 	}
 	
@@ -561,6 +578,13 @@ public class Client {
 			if(nei.comrade.id == id)
 				return true;
 		return false;
+	}
+	
+	private Neighbour findNeiWithId(Outfits out, int id) {
+		for(Neighbour nei: out.neighbour)
+			if(nei.comrade.id == id)
+				return nei;
+		return null;
 	}
 	
 	private void outiftInfo(Outfits out) {

@@ -9,12 +9,16 @@ public class MergeOutfit extends Message {
 	private static final long serialVersionUID = 1L;
 
 	public int yourPair;
+	public String pairIp;
+	public int pairPort;
 	public Outfits lastfit;
 	
-	public MergeOutfit(int cid, int pair, Outfits fit) {
+	public MergeOutfit(int cid, Outfits fit, int pair, String ip, int port) {
 		super(cid, MessageCodeDictionary.MERGE_OUTFIT);
 		yourPair = pair;
 		lastfit = fit;
+		pairIp = ip;
+		pairPort = port;
 	}
 
 }
