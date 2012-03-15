@@ -458,7 +458,7 @@ public class Server{
 			int cid = regedClientSender.size();
 			
 			count++;
-			if(count>n)
+			if(count>n && n!=0)
 				return true;
 			
 			//manage the heap
