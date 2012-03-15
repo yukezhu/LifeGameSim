@@ -37,12 +37,12 @@ public class InformationPanel extends JFrame {
 
 		clientNumLabel = new JLabel("Client Number:");
 		clientNumLabel.setBounds(20, 140, 180, 20);
-		clientNum = new JLabel("73");
+		clientNum = new JLabel("0");
 		clientNum.setBounds(150, 140, 180, 20);
 		
 		targetLabel = new JLabel("Target Client:");
 		targetLabel.setBounds(20, 180, 180, 20);
-		target = new JLabel("azure.csil.sfu.ca");
+		target = new JLabel("unknown");
 		target.setBounds(150, 180, 180, 20);
 		
 		Color midnightBlue = new Color(0x18, 0x74, 0xcd);
@@ -61,6 +61,7 @@ public class InformationPanel extends JFrame {
 			
 		setTitle("System Information");
 		setLayout(null);
+		setVisible(true);
 //		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	

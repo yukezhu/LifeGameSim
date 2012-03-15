@@ -45,19 +45,23 @@ public class Server{
 	protected void startServer() throws IOException, ClassNotFoundException, InterruptedException
 	{
 		// UI
-		Board b = BoardOperation.LoadFile("HerschelLoop2.lg");
+		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop2.lg");
 		
 		System.out.println("UI");
-		frame = new MainFrame(b);
+		frame = new MainFrame(b, 800, 800);
 		infoPanel = new InformationPanel();
 		
 		MessageWithIp m;
 		
 		while(true) {
 			if(!Receiver.isEmpty()) {
-//				System.out.println(status);
 				m = Receiver.getNextMessageWithIp();
-//				System.out.println("waiting:"+waiting4confirm);
+				
+				infoPanel.setCellNum(frame.automataPanel.getCell());
+				infoPanel.setLifeNum(frame.automataPanel.getAlive());
+				infoPanel.setCycleNum(frame.automataPanel.getCycle());
+				infoPanel.setClientNum(regedClientSender.size());
+				infoPanel.setTargetNum("localhost");
 				
 				switch(status) {
 					//waiting for first client
@@ -68,7 +72,6 @@ public class Server{
 						regedClientSender.get(0).sender.sendMsg(new JoinOutfitsMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
 						waiting4confirm++;
 						status = 2;
-						
 						break;
 					
 					//wait for the confirm

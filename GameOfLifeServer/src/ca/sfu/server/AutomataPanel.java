@@ -21,8 +21,9 @@ public class AutomataPanel extends JPanel  {
 	private Stack<Integer> startX, startY;
 	
 	private int alive, cell, cycle;
+	private int height, width;
 	
-	public AutomataPanel()
+	public AutomataPanel(int height, int width)
 	{
 		setBackground(Color.WHITE);
 		cellSize = 1;
@@ -90,6 +91,10 @@ public class AutomataPanel extends JPanel  {
 			public void mouseReleased(MouseEvent arg0) {}
 			
 		});
+		
+		this.height = height;
+		this.width = width;
+		setSize(height, width);
 	}
 	
 	public void setZoomIn()
@@ -134,7 +139,10 @@ public class AutomataPanel extends JPanel  {
 	public void setBoard(Board board)
 	{
 		b = board;
-		setSize(b.width * cellSize, b.height * cellSize);
+		int scale = Math.max(height / b.height, width / b.width);
+		if(scale < 1) cellSize = 1;
+		else if(scale > 10) cellSize = 10;
+		else cellSize = scale;		
 	}
 	
 	public int getAlive() {

@@ -21,17 +21,16 @@ public class MainFrame extends JFrame {
 
 	Board board;
 	
-	public MainFrame(Board b)
+	public MainFrame(Board b, int height, int width)
 	{
 		super();
-		setSize(800, 850);
+		setSize(width, height + 50);
 		setJMenuBar(createMenuBar());
 		setBackground(new Color(0xeb, 0xeb, 0xeb));
 		
 		board = b;
 		
-		automataPanel = new AutomataPanel();
-		automataPanel.setCellSize(3);
+		automataPanel = new AutomataPanel(height, width);
 		automataPanel.setBoard(board);
 		automataPanel.setBackground(new Color(0xeb, 0xeb, 0xeb));
 		
@@ -56,7 +55,7 @@ public class MainFrame extends JFrame {
 		board = new Board(800, 800);
 		BoardOperation.Randomize(board, 0.1);
 		
-		automataPanel = new AutomataPanel();
+		automataPanel = new AutomataPanel(800, 800);
 		automataPanel.setCellSize(3);
 		automataPanel.setBoard(board);
 		automataPanel.setBackground(new Color(0xeb, 0xeb, 0xeb));
