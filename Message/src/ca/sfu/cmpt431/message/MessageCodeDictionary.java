@@ -17,6 +17,7 @@ public class MessageCodeDictionary {
 	
 	public final static int LEAVE_REQUEST = 31;
 	public final static int LEAVE_RECEIVER = 32;
+	public final static int LEAVE_OUTFIT = 33;
 	
 	public final  static int MERGE_LAST = 41;
 	public final  static int MERGE_OUTFIT = 42;

@@ -1,5 +1,7 @@
 package ca.sfu.client;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,6 +41,9 @@ public class Client {
 	private Outfits outfit;
 	
 	private int neiUpdCount;
+	private int borderCount = 0;
+	
+	private Message tmpmsg;
 
 	public boolean[] up ;
 	public boolean[] down;
@@ -49,7 +54,6 @@ public class Client {
 	public boolean lowerLeft;
 	public boolean lowerRight;
 	
-	private int borderCount = 0;
 	
 	public Client() {
 		while(true){
@@ -78,8 +82,8 @@ public class Client {
 		while(true){
 			if(!Receiver.isEmpty()){
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
-//				if(outfit != null)
-//					System.out.println("time:" + outfit.nextClock + "  status:" + status + "  messgetype:"+ msg.getMessageCode());
+				if(outfit != null)
+					System.out.println("time:" + outfit.nextClock + "  status:" + status + "  messgetype:"+ msg.getMessageCode());
 				switch(status) {
 					case 1:
 						repairOutfit((JoinOutfitsMsg) msg);
@@ -122,7 +126,12 @@ public class Client {
 						else if (msgType == MessageCodeDictionary.MERGE_OUTFIT) {
 							System.out.println("MERGE OUTFIT");
 							MergeOutfit mmsg = (MergeOutfit)msg;
-							handleMerge(outfit, mmsg.yourPair, mmsg.pairIp, mmsg.pairPort);
+							handleMerge(mmsg.lastfit, mmsg.yourPair);
+							tmpmsg = mmsg;
+							if(neiUpdCount > 0)
+								status = 8;
+							else
+								finishMerge();
 						}
 						break;
 					case 4:
@@ -138,17 +147,45 @@ public class Client {
 						status = 3;
 						break;
 					case 6:
-						if (msg.getMessageCode() == MessageCodeDictionary.MERGE_LAST) 
+						int msgTp = msg.getMessageCode();
+						if (msgTp == MessageCodeDictionary.MERGE_OUTFIT) {
+							System.out.println("MERGE OUTFIT");
+							MergeOutfit mmsg = (MergeOutfit)msg;
+							handleMerge(mmsg.lastfit, mmsg.yourPair);
+							tmpmsg = mmsg;
+							if(neiUpdCount > 0)
+								status = 9;
+							else
+								finishMerge();
+						}
+						else if (msgTp == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
+							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
+						else if (msgTp == MessageCodeDictionary.MERGE_LAST) 
 							passOutfitsToPair((MergeLastMsg)msg);
 						else 
 							System.exit(0);
 						break;
 					case 7:
 						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
-							System.out.println("type error, expect confirm message, received: " + msg.getMessageCode());
+							System.out.println("type error, expect confirm message, received: " + msg.getMessageCode() + "  from " + msg.getClientId());
 						else
 							server.sender.sendMsg(myConfirmMessage);
+						System.out.println("has send confirm to" + outfit.pair.id);
 						status = 6;
+						break;
+					case 8:
+						neiUpdCount--;
+						if(neiUpdCount <= 0) {
+							finishMerge();
+							status = 3;
+						}
+						break;
+					case 9:
+						neiUpdCount--;
+						if(neiUpdCount <= 0) {
+							finishMerge();
+							status = 6;
+						}
 						break;
 					default:
 						System.out.println("Received unexpectd message.");
@@ -158,9 +195,25 @@ public class Client {
 		}
 	}
 	
+	private void finishMerge() throws IOException{
+		outfit.pair.sender.sendMsg(myConfirmMessage);
+		System.out.println("has send confirm to" + outfit.pair.id);
+		MergeOutfit mmsg = (MergeOutfit) tmpmsg;
+		if(hasNeighbour(outfit, mmsg.yourPair))
+			outfit.pair = findNeiWithId(outfit, mmsg.yourPair).comrade;
+		else if(mmsg.yourPair >= 0) {
+			if(!hasNeighbour(outfit, outfit.pair.id))
+				outfit.pair.sender.close();
+			outfit.pair = new Comrade(mmsg.yourPair, mmsg.pairPort, mmsg.pairIp, 
+					new MessageSender(mmsg.pairIp, mmsg.pairPort));
+		}
+		else
+			outfit.pair = null;
+	}
+	
 	private void passOutfitsToPair(MergeLastMsg msg) throws IOException {
 		MessageSender sender = outfit.pair.sender;
-		outfit.pair = null;
+		outfit.pair.sender = null;
 		for(Neighbour nei: outfit.neighbour)
 			nei.comrade.sender = null;
 		sender.sendMsg(new MergeOutfit(outfit.myId, outfit, msg.newpair, msg.pairIp, msg.pairPort));
@@ -204,10 +257,14 @@ public class Client {
 		}
 	}
 	
-	private void handleMerge(Outfits pout, int newpair, String nip, int nport) throws IOException {
+	private void handleMerge(Outfits pout, int newpairid) throws IOException {
+		System.out.println("handling merge");
 		Neighbour [] pn = new Neighbour[12];
 		for(int i = 0; i < 12; i++)
 			pn[i] = findNeiWithPos(pout, i);
+		
+//		System.out.println("POUT");
+//		outiftInfo(pout);
 		
 		Neighbour [] n = new Neighbour[12];
 		for(int i = 0; i < 12; i++)
@@ -218,26 +275,54 @@ public class Client {
 		// reverse of vertical split
 		if(pout.top == outfit.top) {
 			newboard = new Board(outfit.myBoard.height, outfit.myBoard.width + pout.myBoard.width);
-			BoardOperation.Merge(newboard, outfit.myBoard, 0, 0);
-			BoardOperation.Merge(newboard, pout.myBoard, 0, outfit.myBoard.width);
-			
-			if(n[1].comrade.id != pn[1].comrade.id) {
-				deletePos(outfit, n[1], 2);
-				addPos(n[3], 2, true);
-			}
-			if(n[8].comrade.id != pn[8].comrade.id) {
-				deletePos(outfit, n[8], 7);
-				addPos(n[6], 7, false);
-			}
-			for(int i = 3; i <= 6; i++) {
-				if(hasNeighbour(outfit, n[i].comrade.id)) {
-					deletePos(outfit, n[i], i);
+			if(outfit.left < pout.left) {
+				BoardOperation.Merge(newboard, outfit.myBoard, 0, 0);
+				BoardOperation.Merge(newboard, pout.myBoard, 0, outfit.myBoard.width);
+				
+				if(n[1] != null && n[1].comrade.id != pn[1].comrade.id) {
+					deletePos(outfit, n[1], 2);
+					addPos(n[3], 2, true);
 				}
-				if(pn[i] != null) {
-					if(hasNeighbour(pout, pn[i].comrade.id)) {
-						outfit.neighbour.add(pn[i]);
-						pout.neighbour.remove(pn[i]);
-						repairNeighbour(pn[i]);
+				if(n[8] != null && n[8].comrade.id != pn[8].comrade.id) {
+					deletePos(outfit, n[8], 7);
+					addPos(n[6], 7, false);
+				}
+				for(int i = 3; i <= 6; i++) {
+					if(n[i] != null && hasNeighbour(outfit, n[i].comrade.id)) {
+						deletePos(outfit, n[i], i);
+					}
+					if(pn[i] != null) {
+						if(hasNeighbour(pout, pn[i].comrade.id)) {
+							outfit.neighbour.add(pn[i]);
+							pout.neighbour.remove(pn[i]);
+							repairNeighbour(pn[i]);
+						}
+					}
+				}
+			}
+			else {
+				outfit.left = pout.left;
+				BoardOperation.Merge(newboard, pout.myBoard, 0, 0);
+				BoardOperation.Merge(newboard, outfit.myBoard, 0, pout.myBoard.width);
+				
+				if(n[1] != null && n[1].comrade.id != pn[1].comrade.id) {
+					deletePos(outfit, n[1], 1);
+					addPos(n[0], 1, true);
+				}
+				if(n[8] != null && n[8].comrade.id != pn[8].comrade.id) {
+					deletePos(outfit, n[8], 8);
+					addPos(n[9], 8, false);
+				}
+				for(int i = 9; i <= 12; i++) {
+					if(n[i%12] != null && hasNeighbour(outfit, n[i%12].comrade.id)) {
+						deletePos(outfit, n[i%12], i%12);
+					}
+					if(pn[i%12] != null) {
+						if(hasNeighbour(pout, pn[i%12].comrade.id)) {
+							outfit.neighbour.add(pn[i%12]);
+							pout.neighbour.remove(pn[i%12]);
+							repairNeighbour(pn[i%12]);
+						}
 					}
 				}
 			}
@@ -245,35 +330,73 @@ public class Client {
 		// reverse of horizontal split
 		else {
 			newboard = new Board(outfit.myBoard.height + pout.myBoard.height, outfit.myBoard.width);
-			BoardOperation.Merge(newboard, outfit.myBoard, 0, 0);
-			BoardOperation.Merge(newboard, pout.myBoard, outfit.myBoard.height, 0);
-			
-			if(n[4].comrade.id != pn[4].comrade.id) {
-				deletePos(outfit, n[4], 5);
-				addPos(n[6], 5, true);
-			}
-			if(n[11].comrade.id != pn[11].comrade.id) {
-				deletePos(outfit, n[11], 10);
-				addPos(n[9], 10, false);
-			}
-			for(int i = 6; i <= 9; i++) {
-				if(hasNeighbour(outfit, n[i].comrade.id)) {
-					deletePos(outfit, n[i], i);
+			if(outfit.top < pout.top){
+				BoardOperation.Merge(newboard, outfit.myBoard, 0, 0);
+				BoardOperation.Merge(newboard, pout.myBoard, outfit.myBoard.height, 0);
+				
+				if(n[4] != null && n[4].comrade.id != pn[4].comrade.id) {
+					deletePos(outfit, n[4], 5);
+					addPos(n[6], 5, true);
 				}
-				if(pn[i] != null) {
-					if(hasNeighbour(pout, pn[i].comrade.id)) {
-						outfit.neighbour.add(pn[i]);
-						pout.neighbour.remove(pn[i]);
-						repairNeighbour(pn[i]);
+				if(n[11] != null && n[11].comrade.id != pn[11].comrade.id) {
+					deletePos(outfit, n[11], 10);
+					addPos(n[9], 10, false);
+				}
+				for(int i = 6; i <= 9; i++) {
+					if(n[i] != null && hasNeighbour(outfit, n[i].comrade.id)) {
+						deletePos(outfit, n[i], i);
+					}
+					if(pn[i] != null) {
+						if(hasNeighbour(pout, pn[i].comrade.id)) {
+							outfit.neighbour.add(pn[i]);
+							pout.neighbour.remove(pn[i]);
+							repairNeighbour(pn[i]);
+						}
+					}
+				}
+			}
+			else {
+				outfit.top = pout.top;
+				BoardOperation.Merge(newboard, pout.myBoard, 0, 0);
+				BoardOperation.Merge(newboard, outfit.myBoard, pout.myBoard.height, 0);
+				outfit.myBoard = newboard;
+				
+				if(n[4] != null && n[4].comrade.id != pn[4].comrade.id) {
+					deletePos(outfit, n[4], 4);
+					addPos(n[3], 4, true);
+				}
+				if(n[11] != null && n[11].comrade.id != pn[11].comrade.id) {
+					deletePos(outfit, n[11], 11);
+					addPos(n[0], 11, false);
+				}
+				for(int i = 0; i <= 3; i++) {
+					if(n[i] != null && hasNeighbour(outfit, n[i].comrade.id)) {
+						deletePos(outfit, n[i], i);
+					}
+					if(pn[i] != null) {
+						if(hasNeighbour(pout, pn[i].comrade.id)) {
+							outfit.neighbour.add(pn[i]);
+							pout.neighbour.remove(pn[i]);
+							repairNeighbour(pn[i]);
+						}
 					}
 				}
 			}
 		}
-		
-		if(hasNeighbour(outfit, newpair))
-			outfit.pair = findNeiWithId(outfit, newpair).comrade;
-		else 
-			outfit.pair = new Comrade(newpair, nport, nip, new MessageSender(nip, nport));
+		for(Neighbour nei: outfit.neighbour) {
+			nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
+			ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
+			RegularUpdateNeighbourMsg msg = new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp);
+			if(outfit.pair != null && nei.comrade.id == newpairid)
+				msg.mypair = outfit.pair.id;
+			nei.comrade.sender.sendMsg(msg);
+			neiUpdCount ++;
+		}
+		outfit.myBoard = newboard;
+		up = new boolean[outfit.myBoard.width];
+		down = new boolean[outfit.myBoard.width];
+		left = new boolean[outfit.myBoard.height];
+		right = new boolean[outfit.myBoard.height];
 		
 		System.out.println("After merging:");
 		outiftInfo(outfit);
@@ -299,7 +422,8 @@ public class Client {
 						}
 				}
 				if(nei.position.size() == 0){
-					nei.comrade.sender.close();
+					if(outfit.pair.id != nei.comrade.id)
+						nei.comrade.sender.close();
 					outfit.neighbour.remove(i);
 					i--;
 				}
@@ -311,7 +435,6 @@ public class Client {
 					new Comrade(msg.getClientId(), msg.port, msg.ip, new MessageSender(msg.ip, msg.port)));
 			outfit.neighbour.add(newnei);
 		}
-		sendMsgToId(myConfirmMessage, msg.getClientId());
 		
 		System.out.println("After neighbour update");
 		System.out.println("Neighbour size: " + outfit.neighbour.size());
@@ -322,6 +445,15 @@ public class Client {
 				System.out.print(" " + in);
 			System.out.println("");
 		}
+		
+		if(msg.mypair == outfit.pair.id) {
+			System.out.println("Pair updated to " + msg.getClientId());
+			if(!hasNeighbour(outfit, outfit.pair.id))
+				outfit.pair.sender.close();
+			outfit.pair = findNeiWithId(outfit, msg.getClientId()).comrade;
+		}
+		
+		sendMsgToId(myConfirmMessage, msg.getClientId());
 	}
 	
 	private void handleSplit(JoinSplitMsg msg) throws IOException {
@@ -537,18 +669,18 @@ public class Client {
 		BoardOperation.NextMoment(outfit.myBoard, up, down, left, right, upperLeft, upperRight, lowerLeft, lowerRight);
 		
 		// whether to leave
-//		System.out.println("Do you want to leave?\n0: no    1: yes");
-//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		String res = br.readLine();
+		System.out.println("Do you want to leave?\n0: no    1: yes");
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String res = br.readLine();
 		boolean isleaving;
-//		if(Integer.parseInt(res) == 1) {
-//			isleaving = true;
-//			status = 6;
-//		}
-//		else {
+		if(Integer.parseInt(res) == 1) {
+			isleaving = true;
+			status = 6;
+		}
+		else {
 			isleaving = false;
 			status = 3;
-//		}
+		}
 		server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		outfit.nextClock ++;
 		borderCount = 0;
@@ -569,7 +701,7 @@ public class Client {
 			return ;
 		nei.position.remove(pos);
 		if(nei.position.size() == 0) {
-			if(nei.comrade.sender != null){
+			if(nei.comrade.sender != null && nei.comrade.id != out.pair.id){
 				nei.comrade.sender.close();
 			}
 			out.neighbour.remove(nei);
@@ -614,7 +746,8 @@ public class Client {
 				System.out.print(" " + in);
 			System.out.println("");
 		}
-		System.out.println("Pair Id: " + out.pair.id);
+		if(out.pair != null)
+			System.out.println("Pair Id: " + out.pair.id);
 		
 	}
 	

@@ -12,12 +12,14 @@ public class RegularUpdateNeighbourMsg extends Message {
 	public ArrayList<Integer> pos;
 	public int port;
 	public String ip;
+	public int mypair;
 
-	public RegularUpdateNeighbourMsg(int cid, ArrayList<Integer> pos, int port, String ip) {
+	public RegularUpdateNeighbourMsg(int cid, ArrayList<Integer> pos, int port, String ip, int pair) {
 		super(cid, MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR);
 		this.pos = pos;
 		this.port = port;
 		this.ip = ip;
+		mypair = pair;
 	}
 
 }
