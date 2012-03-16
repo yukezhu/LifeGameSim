@@ -122,10 +122,7 @@ public class MessageReceiver {
 	private void handleRead(SelectionKey key) throws IOException {
 		SocketChannel clientChannel = (SocketChannel)key.channel();
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
-		
-//		tmpbuf.clear();
-//		System.out.println("Stuck");
-		
+				
 		int cursor = 0;
 		int length = 0;
 		int bytesRead = 0;
@@ -133,7 +130,6 @@ public class MessageReceiver {
 		buffer.clear();
 		bytesRead = clientChannel.read(buffer);
 		if(bytesRead > 0) {
-//			System.out.println("receiving chunck length:" + bytesRead);
 			buffer.flip();
 			length = buffer.getInt();
 			cursor = bytesRead - 4;
