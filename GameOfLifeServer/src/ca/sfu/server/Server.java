@@ -254,7 +254,7 @@ public class Server{
 			RegularBoardReturnMsg r = (RegularBoardReturnMsg)msg;
 			if(r.isLeaving){
 				toLeave.add(msg.getClientId());
-				System.out.println("a client want to leave, pending now");
+				System.out.println("client " + toLeave.get(toLeave.size()-1) + " want to leave, pending now");
 				return false;
 			}
 		}
@@ -296,9 +296,12 @@ public class Server{
 			//ask the last pair merge
 			int s = regedClientSender.size();
 			int pair_index = (s%2==0)?((s-4)>=0?(s-4):-1):0;
+			System.out.println("pair index:"+pair_index);
 			
-			if(isLastPair(pair_index)!=-1)
+			if(pair_index!=-1 && isLastPair(regedClientSender.get(pair_index).id)!=-1)
 				pair_index = -1; //you pair can not be your neighbour, occurs when there is 2 clients
+			
+			System.out.println("pair index:"+pair_index);
 			
 			int pair_cid = -1;
 			String pair_ip = "";
@@ -309,7 +312,7 @@ public class Server{
 				pair_port = regedClientSender.get(pair_index).port;
 			}
 			
-			System.out.println("last pair handle pending:"+pair_cid);
+			System.out.println("last pair handle pending:"+pair_cid+","+cid);
 			regedClientSender.get(regedClientSender.size()-1-isLastPair(cid)).sender.sendMsg(new MergeLastMsg(pair_cid, pair_ip, pair_port));
 			//wait for a confirm, still need a LeaveReceiverMsg
 			return isLastPair(cid)+1; //1 if last or 2 if second last
@@ -321,9 +324,6 @@ public class Server{
 			
 			int pair_index = (s%2==0)?((s-4)>=0?(s-4):-1):0;
 			
-			if(isLastPair(pair_index)!=-1)
-				pair_index = -1; //you pair can not be your brother, occurs when there is 2 clients
-			
 			int pair_cid = -1;
 			String pair_ip = "";
 			int pair_port = -1;
@@ -333,7 +333,7 @@ public class Server{
 				pair_port = regedClientSender.get(pair_index).port;
 			}
 			
-			System.out.println("nomal merge handle pending:"+pair_cid);
+			System.out.println("normal merge handle pending(p/u):"+pair_cid+","+cid);
 			regedClientSender.get(regedClientSender.size()-1).sender.sendMsg(new MergeLastMsg(pair_cid, pair_ip, pair_port));
 			//wait for a confirm, still need a LeaveReceiverMsg
 			return 3;
