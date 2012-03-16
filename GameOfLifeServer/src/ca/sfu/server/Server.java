@@ -155,6 +155,7 @@ public class Server{
 									int s = regedClientSender.size();
 									
 //									System.out.println(regedClientSender.get(s-2).id);
+									//you can leave now
 									regedClientSender.get(s-2).sender.sendMsg(new LeaveReceiverMsg(MessageCodeDictionary.ID_SERVER, 0, ""));
 									
 									Comrade c = regedClientSender.get(s-1);
@@ -170,13 +171,24 @@ public class Server{
 									int cid = toLeave.get(0);
 									int index = findClient(cid);
 									int s = regedClientSender.size();
-									regedClientSender.get(index).sender.sendMsg(new LeaveReceiverMsg(MessageCodeDictionary.ID_SERVER, 0, ""));
+									
+									int new_cid = regedClientSender.get(s-1).id;
+									int new_port = regedClientSender.get(s-1).port;
+									String new_ip = regedClientSender.get(s-1).ip;
+									
+									//send your outfit to the last node
+									regedClientSender.get(index).sender.sendMsg(new LeaveReceiverMsg(new_cid, new_port, new_ip));
 									regedClientSender.get(index).sender.close();
 									regedClientSender.set(index, regedClientSender.get(s-1));
+									
 									regedClientSender.remove(s-1);
 									Comrade c = regedClientSender.get(s-2);
 									regedClientSender.remove(s-2);
 									regedClientSender.add(0, c);
+								}
+								else if(result == 0){
+									//get the confirm
+									//nothing to do
 								}
 								else{
 									//error
@@ -185,23 +197,16 @@ public class Server{
 								toLeave.remove(0);
 							}
 							
-							while((result=handleLeaving())!=-1){
-								//0, continue handling
-								if(result == 0){
-									toLeave.remove(0);
-									continue;
-								}
+							if((result=handleLeaving())!=-1){
 								//4, no client now, go to status 0 pls
-								else if(result == 4){
+								if(result == 4){
 									toLeave.remove(0);
 									System.out.println("go to status 0");
 									status = 0;
-									break;
 								}
 								else{
 									//wait for a confirm
 									status = 3;
-									break;
 								}
 							}
 							
@@ -269,14 +274,14 @@ public class Server{
 		
 		if(newClientSender.size()!=0){
 			//ask a new client to replace it immediately
-			regedClientSender.get(0).sender.sendMsg(new LeaveReceiverMsg(MessageCodeDictionary.ID_SERVER, 0, ""));
+			//TODO
+			regedClientSender.get(findClient(cid)).sender.sendMsg(new LeaveReceiverMsg(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp));
 			regedClientSender.get(findClient(cid)).sender.close();
 			regedClientSender.set(findClient(cid), new Comrade(regedClientSender.size(), newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));
 			newClientSender.remove(0);
 			
 			System.out.println("new adding, replace");
-			//TODO
-			//no confirm
+			//confirm
 			return 0;
 		}
 		else if(regedClientSender.size()==1){
