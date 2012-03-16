@@ -2,13 +2,18 @@ package ca.sfu.server;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -46,11 +51,11 @@ public class MainFrame extends JFrame {
 		automataPanel = new AutomataPanel(height, width);
 		automataPanel.setBoard(board);
 		automataPanel.setBackground(new Color(0xeb, 0xeb, 0xeb));
-
-		//		add(createToolbar(), BorderLayout.NORTH);
-		add(automataPanel, BorderLayout.CENTER);
-
+		
 		setLayout(layout);
+		add(createToolBar(), BorderLayout.NORTH);
+		add(automataPanel, BorderLayout.CENTER);
+		
 		setVisible(true);
 		setTitle("Automata");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -96,12 +101,72 @@ public class MainFrame extends JFrame {
 	}
 
 	/**
-	 * Create JToolbar for the whole program
+	 * Create the tool bar component
+	 * @author	yla269
+	 * @return	new tool bar
 	 */
-	@SuppressWarnings("unused")
-	private JToolBar createToolbar()
+	private JToolBar createToolBar()
 	{
-		return null;
+		JToolBar jToolBar = new JToolBar("ToolBar");
+		jToolBar.setFloatable(true);
+		jToolBar.setVisible(true);		
+		jToolBar.setSize(10, 10);
+		ImageIcon zoominButtonIcon = new ImageIcon("zoomin.png");
+		ImageIcon zoomoutButtonIcon = new ImageIcon("zoomout.png");
+		ImageIcon normalButtonIcon = new ImageIcon("normal.png");
+
+		JButton zoomin = new JButton("",zoominButtonIcon);
+		zoomin.setSize(10, 10);
+
+		zoomin.setBorderPainted(false);
+		zoomin.setVisible(true);
+
+		JButton original = new JButton("",normalButtonIcon);
+
+		original.setSize(10, 10);
+		original.setBorderPainted(false);
+		original.setVisible(true);
+
+		JButton zoomout = new JButton("",zoomoutButtonIcon);
+		zoomout.setSize(10, 10);
+
+		zoomout.setBorderPainted(false);
+		zoomout.setVisible(true);
+
+		jToolBar.add(zoomin);    
+		jToolBar.add(zoomout);
+		jToolBar.add(original);
+
+		ActionListener a = new ActionListener(){
+			public void actionPerformed(ActionEvent event) {
+				Cursor cursors = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage("zoomin.png"), new Point(10, 10),"zoom_in");
+				automataPanel.setCursor(cursors);
+				automataPanel.requestFocusInWindow();
+				automataPanel.setZoomIn();
+			}
+		};
+		zoomin.addActionListener(a);
+
+		ActionListener b = new ActionListener(){
+			public void actionPerformed(ActionEvent event) {
+				Cursor cursors = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage("zoomout.png"), new Point(10, 10),"zoom_out");
+				automataPanel.setCursor(cursors);
+				automataPanel.requestFocusInWindow();
+				automataPanel.setZoomOut();
+			}
+		};		
+		zoomout.addActionListener(b);
+
+		ActionListener c = new ActionListener(){
+			public void actionPerformed(ActionEvent event) {
+				Cursor cursors = Cursor.getDefaultCursor();
+				automataPanel.setCursor(cursors);
+				automataPanel.requestFocusInWindow();
+				automataPanel.setNormal();
+			}
+		};		
+		original.addActionListener(c);
+		return jToolBar;
 	}
 
 	/**
