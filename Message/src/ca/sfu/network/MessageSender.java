@@ -49,8 +49,7 @@ public class MessageSender{
 		for(int i = 0; i < 4; i++)
 			tmpbuf[i] = (byte) (len >> ((3 - i) * 8));
 		for(int i = 0; i < arr.length; i++)
-			tmpbuf[i + 4] = arr[i];
-		
+			tmpbuf[i + 4] = arr[i];		
 		
 		ByteBuffer bb = ByteBuffer.wrap(tmpbuf, 0, len + 4);
 		
