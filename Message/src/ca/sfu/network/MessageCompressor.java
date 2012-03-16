@@ -10,7 +10,7 @@ public class MessageCompressor {
 	
 	public static final int BufferSize = 65536;
 
-	public static byte[] compress(byte[] input)
+	public static byte[] compress(final byte[] input)
 	{
 		// Create the compressor with highest level of compression
 		Deflater compressor = new Deflater();
@@ -42,7 +42,7 @@ public class MessageCompressor {
 		return compressedData;
 	}
 
-	public static byte[] decompress(byte[] compressedData)
+	public static byte[] decompress(final byte[] compressedData)
 	{
 		// Create the decompressor and give it the data to compress
 		Inflater decompressor = new Inflater();
