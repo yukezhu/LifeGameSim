@@ -357,11 +357,14 @@ public class Server{
 			status = nextStatus;
 			return true;
 		}
-		else if(msg.getMessageCode()==MessageCodeDictionary.LEAVE_REQUEST){
+		else if(msg.getMessageCode()==MessageCodeDictionary.REGULAR_BOARD_RETURN){
 			//TODO
-			toLeave.add(msg.getClientId());
-			System.out.println("a client want to leave, pending now");
-			return true;
+			RegularBoardReturnMsg r = (RegularBoardReturnMsg)msg;
+			if(r.isLeaving){
+				toLeave.add(msg.getClientId());
+				System.out.println("a client want to leave, pending now");
+				return false;
+			}
 		}
 		return false;
 	}
@@ -378,6 +381,9 @@ public class Server{
 			regedClientSender.get(findClient(cid)).sender.close();
 			regedClientSender.set(findClient(cid), new Comrade(regedClientSender.size(), newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));
 			newClientSender.remove(0);
+			
+			System.out.println("new adding, replace");
+			
 			//no confirm
 			return 0;
 		}
@@ -387,6 +393,8 @@ public class Server{
 			regedClientSender.get(0).sender.sendMsg(new LeaveReceiverMsg(MessageCodeDictionary.ID_SERVER, 0, ""));
 			regedClientSender.get(findClient(cid)).sender.close();
 			regedClientSender.remove(findClient(cid));
+			
+			System.out.println("only one client, leave directly");
 			
 			//no confirm, everything done, but you need to wait for a client to start
 			return 4;
@@ -409,6 +417,7 @@ public class Server{
 				pair_port = regedClientSender.get(pair_index).port;
 			}
 			
+			System.out.println("last pair handle pending:"+pair_cid);
 			regedClientSender.get(regedClientSender.size()-1-isLastPair(cid)).sender.sendMsg(new MergeLastMsg(pair_cid, pair_ip, pair_port));
 			//wait for a confirm, still need a LeaveReceiverMsg
 			return isLastPair(cid)+1; //1 if last or 2 if second last
@@ -432,6 +441,7 @@ public class Server{
 				pair_port = regedClientSender.get(pair_index).port;
 			}
 			
+			System.out.println("nomal merge handle pending:"+pair_cid);
 			regedClientSender.get(regedClientSender.size()-1).sender.sendMsg(new MergeLastMsg(pair_cid, pair_ip, pair_port));
 			//wait for a confirm, still need a LeaveReceiverMsg
 			return 3;
