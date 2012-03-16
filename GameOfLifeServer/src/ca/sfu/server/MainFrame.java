@@ -148,9 +148,12 @@ public class MainFrame extends JFrame {
 			    style.append("font-size:" + font.getSize() + "pt;");
 
 			    // html content
-			    JEditorPane ep = new JEditorPane("text/html", "<html><body style=\"" + style + "\">" //
-			            + "some text, and <a href=\"http://google.com/\">a link</a>" //
-			            + "</body></html>");
+			    String text1 = "<html><body><p><strong><font size=\"5\" face=\"arial\" color=\"black\">Game of life</font></strong></p>" +
+			    			   "<p>version:1.1</p><p>CMPT 431 group project:</p>"    													 +
+			    			   "<p>We propose a distributed cellular automaton simulation application, called world  of cell.</p>"       +  
+			    			   "<p>Author: Yuke Zhu, Luna Lu, Yang Liu, Yao Xie, Xiaying Peng</p>"                                       +
+			    			   "<p>Sound interesting? <a href=\"www.google.com\">Get involved!</a></p></body></html>";
+			    JEditorPane ep = new JEditorPane("text/html", text1);
 
 			    // handle link events
 			    ep.addHyperlinkListener(new HyperlinkListener()
