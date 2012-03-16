@@ -14,7 +14,7 @@ import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
 
 public class MessageReceiver {
 	
-	private static final int BufferSize = 1048576;
+	private static final int BufferSize = 65536;
 	private static final int QueueSize  = 1024;
 	private static final int TimeOut    = 3000;
 	
@@ -122,10 +122,7 @@ public class MessageReceiver {
 	private void handleRead(SelectionKey key) throws IOException {
 		SocketChannel clientChannel = (SocketChannel)key.channel();
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
-		
-//		tmpbuf.clear();
-//		System.out.println("Stuck");
-		
+				
 		int cursor = 0;
 		int length = 0;
 		int bytesRead = 0;
@@ -133,7 +130,6 @@ public class MessageReceiver {
 		buffer.clear();
 		bytesRead = clientChannel.read(buffer);
 		if(bytesRead > 0) {
-//			System.out.println("receiving chunck length:" + bytesRead);
 			buffer.flip();
 			length = buffer.getInt();
 			cursor = bytesRead - 4;
@@ -143,22 +139,16 @@ public class MessageReceiver {
 		else {
 			return ;
 		}
-//		System.out.println("cursor: " + cursor);
-//		System.out.println("length: " + length);
 		
 		while(key.isReadable() && cursor < length) {
 			buffer.clear();
 			bytesRead = clientChannel.read(buffer);
-//			System.out.println("cursor: " + cursor);
 			if(bytesRead > 0) {
-//				System.out.println("Appending buffer.");
-//				System.out.println("receiving chunck length:" + bytesRead);
 				buffer.flip();
 				byte [] data = buffer.array();
 				for(int i = 0; i < bytesRead; i++)
 					tmpbuf[cursor + i] = data[i];
 				cursor += bytesRead;
-//				System.out.println("data length now: " + cursor);
 			}
 		}
 		
@@ -170,7 +160,6 @@ public class MessageReceiver {
 			msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());
 			bi.close();
 			oi.close();
-//			System.out.println("Successfully decode message, type: " + msg.getClass().toString() + "\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -55,7 +55,7 @@ public class Server{
 	protected void startServer() throws IOException, ClassNotFoundException, InterruptedException
 	{
 		// UI
-		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop2.lg");
+		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
 		
 		System.out.println("UI");
 		frame = new MainFrame(b, 800, 800);
@@ -137,35 +137,58 @@ public class Server{
 							//deal with the confirm
 							//manage the heap
 							if(((Message)m.extracMessage()).getMessageCode()==MessageCodeDictionary.REGULAR_CONFIRM){
+//								System.out.println("result:"+result);
 								if(result == 1){
 									int s = regedClientSender.size();
+									
+//									System.out.println(regedClientSender.get(s-2).id);
+									
 									regedClientSender.get(s-1).sender.sendMsg(new LeaveReceiverMsg(MessageCodeDictionary.ID_SERVER, 0, ""));
 									regedClientSender.get(s-1).sender.close();
 									regedClientSender.remove(s-1);
+									
 									Comrade c = regedClientSender.get(s-2);
 									regedClientSender.remove(s-2);
 									regedClientSender.add(0, c);
 								}
 								else if(result == 2){
 									int s = regedClientSender.size();
+									
+//									System.out.println(regedClientSender.get(s-2).id);
+									//you can leave now
 									regedClientSender.get(s-2).sender.sendMsg(new LeaveReceiverMsg(MessageCodeDictionary.ID_SERVER, 0, ""));
-									regedClientSender.get(s-2).sender.close();
-									regedClientSender.remove(s-2);
+									
 									Comrade c = regedClientSender.get(s-1);
 									regedClientSender.remove(s-1);
+									
+									regedClientSender.get(s-2).sender.close();
+									regedClientSender.remove(s-2);
+									
 									regedClientSender.add(0, c);
+									
 								}
 								else if(result == 3){
 									int cid = toLeave.get(0);
 									int index = findClient(cid);
 									int s = regedClientSender.size();
-									regedClientSender.get(index).sender.sendMsg(new LeaveReceiverMsg(MessageCodeDictionary.ID_SERVER, 0, ""));
+									
+									int new_cid = regedClientSender.get(s-1).id;
+									int new_port = regedClientSender.get(s-1).port;
+									String new_ip = regedClientSender.get(s-1).ip;
+									
+									//send your outfit to the last node
+									regedClientSender.get(index).sender.sendMsg(new LeaveReceiverMsg(new_cid, new_port, new_ip));
 									regedClientSender.get(index).sender.close();
 									regedClientSender.set(index, regedClientSender.get(s-1));
+									
 									regedClientSender.remove(s-1);
 									Comrade c = regedClientSender.get(s-2);
 									regedClientSender.remove(s-2);
 									regedClientSender.add(0, c);
+								}
+								else if(result == 0){
+									//get the confirm
+									//nothing to do
 								}
 								else{
 									//error
@@ -174,26 +197,20 @@ public class Server{
 								toLeave.remove(0);
 							}
 							
-							while((result=handleLeaving())!=-1){
-								//0, continue handling
-								if(result == 0){
-									toLeave.remove(0);
-									continue;
-								}
+							if((result=handleLeaving())!=-1){
 								//4, no client now, go to status 0 pls
-								else if(result == 4){
+								if(result == 4){
 									toLeave.remove(0);
+									System.out.println("go to status 0");
 									status = 0;
-									break;
 								}
 								else{
 									//wait for a confirm
 									status = 3;
-									break;
 								}
 							}
 							
-							if(toLeave.isEmpty())
+							if(toLeave.isEmpty() && status != 0)
 								phase = ADD;
 							else
 								break;
@@ -218,125 +235,6 @@ public class Server{
 							phase = COMPUTE;
 						}
 						break;
-					//new addings (not the first client)
-					case -10:
-						if(handleNewAddingLeaving(m,4))
-							break;
-						
-						handleConfirm(m,-1);
-						
-						if(waiting4confirm!=0) //still need waiting for confirmation
-							break;
-						
-						//deal with add
-						if(newClientSender.size()!=0){
-							handlePending();
-							status = 5;
-							break;
-						}
-						
-						//start
-						System.out.println("sending start!!!!!!!!!");
-						if(waiting4confirm==0){
-							for (Comrade var : regedClientSender) {
-								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
-								waiting4confirm++;
-							}
-						}
-						status = 3;
-						break;
-						
-					case -1:
-						client1_ip = m.getIp();
-						Sender1 = new MessageSender(client1_ip, LISTEN_PORT);
-						System.out.println(client1_ip + "connected!!!");
-						status = 1;
-						break;
-					case -2:
-						client2_ip = m.getIp();
-						Sender2 = new MessageSender(client2_ip, LISTEN_PORT);
-						System.out.println(client2_ip + "connected!!!");
-						Sender1.sendMsg(client2_ip);
-						status = 2;
-						break;
-					case -3:
-						if(!m.getIp().equals(client1_ip))
-							System.out.println("Error!");
-						Sender2.sendMsg(client1_ip);
-						status = 3;
-						break;
-					case -4:
-						if(!m.getIp().equals(client2_ip))
-							System.out.println("Error!");
-						System.out.println("before");
-						//Sender1.sendMsg(auto.left());
-//						Sender1.sendMsg(auto);
-//						Sender1.sendMsg(new AutomataMsg(3, 4));
-//						Sender1.sendMsg("left");
-						System.out.println("after");
-						status = 4;
-						break;
-					case -5:
-						if(!m.getIp().equals(client1_ip))
-							System.out.println("Error!");
-						//Sender2.sendMsg(auto.right());
-						status = 5;
-						break;
-					case -6:
-						if(!m.getIp().equals(client2_ip))
-							System.out.println("Error!");
-						Sender1.sendMsg("left");
-						status = 6;
-						break;
-					case -7:
-						if(!m.getIp().equals(client1_ip))
-							System.out.println("Error!");
-						Sender2.sendMsg("right");
-						status = 7;
-						break;
-					case 7:
-						if(!m.getIp().equals(client2_ip))
-							System.out.println("Error!");
-						Sender1.sendMsg("start");
-						status = 8;
-						break;
-					case 8:
-						if(!m.getIp().equals(client1_ip))
-							System.out.println("Error!");
-						Sender2.sendMsg("start");
-						status = 9;
-						break;
-					case 9:
-						if(!m.getIp().equals(client2_ip))
-							System.out.println("Error!");
-						status = 10;
-						break;
-					case 10:
-//						if(m == null) System.out.println("null");
-						if(m.getIp().equals(client1_ip)){
-							//auto.mergeLeft((AutomataMsg)m.extracMessage());
-							//Sender1.sendMsg("OK");
-						}
-						else{
-							//auto.mergeRight((AutomataMsg)m.extracMessage());
-							//Sender2.sendMsg("OK");
-						}
-						status = 11;
-						break;
-					case 11:
-						if(m.getIp().equals(client1_ip)){
-							//auto.mergeLeft((AutomataMsg)m.extracMessage());
-							//Sender1.sendMsg("OK");
-						}
-						else{
-							//auto.mergeRight((AutomataMsg)m.extracMessage());
-							//Sender2.sendMsg("OK");
-						}
-						frame.repaint();
-						
-						Sender1.sendMsg("start");
-						status = 8;
-						break;
 					default:
 						break;
 				}
@@ -358,11 +256,10 @@ public class Server{
 			return true;
 		}
 		else if(msg.getMessageCode()==MessageCodeDictionary.REGULAR_BOARD_RETURN){
-			//TODO
 			RegularBoardReturnMsg r = (RegularBoardReturnMsg)msg;
 			if(r.isLeaving){
 				toLeave.add(msg.getClientId());
-				System.out.println("a client want to leave, pending now");
+				System.out.println("client " + toLeave.get(toLeave.size()-1) + " want to leave, pending now");
 				return false;
 			}
 		}
@@ -377,14 +274,14 @@ public class Server{
 		
 		if(newClientSender.size()!=0){
 			//ask a new client to replace it immediately
-			regedClientSender.get(0).sender.sendMsg(new LeaveReceiverMsg(MessageCodeDictionary.ID_SERVER, 0, ""));
+			//TODO
+			regedClientSender.get(findClient(cid)).sender.sendMsg(new LeaveReceiverMsg(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp));
 			regedClientSender.get(findClient(cid)).sender.close();
 			regedClientSender.set(findClient(cid), new Comrade(regedClientSender.size(), newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));
 			newClientSender.remove(0);
 			
 			System.out.println("new adding, replace");
-			
-			//no confirm
+			//confirm
 			return 0;
 		}
 		else if(regedClientSender.size()==1){
@@ -404,9 +301,12 @@ public class Server{
 			//ask the last pair merge
 			int s = regedClientSender.size();
 			int pair_index = (s%2==0)?((s-4)>=0?(s-4):-1):0;
+			System.out.println("pair index:"+pair_index);
 			
-			if(isLastPair(pair_index)!=-1)
+			if(pair_index!=-1 && isLastPair(regedClientSender.get(pair_index).id)!=-1)
 				pair_index = -1; //you pair can not be your neighbour, occurs when there is 2 clients
+			
+			System.out.println("pair index:"+pair_index);
 			
 			int pair_cid = -1;
 			String pair_ip = "";
@@ -417,7 +317,7 @@ public class Server{
 				pair_port = regedClientSender.get(pair_index).port;
 			}
 			
-			System.out.println("last pair handle pending:"+pair_cid);
+			System.out.println("last pair handle pending:"+pair_cid+","+cid);
 			regedClientSender.get(regedClientSender.size()-1-isLastPair(cid)).sender.sendMsg(new MergeLastMsg(pair_cid, pair_ip, pair_port));
 			//wait for a confirm, still need a LeaveReceiverMsg
 			return isLastPair(cid)+1; //1 if last or 2 if second last
@@ -429,9 +329,6 @@ public class Server{
 			
 			int pair_index = (s%2==0)?((s-4)>=0?(s-4):-1):0;
 			
-			if(isLastPair(pair_index)!=-1)
-				pair_index = -1; //you pair can not be your neighbour, occurs when there is 2 clients
-			
 			int pair_cid = -1;
 			String pair_ip = "";
 			int pair_port = -1;
@@ -441,7 +338,7 @@ public class Server{
 				pair_port = regedClientSender.get(pair_index).port;
 			}
 			
-			System.out.println("nomal merge handle pending:"+pair_cid);
+			System.out.println("normal merge handle pending(p/u):"+pair_cid+","+cid);
 			regedClientSender.get(regedClientSender.size()-1).sender.sendMsg(new MergeLastMsg(pair_cid, pair_ip, pair_port));
 			//wait for a confirm, still need a LeaveReceiverMsg
 			return 3;
