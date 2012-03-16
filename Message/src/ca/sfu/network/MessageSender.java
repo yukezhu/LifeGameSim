@@ -37,13 +37,14 @@ public class MessageSender{
 		ObjectOutputStream out = new ObjectOutputStream(bOut);
 		out.writeObject(msg);
 		out.flush();
-		byte [] arr = MessageCompressor.compress(bOut.toByteArray());
 		
+		byte [] arr = MessageCompressor.compress(bOut.toByteArray());
 		int len = arr.length;
 		for(int i = 0; i < 4; i++)
 			tmpbuf[i] = (byte) (len >> ((3 - i) * 8));
-		for(int i = 0; i < arr.length; i++)
-			tmpbuf[i + 4] = arr[i];
+//		for(int i = 0; i < arr.length; i++)
+//			tmpbuf[i+4] = arr[i];
+		System.arraycopy(arr, 0, tmpbuf, 4, arr.length);
 		
 		ByteBuffer bb = ByteBuffer.wrap(tmpbuf, 0, len + 4);
 		

@@ -1,5 +1,6 @@
 package ca.sfu.server;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JToolBar;
 import javax.swing.Timer;
 
 import ca.sfu.cmpt431.facility.Board;
@@ -29,6 +31,8 @@ public class MainFrame extends JFrame {
 		setBackground(new Color(0xeb, 0xeb, 0xeb));
 		
 		board = b;
+		
+		BorderLayout layout = new BorderLayout();
 		
 		automataPanel = new AutomataPanel(height, width);
 		automataPanel.setBoard(board);
@@ -78,6 +82,16 @@ public class MainFrame extends JFrame {
 		
 		setTitle("Automata");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	
+	/**
+	 * Create JToolbar for the whole program
+	 */
+	private JToolBar createToolbar()
+	{
+		JToolBar toolbar = new JToolBar();
+		
+		return toolbar;
 	}
 	
 	/**
