@@ -2,15 +2,21 @@ package ca.sfu.server;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.Timer;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 import ca.sfu.cmpt431.facility.Board;
 import ca.sfu.cmpt431.facility.BoardOperation;
@@ -89,6 +95,7 @@ public class MainFrame extends JFrame {
 	/**
 	 * Create JToolbar for the whole program
 	 */
+	@SuppressWarnings("unused")
 	private JToolBar createToolbar()
 	{
 		return null;
@@ -131,6 +138,37 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("I am clicked!!!");
+				Object[] options = { "OK" };
+				JLabel label = new JLabel();
+			    Font font = label.getFont();
+
+			    // create some css from the label's font
+			    StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
+			    style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
+			    style.append("font-size:" + font.getSize() + "pt;");
+
+			    // html content
+			    JEditorPane ep = new JEditorPane("text/html", "<html><body style=\"" + style + "\">" //
+			            + "some text, and <a href=\"http://google.com/\">a link</a>" //
+			            + "</body></html>");
+
+			    // handle link events
+			    ep.addHyperlinkListener(new HyperlinkListener()
+			    {
+			        @Override
+			        public void hyperlinkUpdate(HyperlinkEvent e)
+			        {
+			            //if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED))
+			                //ProcessHandler.launchUrl(e.getURL().toString()); // roll your own link launcher or use Desktop if J6+
+			        }
+			    });
+
+			    ep.setEditable(false);
+			    ep.setBackground(label.getBackground());
+
+			    // show
+			    JOptionPane.showMessageDialog(null, ep);
+
 			}});
 		exit.addActionListener(new ActionListener() {
 			@Override
