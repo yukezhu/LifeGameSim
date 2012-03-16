@@ -17,7 +17,6 @@ import ca.sfu.cmpt431.message.MessageCodeDictionary;
 import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.join.JoinSplitMsg;
-import ca.sfu.cmpt431.message.leave.LeaveRequestMsg;
 import ca.sfu.cmpt431.message.merge.MergeLastMsg;
 import ca.sfu.cmpt431.message.merge.MergeOutfit;
 import ca.sfu.cmpt431.message.regular.RegularBoardReturnMsg;
@@ -118,9 +117,12 @@ public class Client {
 						}
 						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 							handleBorderMessage((RegularBorderMsg) msg);
-						else if (msgType == MessageCodeDictionary.MERGE_LAST)
+						else if (msgType == MessageCodeDictionary.MERGE_LAST) {
+							System.out.println("MERGE LAST");
 							passOutfitsToPair((MergeLastMsg)msg);
+						}
 						else if (msgType == MessageCodeDictionary.MERGE_OUTFIT) {
+							System.out.println("MERGE OUTFIT");
 							MergeOutfit mmsg = (MergeOutfit)msg;
 							handleMerge(outfit, mmsg.yourPair, mmsg.pairIp, mmsg.pairPort);
 						}
@@ -219,7 +221,7 @@ public class Client {
 		if(pout.top == outfit.top) {
 			newboard = new Board(outfit.myBoard.height, outfit.myBoard.width + pout.myBoard.width);
 			BoardOperation.Merge(newboard, outfit.myBoard, 0, 0);
-			BoardOperation.Merge(newboard, pout.myBoard, 0, outfit.myBoard.width + 1);
+			BoardOperation.Merge(newboard, pout.myBoard, 0, outfit.myBoard.width);
 			
 			if(n[1].comrade.id != pn[1].comrade.id) {
 				deletePos(outfit, n[1], 2);
@@ -246,7 +248,7 @@ public class Client {
 		else {
 			newboard = new Board(outfit.myBoard.height + pout.myBoard.height, outfit.myBoard.width);
 			BoardOperation.Merge(newboard, outfit.myBoard, 0, 0);
-			BoardOperation.Merge(newboard, pout.myBoard, outfit.myBoard.height + 1, 0);
+			BoardOperation.Merge(newboard, pout.myBoard, outfit.myBoard.height, 0);
 			
 			if(n[4].comrade.id != pn[4].comrade.id) {
 				deletePos(outfit, n[4], 5);
@@ -540,16 +542,18 @@ public class Client {
 		System.out.println("Do you want to leave?\n0: no    1: yes");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String res = br.readLine();
+		boolean isleaving;
 		if(Integer.parseInt(res) == 1) {
-			server.sender.sendMsg(new LeaveRequestMsg(outfit.myId));
+			isleaving = true;
 			status = 6;
 		}
 		else {
-			server.sender.sendMsg(new RegularBoardReturnMsg(outfit.myId, outfit.top, outfit.left, outfit.myBoard));
-			outfit.nextClock ++;
-			borderCount = 0;
+			isleaving = false;
 			status = 3;
 		}
+		server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
+		outfit.nextClock ++;
+		borderCount = 0;
 	}
 	
 	private void sendMsgToId(Message msg, int id) throws IOException {
