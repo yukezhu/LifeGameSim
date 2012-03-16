@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
 		automataPanel.setBoard(board);
 		automataPanel.setBackground(new Color(0xeb, 0xeb, 0xeb));
 		
-		add(createToolbar(), BorderLayout.NORTH);
+//		add(createToolbar(), BorderLayout.NORTH);
 		add(automataPanel, BorderLayout.CENTER);
 		
 		setLayout(layout);
