@@ -163,7 +163,8 @@ public class MessageReceiver {
 		}
 		
 		try {
-			ByteArrayInputStream bi = new ByteArrayInputStream(tmpbuf);
+			byte[] arr = MessageCompressor.decompress(tmpbuf);
+			ByteArrayInputStream bi = new ByteArrayInputStream(arr);
 			ObjectInputStream oi = new ObjectInputStream(bi);
 			Object msg = oi.readObject();
 			msgQueue.push(msg, clientChannel.socket().getInetAddress().toString());

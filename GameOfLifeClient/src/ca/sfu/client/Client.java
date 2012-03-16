@@ -102,7 +102,6 @@ public class Client {
 					case 3:
 						int msgType = msg.getMessageCode();
 						if(msgType == MessageCodeDictionary.REGULAR_NEXTCLOCK) {
-							System.out.println("received start");
 							sendBorderToNeighbours();
 							if(isBorderMessageComplete())
 								computeAndReport();
@@ -537,8 +536,13 @@ public class Client {
 	
 	private void computeAndReport() throws IOException {
 		BoardOperation.NextMoment(outfit.myBoard, up, down, left, right, upperLeft, upperRight, lowerLeft, lowerRight);
+		server.sender.sendMsg(new RegularBoardReturnMsg(outfit.myId, outfit.top, outfit.left, outfit.myBoard));
+		outfit.nextClock ++;
+		borderCount = 0;
+		status = 3;
 		
 		// whether to leave
+<<<<<<< HEAD
 //		System.out.println("Do you want to leave?\n0: no    1: yes");
 //		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 //		String res = br.readLine();
@@ -554,6 +558,17 @@ public class Client {
 		server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		outfit.nextClock ++;
 		borderCount = 0;
+=======
+		System.out.println("Do you want to leave?\n0: no    1: yes");
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String res = br.readLine();
+		if(Integer.parseInt(res) == 1) {
+			server.sender.sendMsg(new LeaveRequestMsg(outfit.myId));
+			status = 6;
+		}
+		else
+			status = 3;
+>>>>>>> 58e607bb5eb5dc0da8c8882d65cba403d206ca9f
 	}
 	
 	private void sendMsgToId(Message msg, int id) throws IOException {
