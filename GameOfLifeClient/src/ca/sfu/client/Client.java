@@ -539,18 +539,18 @@ public class Client {
 		BoardOperation.NextMoment(outfit.myBoard, up, down, left, right, upperLeft, upperRight, lowerLeft, lowerRight);
 		
 		// whether to leave
-		System.out.println("Do you want to leave?\n0: no    1: yes");
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String res = br.readLine();
+//		System.out.println("Do you want to leave?\n0: no    1: yes");
+//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//		String res = br.readLine();
 		boolean isleaving;
-		if(Integer.parseInt(res) == 1) {
-			isleaving = true;
-			status = 6;
-		}
-		else {
+//		if(Integer.parseInt(res) == 1) {
+//			isleaving = true;
+//			status = 6;
+//		}
+//		else {
 			isleaving = false;
 			status = 3;
-		}
+//		}
 		server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		outfit.nextClock ++;
 		borderCount = 0;
