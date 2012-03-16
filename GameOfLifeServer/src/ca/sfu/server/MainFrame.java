@@ -108,27 +108,27 @@ public class MainFrame extends JFrame {
 	private JToolBar createToolBar()
 	{
 		JToolBar jToolBar = new JToolBar("ToolBar");
-		jToolBar.setFloatable(true);
+		jToolBar.setFloatable(false);
 		jToolBar.setVisible(true);		
-		jToolBar.setSize(10, 10);
-		ImageIcon zoominButtonIcon = new ImageIcon("zoomin.png");
-		ImageIcon zoomoutButtonIcon = new ImageIcon("zoomout.png");
-		ImageIcon normalButtonIcon = new ImageIcon("normal.png");
+		jToolBar.setSize(5, 5);
+		ImageIcon zoominButtonIcon = new ImageIcon("Images/zoomin.png");
+		ImageIcon zoomoutButtonIcon = new ImageIcon("Images/zoomout.png");
+		ImageIcon normalButtonIcon = new ImageIcon("Images/normal.png");
 
 		JButton zoomin = new JButton("",zoominButtonIcon);
-		zoomin.setSize(10, 10);
+		zoomin.setSize(5, 5);
 
 		zoomin.setBorderPainted(false);
 		zoomin.setVisible(true);
 
 		JButton original = new JButton("",normalButtonIcon);
 
-		original.setSize(10, 10);
+		original.setSize(5, 5);
 		original.setBorderPainted(false);
 		original.setVisible(true);
 
 		JButton zoomout = new JButton("",zoomoutButtonIcon);
-		zoomout.setSize(10, 10);
+		zoomout.setSize(5, 5);
 
 		zoomout.setBorderPainted(false);
 		zoomout.setVisible(true);
@@ -139,7 +139,7 @@ public class MainFrame extends JFrame {
 
 		ActionListener a = new ActionListener(){
 			public void actionPerformed(ActionEvent event) {
-				Cursor cursors = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage("zoomin.png"), new Point(10, 10),"zoom_in");
+				Cursor cursors = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage("Images/zoomin.png"), new Point(10, 10),"zoom_in");
 				automataPanel.setCursor(cursors);
 				automataPanel.requestFocusInWindow();
 				automataPanel.setZoomIn();
@@ -149,7 +149,7 @@ public class MainFrame extends JFrame {
 
 		ActionListener b = new ActionListener(){
 			public void actionPerformed(ActionEvent event) {
-				Cursor cursors = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage("zoomout.png"), new Point(10, 10),"zoom_out");
+				Cursor cursors = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage("Images/zoomout.png"), new Point(10, 10),"zoom_out");
 				automataPanel.setCursor(cursors);
 				automataPanel.requestFocusInWindow();
 				automataPanel.setZoomOut();
