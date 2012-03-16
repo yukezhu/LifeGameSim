@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -40,7 +38,7 @@ public class MainFrame extends JFrame {
 	public MainFrame(Board b, int height, int width)
 	{
 		super();
-		setSize(width, height + 50);
+		setSize(width, height + 70);
 		setJMenuBar(createMenuBar());
 		setBackground(new Color(0xeb, 0xeb, 0xeb));
 
@@ -106,41 +104,40 @@ public class MainFrame extends JFrame {
 	 * @return	new tool bar
 	 */
 	private JToolBar createToolBar()
-	{
+	{		
 		JToolBar jToolBar = new JToolBar("ToolBar");
 		jToolBar.setFloatable(false);
 		jToolBar.setVisible(true);		
-		jToolBar.setSize(5, 5);
+		jToolBar.setSize(60, 20);
 		ImageIcon zoominButtonIcon = new ImageIcon("Images/zoomin.png");
 		ImageIcon zoomoutButtonIcon = new ImageIcon("Images/zoomout.png");
 		ImageIcon normalButtonIcon = new ImageIcon("Images/normal.png");
 
 		JButton zoomin = new JButton("",zoominButtonIcon);
-		zoomin.setSize(5, 5);
-
+		zoomin.setSize(20, 20);
 		zoomin.setBorderPainted(false);
+		zoomin.setFocusable(false);
 		zoomin.setVisible(true);
 
 		JButton original = new JButton("",normalButtonIcon);
-
-		original.setSize(5, 5);
+		original.setSize(20, 20);
 		original.setBorderPainted(false);
+		original.setFocusable(false);
 		original.setVisible(true);
 
 		JButton zoomout = new JButton("",zoomoutButtonIcon);
-		zoomout.setSize(5, 5);
-
+		zoomout.setSize(20, 20);
 		zoomout.setBorderPainted(false);
+		zoomout.setFocusable(false);
 		zoomout.setVisible(true);
 
 		jToolBar.add(zoomin);    
 		jToolBar.add(zoomout);
 		jToolBar.add(original);
-
+		
 		ActionListener a = new ActionListener(){
 			public void actionPerformed(ActionEvent event) {
-				Cursor cursors = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage("Images/zoomin.png"), new Point(10, 10),"zoom_in");
-				automataPanel.setCursor(cursors);
+				automataPanel.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 				automataPanel.requestFocusInWindow();
 				automataPanel.setZoomIn();
 			}
@@ -149,8 +146,7 @@ public class MainFrame extends JFrame {
 
 		ActionListener b = new ActionListener(){
 			public void actionPerformed(ActionEvent event) {
-				Cursor cursors = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage("Images/zoomout.png"), new Point(10, 10),"zoom_out");
-				automataPanel.setCursor(cursors);
+				automataPanel.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 				automataPanel.requestFocusInWindow();
 				automataPanel.setZoomOut();
 			}
@@ -216,7 +212,7 @@ public class MainFrame extends JFrame {
 				// html content
 				String text1 = "<html><body><p><strong><font size=\"5\" face=\"arial\" color=\"black\">Game of Life</font></strong></p>" +
 						"<p><i>Version 1.1</i></p><p><i>School of Computing Science, Simon Fraser University</i></p>"    													 +
-						"<p>Distributed cellular automaton simulation application, called world  of cell.</p>"       +  
+						"<p>Distributed cellular automaton simulation application, called World  of Cell</p>"       +  
 						"<p><b>Author:</b> Yuke Zhu, Luna Lu, Yang Liu, Yao Xie, Xiaying Peng</p>"                                       +
 						"<p>Sound interesting? <a href=\"https://github.com/leafpicker/LifeGameSim\">Get involved!</a></p></body></html>";
 				JEditorPane ep = new JEditorPane("text/html", text1);
@@ -229,7 +225,6 @@ public class MainFrame extends JFrame {
 					{
 						if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED))
 							openURL(e.getURL().toString());
-						//ProcessHandler.launchUrl(e.getURL().toString()); // roll your own link launcher or use Desktop if J6+
 					}
 				});
 
