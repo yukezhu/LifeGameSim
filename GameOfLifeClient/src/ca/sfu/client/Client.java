@@ -157,7 +157,7 @@ public class Client {
 							handleMerge(mmsg.lastfit, mmsg.yourPair);
 							tmpmsg = mmsg;
 							if(neiUpdCount > 0)
-								status = 9;
+								status = 8;
 							else
 								finishMerge();
 						}
@@ -187,14 +187,10 @@ public class Client {
 						neiUpdCount--;
 						if(neiUpdCount <= 0) {
 							finishMerge();
-							status = 3;
-						}
-						break;
-					case 9:
-						neiUpdCount--;
-						if(neiUpdCount <= 0) {
-							finishMerge();
-							status = 6;
+							if(isleaving)
+								status = 6;
+							else
+								status = 3;
 						}
 						break;
 					default:
@@ -208,7 +204,8 @@ public class Client {
 	private void handleleaveReceiverMsg(LeaveReceiverMsg msg) throws IOException {
 		for(Neighbour nei: outfit.neighbour)
 			nei.comrade.sender = null;
-		outfit.pair.sender = null;
+		if(outfit.pair != null)
+			outfit.pair.sender = null;
 		if(msg.rcvid >= 0) {
 			MessageSender sender = new MessageSender(msg.rcvip, msg.rcvport);
 			sender.sendMsg(new RegularOutfitMsg(outfit.myId, outfit));
@@ -703,7 +700,7 @@ public class Client {
 			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		}
 		else {
-			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
+			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, null));
 //			server.sender.sendMsg(myConfirmMessage);
 		}
 		outfit.nextClock ++;
