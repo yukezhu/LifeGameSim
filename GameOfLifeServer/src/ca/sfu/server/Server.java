@@ -42,7 +42,8 @@ public class Server{
 	
 	//for test!
 	private static final boolean TEST = true; //default: 2
-	private static final int lowerbound = 10; //default: 1
+	private static final int lowerbound = 1; //default: 1
+	private static int test_Cycle = 0;
 	
 	/* UI widgets */
 	MainFrame frame = null;
@@ -59,7 +60,7 @@ public class Server{
 
 
 //		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
-		Board b = new Board(1000, 1000);
+		Board b = new Board(3000, 3000);
 		b = BoardOperation.Randomize(b, 0.1);
 
 		
@@ -137,6 +138,12 @@ public class Server{
 							}
 							
 							System.out.println("sending start");
+							
+							if(TEST){
+								test_Cycle++;
+								frame.automataPanel.setCycle(test_Cycle);
+							}
+							
 							infoPanel.setCycleNum(frame.automataPanel.getCycle());
 							for (Comrade var : regedClientSender) {
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
@@ -302,6 +309,11 @@ public class Server{
 										status = 1; //waiting for a new client
 										break;
 									}
+								}
+								
+								if(TEST){
+									test_Cycle++;
+									frame.automataPanel.setCycle(test_Cycle);
 								}
 								
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));

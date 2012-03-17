@@ -211,6 +211,10 @@ public class AutomataPanel extends JPanel  {
 		return cycle;
 	}
 	
+	public void setCycle(int c){
+		cycle = c;
+	}
+	
 	public Board getBoard()
 	{
 		return b;
