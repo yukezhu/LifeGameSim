@@ -8,13 +8,13 @@ import ca.sfu.cmpt431.facility.Comrade;
 import ca.sfu.cmpt431.facility.Outfits;
 import ca.sfu.cmpt431.message.Message;
 import ca.sfu.cmpt431.message.MessageCodeDictionary;
-import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.join.JoinSplitMsg;
 import ca.sfu.cmpt431.message.leave.LeaveReceiverMsg;
 import ca.sfu.cmpt431.message.merge.MergeLastMsg;
 import ca.sfu.cmpt431.message.regular.RegularBoardReturnMsg;
 import ca.sfu.cmpt431.message.regular.RegularNextClockMsg;
+import ca.sfu.cmpt431.message.regular.RegularOutfitMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
 import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
@@ -71,7 +71,7 @@ public class Server{
 						handleNewAddingLeaving(m,1);
 						handlePending();
 						//send it the outfit
-						regedClientSender.get(0).sender.sendMsg(new JoinOutfitsMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
+						regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
 						waiting4confirm++;
 						status = 2;
 						break;
@@ -177,15 +177,23 @@ public class Server{
 									regedClientSender.get(index).sender.sendMsg(new LeaveReceiverMsg(new_cid, new_port, new_ip));
 									regedClientSender.get(index).sender.close();
 									regedClientSender.set(index, regedClientSender.get(s-1));
+									regedClientSender.get(index).id = cid;
 									
 									regedClientSender.remove(s-1);
 									Comrade c = regedClientSender.get(s-2);
 									regedClientSender.remove(s-2);
 									regedClientSender.add(0, c);
+									
+									//wait for confirm
+									result = 6;
+									break;
 								}
 								else if(result == 0){
 									//get the confirm
 									//nothing to do
+								}
+								else if(result == 6){
+									//do nothing
 								}
 								else{
 									//error
@@ -276,7 +284,7 @@ public class Server{
 			//TODO
 			regedClientSender.get(findClient(cid)).sender.sendMsg(new LeaveReceiverMsg(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp));
 			regedClientSender.get(findClient(cid)).sender.close();
-			regedClientSender.set(findClient(cid), new Comrade(regedClientSender.size(), newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));
+			regedClientSender.set(findClient(cid), new Comrade(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));
 			newClientSender.remove(0);
 			
 			System.out.println("new adding, replace");
