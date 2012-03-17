@@ -52,7 +52,7 @@ public class Server{
 	protected void startServer() throws IOException, ClassNotFoundException, InterruptedException
 	{
 		// UI
-		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
+		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop2.lg");
 		
 		System.out.println("UI");
 		frame = new MainFrame(b, 800, 800);
