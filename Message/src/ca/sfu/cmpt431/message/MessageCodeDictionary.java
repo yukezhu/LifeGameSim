@@ -10,14 +10,13 @@ public class MessageCodeDictionary {
 	public final static int REGULAR_BORDER_EXCHANGE = 3;
 	public final static int REGULAR_BOARD_RETURN = 4;
 	public final static int REGULAR_UPDATE_NEIGHBOUR = 5;
+	public final static int REGULAR_OUTFIT = 5;
 	
 	public final static int JOIN_REQUEST = 21;
-	public final static int JOIN_OUTFITS = 22;
 	public final static int JOIN_SPLIT = 23;
 	
 	public final static int LEAVE_REQUEST = 31;
 	public final static int LEAVE_RECEIVER = 32;
-	public final static int LEAVE_OUTFIT = 33;
 	
 	public final  static int MERGE_LAST = 41;
 	public final  static int MERGE_OUTFIT = 42;

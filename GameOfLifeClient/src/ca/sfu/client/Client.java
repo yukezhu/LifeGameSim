@@ -14,14 +14,15 @@ import ca.sfu.cmpt431.facility.Neighbour;
 import ca.sfu.cmpt431.facility.Outfits;
 import ca.sfu.cmpt431.message.Message;
 import ca.sfu.cmpt431.message.MessageCodeDictionary;
-import ca.sfu.cmpt431.message.join.JoinOutfitsMsg;
 import ca.sfu.cmpt431.message.join.JoinRequestMsg;
 import ca.sfu.cmpt431.message.join.JoinSplitMsg;
+import ca.sfu.cmpt431.message.leave.LeaveReceiverMsg;
 import ca.sfu.cmpt431.message.merge.MergeLastMsg;
 import ca.sfu.cmpt431.message.merge.MergeOutfit;
 import ca.sfu.cmpt431.message.regular.RegularBoardReturnMsg;
 import ca.sfu.cmpt431.message.regular.RegularBorderMsg;
 import ca.sfu.cmpt431.message.regular.RegularConfirmMsg;
+import ca.sfu.cmpt431.message.regular.RegularOutfitMsg;
 import ca.sfu.cmpt431.message.regular.RegularUpdateNeighbourMsg;
 import ca.sfu.network.MessageReceiver;
 import ca.sfu.network.MessageSender;
@@ -86,18 +87,18 @@ public class Client {
 					System.out.println("time:" + outfit.nextClock + "  status:" + status + "  messgetype:"+ msg.getMessageCode());
 				switch(status) {
 					case 1:
-						repairOutfit((JoinOutfitsMsg) msg);
+						repairOutfit((RegularOutfitMsg) msg);
 						if(neiUpdCount > 0)
 							status = 2;
 						else {
-							outfit.pair.sender.sendMsg(myConfirmMessage);
+							server.sender.sendMsg(myConfirmMessage);
 							status = 3;
 						}
-							break;
+						break;
 					case 2:
 						neiUpdCount--;
 						if(neiUpdCount <= 0){
-							outfit.pair.sender.sendMsg(myConfirmMessage);
+							server.sender.sendMsg(myConfirmMessage);
 							status = 3;
 						}
 						break;
@@ -113,10 +114,8 @@ public class Client {
 						}
 						else if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
 							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
-						else if (msgType == MessageCodeDictionary.JOIN_SPLIT) {
+						else if (msgType == MessageCodeDictionary.JOIN_SPLIT)
 							handleSplit((JoinSplitMsg) msg);
-							status = 5;
-						}
 						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 							handleBorderMessage((RegularBorderMsg) msg);
 						else if (msgType == MessageCodeDictionary.MERGE_LAST) {
@@ -139,13 +138,13 @@ public class Client {
 						if(isBorderMessageComplete())
 							computeAndReport();
 						break;
-					case 5:
-						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
-							System.out.println("type error, expect confirm message, received: " + msg.getMessageCode());
-						else
-							server.sender.sendMsg(myConfirmMessage);
-						status = 3;
-						break;
+//					case 5:
+//						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
+//							System.out.println("type error, expect confirm message, received: " + msg.getMessageCode());
+//						else
+//							server.sender.sendMsg(myConfirmMessage);
+//						status = 3;
+//						break;
 					case 6:
 						int msgTp = msg.getMessageCode();
 						if (msgTp == MessageCodeDictionary.MERGE_OUTFIT) {
@@ -162,8 +161,11 @@ public class Client {
 							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
 						else if (msgTp == MessageCodeDictionary.MERGE_LAST) 
 							passOutfitsToPair((MergeLastMsg)msg);
-						else 
-							System.exit(0);
+						else if(msgTp == MessageCodeDictionary.LEAVE_RECEIVER) {
+							handleleaveReceiverMsg((LeaveReceiverMsg) msg);
+						}
+						else
+							System.out.println("Received unexpectd message.");
 						break;
 					case 7:
 						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
@@ -171,7 +173,7 @@ public class Client {
 						else
 							server.sender.sendMsg(myConfirmMessage);
 						System.out.println("has send confirm to" + outfit.pair.id);
-						status = 6;
+						status = 1;
 						break;
 					case 8:
 						neiUpdCount--;
@@ -193,6 +195,17 @@ public class Client {
 				}
 			}
 		}
+	}
+	
+	private void handleleaveReceiverMsg(LeaveReceiverMsg msg) throws IOException {
+		for(Neighbour nei: outfit.neighbour)
+			nei.comrade.sender = null;
+		outfit.pair.sender = null;
+		if(msg.rcvid >= 0) {
+			MessageSender sender = new MessageSender(msg.rcvip, msg.rcvport);
+			sender.sendMsg(new RegularOutfitMsg(outfit.myId, outfit));
+		}
+		System.exit(0);
 	}
 	
 	private void finishMerge() throws IOException{
@@ -220,7 +233,7 @@ public class Client {
 		status = 7;
 	}
 	
-	private void repairOutfit(JoinOutfitsMsg msg) throws IOException {
+	private void repairOutfit(RegularOutfitMsg msg) throws IOException {
 		outfit = msg.yourOutfits;
 		myConfirmMessage = new RegularConfirmMsg(outfit.myId);
 		if(outfit.pair == null)
@@ -233,7 +246,7 @@ public class Client {
 			else {
 				nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
 				ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
-				nei.comrade.sender.sendMsg(new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp));
+				nei.comrade.sender.sendMsg(new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp, msg.getClientId()));
 				neiUpdCount ++;
 			}
 		}
@@ -386,7 +399,7 @@ public class Client {
 		for(Neighbour nei: outfit.neighbour) {
 			nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
 			ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
-			RegularUpdateNeighbourMsg msg = new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp);
+			RegularUpdateNeighbourMsg msg = new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp, -2);
 			if(outfit.pair != null && nei.comrade.id == newpairid)
 				msg.mypair = outfit.pair.id;
 			nei.comrade.sender.sendMsg(msg);
@@ -446,7 +459,7 @@ public class Client {
 			System.out.println("");
 		}
 		
-		if(msg.mypair == outfit.pair.id) {
+		if(msg.mypair == outfit.pair.id && outfit.pair.id != msg.mypair) {
 			System.out.println("Pair updated to " + msg.getClientId());
 			if(!hasNeighbour(outfit, outfit.pair.id))
 				outfit.pair.sender.close();
@@ -641,7 +654,7 @@ public class Client {
 		
 		System.out.println("My outfit after spliting:");
 		outiftInfo(outfit);
-		outfit.pair.sender.sendMsg(new JoinOutfitsMsg(outfit.myId, myPort, pout));
+		outfit.pair.sender.sendMsg(new RegularOutfitMsg(outfit.myId, myPort, pout));
 	}
 	
 	private void handleBorderMessage(RegularBorderMsg msg) {
