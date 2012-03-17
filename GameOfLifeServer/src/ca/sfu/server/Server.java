@@ -24,10 +24,7 @@ public class Server{
 	
 	protected static final int LISTEN_PORT = 6560;
 	private MessageReceiver Receiver;
-	private MessageSender Sender1;
-	private MessageSender Sender2;
-	private String client1_ip;
-	private String client2_ip;
+
 	private ArrayList<MessageSender> newClientSender = new ArrayList<MessageSender>();
 	private ArrayList<Comrade>  regedClientSender = new ArrayList<Comrade>();
 	
