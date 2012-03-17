@@ -33,6 +33,9 @@ public class Client {
 	private String SERVER_IP;
 	private Comrade  server;
 	
+	
+	private boolean TEST_MODE = true;
+	
 	private int myPort;
 	private String myIp;
 	private MessageReceiver Receiver;
@@ -43,6 +46,7 @@ public class Client {
 	
 	private int neiUpdCount;
 	private int borderCount = 0;
+	private boolean isleaving = false;
 	
 	private Message tmpmsg;
 
@@ -83,8 +87,8 @@ public class Client {
 		while(true){
 			if(!Receiver.isEmpty()){
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
-				if(outfit != null)
-					System.out.println("time:" + outfit.nextClock + "  status:" + status + "  messgetype:"+ msg.getMessageCode());
+//				if(outfit != null)
+//					System.out.println("time:" + outfit.nextClock + "  status:" + status + "  messgetype:"+ msg.getMessageCode() + "  from: " + msg.getClientId());
 				switch(status) {
 					case 1:
 						repairOutfit((RegularOutfitMsg) msg);
@@ -105,10 +109,14 @@ public class Client {
 					case 3:
 						int msgType = msg.getMessageCode();
 						if(msgType == MessageCodeDictionary.REGULAR_NEXTCLOCK) {
-							System.out.println("received start");
 							sendBorderToNeighbours();
-							if(isBorderMessageComplete())
+							if(isBorderMessageComplete()) {
 								computeAndReport();
+								if(isleaving)
+									status = 6;
+								else
+									status = 3;
+							}
 							else
 								status = 4;
 						}
@@ -119,11 +127,10 @@ public class Client {
 						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 							handleBorderMessage((RegularBorderMsg) msg);
 						else if (msgType == MessageCodeDictionary.MERGE_LAST) {
-							System.out.println("MERGE LAST");
 							passOutfitsToPair((MergeLastMsg)msg);
+							status = 7;
 						}
 						else if (msgType == MessageCodeDictionary.MERGE_OUTFIT) {
-							System.out.println("MERGE OUTFIT");
 							MergeOutfit mmsg = (MergeOutfit)msg;
 							handleMerge(mmsg.lastfit, mmsg.yourPair);
 							tmpmsg = mmsg;
@@ -135,32 +142,31 @@ public class Client {
 						break;
 					case 4:
 						handleBorderMessage((RegularBorderMsg) msg);
-						if(isBorderMessageComplete())
+						if(isBorderMessageComplete()) {
 							computeAndReport();
+							if(isleaving)
+								status = 6;
+							else
+								status = 3;
+						}
 						break;
-//					case 5:
-//						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
-//							System.out.println("type error, expect confirm message, received: " + msg.getMessageCode());
-//						else
-//							server.sender.sendMsg(myConfirmMessage);
-//						status = 3;
-//						break;
 					case 6:
 						int msgTp = msg.getMessageCode();
 						if (msgTp == MessageCodeDictionary.MERGE_OUTFIT) {
-							System.out.println("MERGE OUTFIT");
 							MergeOutfit mmsg = (MergeOutfit)msg;
 							handleMerge(mmsg.lastfit, mmsg.yourPair);
 							tmpmsg = mmsg;
 							if(neiUpdCount > 0)
-								status = 9;
+								status = 8;
 							else
 								finishMerge();
 						}
 						else if (msgTp == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
 							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
-						else if (msgTp == MessageCodeDictionary.MERGE_LAST) 
+						else if (msgTp == MessageCodeDictionary.MERGE_LAST) {
 							passOutfitsToPair((MergeLastMsg)msg);
+							status = 7;
+						}
 						else if(msgTp == MessageCodeDictionary.LEAVE_RECEIVER) {
 							handleleaveReceiverMsg((LeaveReceiverMsg) msg);
 						}
@@ -172,21 +178,19 @@ public class Client {
 							System.out.println("type error, expect confirm message, received: " + msg.getMessageCode() + "  from " + msg.getClientId());
 						else
 							server.sender.sendMsg(myConfirmMessage);
-						System.out.println("has send confirm to" + outfit.pair.id);
-						status = 1;
+						if(isleaving)
+							status = 6;
+						else
+							status = 1;
 						break;
 					case 8:
 						neiUpdCount--;
 						if(neiUpdCount <= 0) {
 							finishMerge();
-							status = 3;
-						}
-						break;
-					case 9:
-						neiUpdCount--;
-						if(neiUpdCount <= 0) {
-							finishMerge();
-							status = 6;
+							if(isleaving)
+								status = 6;
+							else
+								status = 3;
 						}
 						break;
 					default:
@@ -200,7 +204,8 @@ public class Client {
 	private void handleleaveReceiverMsg(LeaveReceiverMsg msg) throws IOException {
 		for(Neighbour nei: outfit.neighbour)
 			nei.comrade.sender = null;
-		outfit.pair.sender = null;
+		if(outfit.pair != null)
+			outfit.pair.sender = null;
 		if(msg.rcvid >= 0) {
 			MessageSender sender = new MessageSender(msg.rcvip, msg.rcvport);
 			sender.sendMsg(new RegularOutfitMsg(outfit.myId, outfit));
@@ -210,7 +215,6 @@ public class Client {
 	
 	private void finishMerge() throws IOException{
 		outfit.pair.sender.sendMsg(myConfirmMessage);
-		System.out.println("has send confirm to" + outfit.pair.id);
 		MergeOutfit mmsg = (MergeOutfit) tmpmsg;
 		if(hasNeighbour(outfit, mmsg.yourPair))
 			outfit.pair = findNeiWithId(outfit, mmsg.yourPair).comrade;
@@ -230,7 +234,6 @@ public class Client {
 		for(Neighbour nei: outfit.neighbour)
 			nei.comrade.sender = null;
 		sender.sendMsg(new MergeOutfit(outfit.myId, outfit, msg.newpair, msg.pairIp, msg.pairPort));
-		status = 7;
 	}
 	
 	private void repairOutfit(RegularOutfitMsg msg) throws IOException {
@@ -241,14 +244,12 @@ public class Client {
 		else
 			outfit.pair.sender = new MessageSender(outfit.pair.ip, outfit.pair.port);
 		for(Neighbour nei: outfit.neighbour) {
+			nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
+			ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
+			nei.comrade.sender.sendMsg(new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp, msg.getClientId()));
+			neiUpdCount ++;
 			if(nei.comrade.id == outfit.pair.id)
 				nei.comrade.sender = outfit.pair.sender;
-			else {
-				nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
-				ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
-				nei.comrade.sender.sendMsg(new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp, msg.getClientId()));
-				neiUpdCount ++;
-			}
 		}
 		up = new boolean[outfit.myBoard.width];
 		down = new boolean[outfit.myBoard.width];
@@ -271,13 +272,12 @@ public class Client {
 	}
 	
 	private void handleMerge(Outfits pout, int newpairid) throws IOException {
-		System.out.println("handling merge");
+		if(pout.myId < outfit.myId)
+			outfit.myId = pout.myId;;
+		
 		Neighbour [] pn = new Neighbour[12];
 		for(int i = 0; i < 12; i++)
 			pn[i] = findNeiWithPos(pout, i);
-		
-//		System.out.println("POUT");
-//		outiftInfo(pout);
 		
 		Neighbour [] n = new Neighbour[12];
 		for(int i = 0; i < 12; i++)
@@ -424,6 +424,13 @@ public class Client {
 				nei.position.clear();
 				for(Integer q: msg.pos) nei.position.add(q);
 				isOldFriend = true;
+				System.out.println("Old neighbour " + msg.getClientId() + " updated");
+				System.out.println("old nei port:" + nei.comrade.port + "  new nei port:" + msg.port);
+				if(!nei.comrade.ip.equals(msg.ip) || nei.comrade.port != msg.port) {
+					System.out.println("But he is not the origin one");
+					nei.comrade.sender.close();
+					nei.comrade = new Comrade(msg.getClientId(), msg.port, msg.ip, new MessageSender(msg.ip, msg.port));
+				}
 			}
 			else {
 				for(int j = 0; j < nei.position.size(); j++){
@@ -459,7 +466,7 @@ public class Client {
 			System.out.println("");
 		}
 		
-		if(msg.mypair == outfit.pair.id && outfit.pair.id != msg.mypair) {
+		if(msg.mypair == outfit.pair.id) {
 			System.out.println("Pair updated to " + msg.getClientId());
 			if(!hasNeighbour(outfit, outfit.pair.id))
 				outfit.pair.sender.close();
@@ -681,20 +688,21 @@ public class Client {
 	private void computeAndReport() throws IOException {
 		BoardOperation.NextMoment(outfit.myBoard, up, down, left, right, upperLeft, upperRight, lowerLeft, lowerRight);
 		
-		// whether to leave
-		System.out.println("Do you want to leave?\n0: no    1: yes");
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String res = br.readLine();
-		boolean isleaving;
-		if(Integer.parseInt(res) == 1) {
-			isleaving = true;
-			status = 6;
+		if(!TEST_MODE) {
+//			whether to leave
+			System.out.println("Do you want to leave?\n0: no    1: yes");
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			String res = br.readLine();
+			if(Integer.parseInt(res) == 1)
+				isleaving = true;
+			else
+				isleaving = false;
+			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		}
 		else {
-			isleaving = false;
-			status = 3;
+			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, null));
+//			server.sender.sendMsg(myConfirmMessage);
 		}
-		server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		outfit.nextClock ++;
 		borderCount = 0;
 	}

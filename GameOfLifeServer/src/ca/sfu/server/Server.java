@@ -40,6 +40,10 @@ public class Server{
 	private static final int ADD = 1;
 	private static final int LEAVE = 2;
 	
+	//for test!
+	private static final boolean TEST = true; //default: 2
+	private static final int lowerbound = 10; //default: 1
+	
 	/* UI widgets */
 	MainFrame frame = null;
 	InformationPanel infoPanel = null;
@@ -52,7 +56,12 @@ public class Server{
 	protected void startServer() throws IOException, ClassNotFoundException, InterruptedException
 	{
 		// UI
-		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop2.lg");
+
+
+//		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
+		Board b = new Board(1000, 1000);
+		b = BoardOperation.Randomize(b, 0.1);
+
 		
 		System.out.println("UI");
 		frame = new MainFrame(b, 800, 800);
@@ -65,10 +74,13 @@ public class Server{
 			if(!Receiver.isEmpty()) {
 				m = Receiver.getNextMessageWithIp();
 				
+				System.out.println(status);
+				
 				switch(status) {
 					//waiting for first client
 					case 0:
 						handleNewAddingLeaving(m,1);
+						
 						handlePending();
 						//send it the outfit
 						regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
@@ -76,6 +88,24 @@ public class Server{
 						status = 2;
 						break;
 					
+					case 1:
+						if(TEST){
+							handleNewAddingLeaving(m,1);
+							
+							if(regedClientSender.size()<lowerbound){
+								//waiting for more clients
+								if(!newClientSender.isEmpty()){
+									handlePending();
+								}
+								status = 2; //waiting for a confirm
+								break;
+							}
+						}
+						else{
+							//error
+						}
+						break;
+						
 					//wait for the confirm
 					//start a cycle
 					case 2:
@@ -92,12 +122,29 @@ public class Server{
 						
 						if(waiting4confirm == 0){
 							//send you a start
+							
+							if(TEST){
+								if(regedClientSender.size()<lowerbound){
+									//waiting for more clients
+									if(!newClientSender.isEmpty()){
+										handlePending();
+										status = 2;
+										break;
+									}
+									status = 1; //waiting for a new client
+									break;
+								}
+							}
+							
 							System.out.println("sending start");
 							infoPanel.setCycleNum(frame.automataPanel.getCycle());
 							for (Comrade var : regedClientSender) {
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
 							}
+							
+							System.out.println("Start time: " + System.currentTimeMillis());
+							
 							status = 3;
 							phase = COMPUTE;
 						}
@@ -118,7 +165,8 @@ public class Server{
 							}
 							
 //							Thread.sleep(50);
-							frame.repaint();
+							if(!TEST)
+								frame.repaint();
 							infoPanel.setCellNum(frame.automataPanel.getCell());
 							infoPanel.setLifeNum(frame.automataPanel.getAlive());
 							
@@ -158,9 +206,11 @@ public class Server{
 									Comrade c = regedClientSender.get(s-1);
 									regedClientSender.remove(s-1);
 									
+									int id = regedClientSender.get(s-2).id;
 									regedClientSender.get(s-2).sender.close();
 									regedClientSender.remove(s-2);
 									
+									c.id = id;
 									regedClientSender.add(0, c);
 									
 								}
@@ -241,10 +291,24 @@ public class Server{
 						if(waiting4confirm==0){
 							for (Comrade var : regedClientSender) {
 								
+								if(TEST){
+									if(regedClientSender.size()<lowerbound){
+										//waiting for more clients
+										if(!newClientSender.isEmpty()){
+											handlePending();
+											status = 2;
+											break;
+										}
+										status = 1; //waiting for a new client
+										break;
+									}
+								}
+								
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
 							}
 							System.out.println("sending start");
+							
 							infoPanel.setCycleNum(frame.automataPanel.getCycle());
 							phase = COMPUTE;
 						}
@@ -271,9 +335,9 @@ public class Server{
 		}
 		else if(msg.getMessageCode()==MessageCodeDictionary.REGULAR_BOARD_RETURN){
 			RegularBoardReturnMsg r = (RegularBoardReturnMsg)msg;
-			if(r.isLeaving){
+			if(r.isLeaving){			
 				toLeave.add(msg.getClientId());
-				System.out.println("client " + toLeave.get(toLeave.size()-1) + " want to leave, pending now");
+				System.out.println("client " + msg.getClientId() + " want to leave, pending now");
 				return false;
 			}
 		}
@@ -284,7 +348,20 @@ public class Server{
 		if(toLeave.isEmpty())
 			return -1;
 		
-		int cid = toLeave.get(0);
+		int index = 0;
+		
+		System.out.println("to Leave");
+		for(int i=0; i<toLeave.size(); i++){
+			System.out.print(toLeave.get(i)+" ");
+			if(findClient(toLeave.get(i))>findClient(toLeave.get(index)))
+				index = i;
+		}
+		int cid = toLeave.get(index);
+		
+		toLeave.remove(index);
+		toLeave.add(0, cid);
+		
+		System.out.println("now handling "+cid);
 		
 		if(newClientSender.size()!=0){
 			//ask a new client to replace it immediately
@@ -435,6 +512,10 @@ public class Server{
 		
 		if(waiting4confirm==0)
 			status = nextStatus;
+		
+		if(TEST){
+			return;
+		}
 		
 		RegularBoardReturnMsg r = (RegularBoardReturnMsg)m.extracMessage();
 		BoardOperation.Merge(b, r.board, r.top, r.left);

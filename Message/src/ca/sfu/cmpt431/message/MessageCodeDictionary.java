@@ -10,7 +10,7 @@ public class MessageCodeDictionary {
 	public final static int REGULAR_BORDER_EXCHANGE = 3;
 	public final static int REGULAR_BOARD_RETURN = 4;
 	public final static int REGULAR_UPDATE_NEIGHBOUR = 5;
-	public final static int REGULAR_OUTFIT = 5;
+	public final static int REGULAR_OUTFIT = 6;
 	
 	public final static int JOIN_REQUEST = 21;
 	public final static int JOIN_SPLIT = 23;
