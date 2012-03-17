@@ -134,7 +134,7 @@ public class Server{
 							//deal with the confirm
 							//manage the heap
 							if(((Message)m.extracMessage()).getMessageCode()==MessageCodeDictionary.REGULAR_CONFIRM){
-//								System.out.println("result:"+result);
+								System.out.println("result:"+result);
 								if(result == 1){
 									int s = regedClientSender.size();
 									
