@@ -271,9 +271,9 @@ public class Server{
 		}
 		else if(msg.getMessageCode()==MessageCodeDictionary.REGULAR_BOARD_RETURN){
 			RegularBoardReturnMsg r = (RegularBoardReturnMsg)msg;
-			if(r.isLeaving){
+			if(r.isLeaving){			
 				toLeave.add(msg.getClientId());
-				System.out.println("client " + toLeave.get(toLeave.size()-1) + " want to leave, pending now");
+				System.out.println("client " + msg.getClientId() + " want to leave, pending now");
 				return false;
 			}
 		}
@@ -284,7 +284,20 @@ public class Server{
 		if(toLeave.isEmpty())
 			return -1;
 		
-		int cid = toLeave.get(0);
+		int index = 0;
+		
+		System.out.println("to Leave");
+		for(int i=0; i<toLeave.size(); i++){
+			System.out.print(toLeave.get(i)+" ");
+			if(findClient(toLeave.get(i))>findClient(toLeave.get(index)))
+				index = i;
+		}
+		int cid = toLeave.get(index);
+		
+		toLeave.remove(index);
+		toLeave.add(0, cid);
+		
+		System.out.println("now handling "+cid);
 		
 		if(newClientSender.size()!=0){
 			//ask a new client to replace it immediately
