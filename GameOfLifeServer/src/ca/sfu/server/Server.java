@@ -179,10 +179,17 @@ public class Server{
 									regedClientSender.set(index, regedClientSender.get(s-1));
 									regedClientSender.get(index).id = cid;
 									
+									System.out.println("replace:"+regedClientSender.get(index).port);
+									
 									regedClientSender.remove(s-1);
 									Comrade c = regedClientSender.get(s-2);
 									regedClientSender.remove(s-2);
 									regedClientSender.add(0, c);
+									
+									for(int i=0; i<regedClientSender.size(); i++){
+										System.out.print(regedClientSender.get(i).port+" ");
+									}
+									System.out.println();
 									
 									//wait for confirm
 									result = 6;
