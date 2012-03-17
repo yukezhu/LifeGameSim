@@ -40,6 +40,10 @@ public class Server{
 	private static final int ADD = 1;
 	private static final int LEAVE = 2;
 	
+	//for test!
+	private static final boolean TEST = true; //default: 2
+	private static final int lowerbound = 10; //default: 1
+	
 	/* UI widgets */
 	MainFrame frame = null;
 	InformationPanel infoPanel = null;
@@ -65,10 +69,13 @@ public class Server{
 			if(!Receiver.isEmpty()) {
 				m = Receiver.getNextMessageWithIp();
 				
+				System.out.println(status);
+				
 				switch(status) {
 					//waiting for first client
 					case 0:
 						handleNewAddingLeaving(m,1);
+						
 						handlePending();
 						//send it the outfit
 						regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
@@ -76,6 +83,24 @@ public class Server{
 						status = 2;
 						break;
 					
+					case 1:
+						if(TEST){
+							handleNewAddingLeaving(m,1);
+							
+							if(regedClientSender.size()<lowerbound){
+								//waiting for more clients
+								if(!newClientSender.isEmpty()){
+									handlePending();
+								}
+								status = 2; //waiting for a confirm
+								break;
+							}
+						}
+						else{
+							//error
+						}
+						break;
+						
 					//wait for the confirm
 					//start a cycle
 					case 2:
@@ -92,6 +117,20 @@ public class Server{
 						
 						if(waiting4confirm == 0){
 							//send you a start
+							
+							if(TEST){
+								if(regedClientSender.size()<lowerbound){
+									//waiting for more clients
+									if(!newClientSender.isEmpty()){
+										handlePending();
+										status = 2;
+										break;
+									}
+									status = 1; //waiting for a new client
+									break;
+								}
+							}
+							
 							System.out.println("sending start");
 							infoPanel.setCycleNum(frame.automataPanel.getCycle());
 							for (Comrade var : regedClientSender) {
@@ -242,6 +281,19 @@ public class Server{
 						//start
 						if(waiting4confirm==0){
 							for (Comrade var : regedClientSender) {
+								
+								if(TEST){
+									if(regedClientSender.size()<lowerbound){
+										//waiting for more clients
+										if(!newClientSender.isEmpty()){
+											handlePending();
+											status = 2;
+											break;
+										}
+										status = 1; //waiting for a new client
+										break;
+									}
+								}
 								
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
