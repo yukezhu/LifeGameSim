@@ -56,9 +56,12 @@ public class Server{
 	protected void startServer() throws IOException, ClassNotFoundException, InterruptedException
 	{
 		// UI
+
+
 //		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
 		Board b = new Board(1000, 1000);
 		b = BoardOperation.Randomize(b, 0.1);
+
 		
 		System.out.println("UI");
 		frame = new MainFrame(b, 800, 800);
