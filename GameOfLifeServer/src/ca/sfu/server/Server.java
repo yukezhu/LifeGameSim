@@ -158,9 +158,11 @@ public class Server{
 									Comrade c = regedClientSender.get(s-1);
 									regedClientSender.remove(s-1);
 									
+									int id = regedClientSender.get(s-2).id;
 									regedClientSender.get(s-2).sender.close();
 									regedClientSender.remove(s-2);
 									
+									c.id = id;
 									regedClientSender.add(0, c);
 									
 								}
