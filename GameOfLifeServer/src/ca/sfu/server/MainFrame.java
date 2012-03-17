@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,6 +14,7 @@ import java.lang.reflect.Method;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -49,11 +51,11 @@ public class MainFrame extends JFrame {
 		automataPanel = new AutomataPanel(height, width);
 		automataPanel.setBoard(board);
 		automataPanel.setBackground(new Color(0xeb, 0xeb, 0xeb));
-		
+
 		setLayout(layout);
 		add(createToolBar(), BorderLayout.NORTH);
 		add(automataPanel, BorderLayout.CENTER);
-		
+
 		setVisible(true);
 		setTitle("Automata");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -134,7 +136,7 @@ public class MainFrame extends JFrame {
 		jToolBar.add(zoomin);    
 		jToolBar.add(zoomout);
 		jToolBar.add(original);
-		
+
 		ActionListener a = new ActionListener(){
 			public void actionPerformed(ActionEvent event) {
 				automataPanel.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
@@ -175,6 +177,7 @@ public class MainFrame extends JFrame {
 		JMenu fileMenu = new JMenu("File");
 		JMenu windowMenu = new JMenu("Window");
 		/* Menu Item */
+		JMenuItem open = new JMenuItem("Load map");
 		JMenuItem about = new JMenuItem("About");
 		JMenuItem exit = new JMenuItem("Exit");
 		JMenuItem zoomIn = new JMenuItem("Zoom In");
@@ -198,6 +201,11 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				automataPanel.setNormal();
 			}});
+		open.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fileSelection();
+			}});
 		about.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -211,10 +219,10 @@ public class MainFrame extends JFrame {
 
 				// html content
 				String text1 = "<html><body><p><strong><font size=\"5\" face=\"arial\" color=\"black\">Game of Life</font></strong></p>" +
-						"<p><i>Version 1.1</i></p><p><i>School of Computing Science, Simon Fraser University</i></p>"    													 +
-						"<p>Distributed cellular automaton simulation application, called World  of Cell</p>"       +  
-						"<p><b>Author:</b> Yuke Zhu, Luna Lu, Yang Liu, Yao Xie, Xiaying Peng</p>"                                       +
-						"<p>Sound interesting? <a href=\"https://github.com/leafpicker/LifeGameSim\">Get involved!</a></p></body></html>";
+				"<p><i>Version 1.1</i></p><p><i>School of Computing Science, Simon Fraser University</i></p>"    													 +
+				"<p>Distributed cellular automaton simulation application, called World  of Cell</p>"       +  
+				"<p><b>Author:</b> Yuke Zhu, Luna Lu, Yang Liu, Yao Xie, Xiaying Peng</p>"                                       +
+				"<p>Sound interesting? <a href=\"https://github.com/leafpicker/LifeGameSim\">Get involved!</a></p></body></html>";
 				JEditorPane ep = new JEditorPane("text/html", text1);
 
 				// handle link events
@@ -241,6 +249,7 @@ public class MainFrame extends JFrame {
 				System.exit(0);
 			}});
 		/* Add to menu list */
+		fileMenu.add(open);
 		fileMenu.add(about);
 		fileMenu.addSeparator();
 		fileMenu.add(exit);
@@ -296,10 +305,44 @@ public class MainFrame extends JFrame {
 		}
 	}
 
+	private String fileSelection()
+	{
+		/* Create file chooser dialog */
+		JFileChooser jf = new JFileChooser();
+		jf.setFileFilter(new BitmapFileFilter());
+		int result = jf.showOpenDialog(MainFrame.this);
+		jf.setVisible(true);
+		File selectedFile = null;
+		/* Check file validity */
+		if (result == JFileChooser.APPROVE_OPTION) {
+			selectedFile = jf.getSelectedFile();
+			if (selectedFile.exists() && selectedFile.getAbsolutePath().endsWith(".lg")) {
+				System.out.println(selectedFile);
+				return selectedFile.toString();
+			} else {
+				JOptionPane.showMessageDialog(this, "Please select a bitmap.");
+				System.out.println(selectedFile + " doesn't exist.");
+			}
+		}
+		return null;
+		
+	}
+
+	class BitmapFileFilter extends javax.swing.filechooser.FileFilter {
+	    public boolean accept(File file) {
+	        String filename = file.getName();
+	        return (filename.endsWith(".lg") || file.isDirectory());
+	    }
+	    public String getDescription() {
+	        return "Life Game Bitmap (*.lg)";
+	    }
+	}
 	public static void main(String[] args) {
 
+		Board board = new Board(800, 800);
+		BoardOperation.Randomize(board, 0.1);
 		@SuppressWarnings("unused")
-		MainFrame frame = new MainFrame();
+		MainFrame frame = new MainFrame(board, 800, 800);
 
 	}
 
