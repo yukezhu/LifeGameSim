@@ -23,7 +23,7 @@ public class AutomataPanel extends JPanel  {
 	private int alive, cell, cycle;
 	private int height, width;
 	
-	public AutomataPanel(int height, int width)
+	public AutomataPanel(final int height, final int width)
 	{
 		setBackground(Color.WHITE);
 		cellSize = 1;
@@ -47,7 +47,7 @@ public class AutomataPanel extends JPanel  {
 				int sX = startX.peek(), sY = startY.peek();
 				
 				System.out.println(mx + " " + my);
-				
+				System.out.println(height + " " + width + " " + cellScale);
 				if(zoomIn && cellScale <= 16)
 				{
 					cellScale *= 2;
@@ -57,23 +57,72 @@ public class AutomataPanel extends JPanel  {
 				} else return;
 				if(zoomIn)
 				{
-					if(mx < b.height / 2 && my < b.width / 2)
+//					if(mx < b.height / 2 && my < b.width / 2)
+//					{
+//						startX.push(sX);
+//						startY.push(sY);
+//					} else if(mx < b.height / 2 && my >= b.width / 2)
+//					{
+//						startX.push(sX);
+//						startY.push(sY + b.width / cellScale);
+//					} else if(mx >= b.height / 2 && my < b.width / 2)
+//					{
+//						startX.push(sX + b.height / cellScale);
+//						startY.push(sY);
+//					} else
+//					{
+//						startX.push(sX + b.height / cellScale);
+//						startY.push(sY + b.width / cellScale);
+//					}
+					/*
+					 * new method
+					 */
+					if(mx < (double)(width / 4) && my < (double)(height / 4))
 					{
 						startX.push(sX);
 						startY.push(sY);
-					} else if(mx < b.height / 2 && my >= b.width / 2)
+					} else if(mx < (double)(width / 4) && my >= (double)(height * 3 / 4))
 					{
 						startX.push(sX);
-						startY.push(sY + b.width / cellScale);
-					} else if(mx >= b.height / 2 && my < b.width / 2)
+						startY.push(sY + b.height / cellScale);
+					} else if(mx >= (double)(width * 3 / 4) && my < (double)(height / 4))
 					{
-						startX.push(sX + b.height / cellScale);
+						startX.push(sX + b.width / cellScale);
 						startY.push(sY);
-					} else
+					} else if(mx >= (double)(width * 3 / 4) && my >= (double)(height * 3 / 4))
 					{
-						startX.push(sX + b.height / cellScale);
-						startY.push(sY + b.width / cellScale);
+						startX.push(sX + b.width / cellScale);
+						startY.push(sY + b.height / cellScale);
+					}else if(mx < (double)(width / 4) && my >= (double)(height / 4) &&  my < (double)(height * 3 / 4))
+					{
+						System.out.println("my1" +my + " " + b.height / cellScale);
+						startX.push(sX);
+						startY.push(sY+(int)(my  - height / cellScale / 2) * b.height/height/cellScale);
+					}else if(mx >= (double)(width * 3 / 4) && my >= (double)(height / 4 ) && my < (double)(height * 3 / 4))
+					{
+						System.out.println("my2" +my + " " + b.height / cellScale);
+						startX.push(sX + b.width / cellScale);
+						startY.push(sY+(int)(my  - height / cellScale / 2) * b.height/height/cellScale);
+					}else if(mx < (double)(width * 3 / 4) && mx >=(double)( width / 4) && my < (double)(height / 4))
+					{
+						System.out.println("sY1" + my + " " + b.height / cellScale);
+						startX.push(sX+(int)(mx  - width / cellScale / 2)* b.width/width/cellScale);
+						startY.push(sY);
+					}else if(mx < (double)(width * 3 / 4) && mx >= (double)(width / 4) && my >= (double)(height * 3 / 4))
+					{
+						System.out.println("SY2" + sY + " " + b.height / cellScale);
+						
+						startX.push(sX+(int)(mx  - width / cellScale / 2)* b.width/width/cellScale);
+						startY.push(sY + b.height / cellScale);
+					}else
+					{
+						System.out.println("mx3 " + sX + " " + mx + " " + width / cellScale/2 + " " + (sX +mx  - width / cellScale / 2)* b.width/width);
+						System.out.println("my3 " + sY + " " +my + " " + height / cellScale/2+ " " + (sY +my  - height / cellScale / 2) * b.height/height);
+						startX.push(sX+(int)(mx  - width / cellScale / 2)* b.width/width/cellScale);
+						startY.push(sY+(int)(my  - height / cellScale / 2) * b.height/height/cellScale);
 					}
+					System.out.println(startX.peek() + " " + startY.peek());
+					
 					repaint();
 				}
 				if(zoomOut)
