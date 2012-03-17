@@ -56,7 +56,9 @@ public class Server{
 	protected void startServer() throws IOException, ClassNotFoundException, InterruptedException
 	{
 		// UI
-		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
+//		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
+		Board b = new Board(1000, 1000);
+		b = BoardOperation.Randomize(b, 0.1);
 		
 		System.out.println("UI");
 		frame = new MainFrame(b, 800, 800);
@@ -137,6 +139,9 @@ public class Server{
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
 							}
+							
+							System.out.println("Start time: " + System.currentTimeMillis());
+							
 							status = 3;
 							phase = COMPUTE;
 						}
@@ -157,7 +162,8 @@ public class Server{
 							}
 							
 //							Thread.sleep(50);
-							frame.repaint();
+							if(!TEST)
+								frame.repaint();
 							infoPanel.setCellNum(frame.automataPanel.getCell());
 							infoPanel.setLifeNum(frame.automataPanel.getAlive());
 							
@@ -299,6 +305,7 @@ public class Server{
 								waiting4confirm++;
 							}
 							System.out.println("sending start");
+							
 							infoPanel.setCycleNum(frame.automataPanel.getCycle());
 							phase = COMPUTE;
 						}
@@ -502,6 +509,10 @@ public class Server{
 		
 		if(waiting4confirm==0)
 			status = nextStatus;
+		
+		if(TEST){
+			return;
+		}
 		
 		RegularBoardReturnMsg r = (RegularBoardReturnMsg)m.extracMessage();
 		BoardOperation.Merge(b, r.board, r.top, r.left);

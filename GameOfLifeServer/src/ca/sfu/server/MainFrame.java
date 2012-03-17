@@ -246,6 +246,8 @@ public class MainFrame extends JFrame {
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("End time: " + System.currentTimeMillis());
+				System.out.println("Cycle: " + automataPanel.getCycle());
 				System.exit(0);
 			}});
 		/* Add to menu list */
