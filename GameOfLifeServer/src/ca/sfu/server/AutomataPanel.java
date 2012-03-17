@@ -43,7 +43,7 @@ public class AutomataPanel extends JPanel  {
 		{
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				int mx = arg0.getY(), my = arg0.getX();
+				int my = arg0.getY(), mx = arg0.getX();
 				int sX = startX.peek(), sY = startY.peek();
 				
 				System.out.println(mx + " " + my);
@@ -97,29 +97,31 @@ public class AutomataPanel extends JPanel  {
 					{
 						System.out.println("my1" +my + " " + b.height / cellScale);
 						startX.push(sX);
-						startY.push(sY+(int)(my  - height / cellScale / 2) * b.height/height/cellScale);
+						System.out.println(sY + " " + my + " " +height / cellScale / 2 +" " + b.height+" "+" "+cellScale);
+						startY.push(sY+(int)(my  - height  / 4) *2* b.height/height/cellScale);
 					}else if(mx >= (double)(width * 3 / 4) && my >= (double)(height / 4 ) && my < (double)(height * 3 / 4))
 					{
 						System.out.println("my2" +my + " " + b.height / cellScale);
 						startX.push(sX + b.width / cellScale);
-						startY.push(sY+(int)(my  - height / cellScale / 2) * b.height/height/cellScale);
+						startY.push(sY+(int)(my  - height  / 4) *2* b.height/height/cellScale);
 					}else if(mx < (double)(width * 3 / 4) && mx >=(double)( width / 4) && my < (double)(height / 4))
 					{
-						System.out.println("sY1" + my + " " + b.height / cellScale);
-						startX.push(sX+(int)(mx  - width / cellScale / 2)* b.width/width/cellScale);
+//						System.out.println("sY1" + my + " " + b.height / cellScale);
+						System.out.println(sX + " " + mx + " " +width / cellScale / 2 +" " + b.width+" "+" "+cellScale);
+						startX.push(sX+(int)(mx  - width  / 4)*2* b.width/cellScale/width);
 						startY.push(sY);
 					}else if(mx < (double)(width * 3 / 4) && mx >= (double)(width / 4) && my >= (double)(height * 3 / 4))
 					{
 						System.out.println("SY2" + sY + " " + b.height / cellScale);
 						
-						startX.push(sX+(int)(mx  - width / cellScale / 2)* b.width/width/cellScale);
+						startX.push(sX+(int)(mx  - width  / 4)*2* b.width/width/cellScale);
 						startY.push(sY + b.height / cellScale);
 					}else
 					{
 						System.out.println("mx3 " + sX + " " + mx + " " + width / cellScale/2 + " " + (sX +mx  - width / cellScale / 2)* b.width/width);
 						System.out.println("my3 " + sY + " " +my + " " + height / cellScale/2+ " " + (sY +my  - height / cellScale / 2) * b.height/height);
-						startX.push(sX+(int)(mx  - width / cellScale / 2)* b.width/width/cellScale);
-						startY.push(sY+(int)(my  - height / cellScale / 2) * b.height/height/cellScale);
+						startX.push(sX+(int)(mx  - width  / 4)*2* b.width/width/cellScale);
+						startY.push(sY+(int)(my  - height  / 4) *2* b.height/height/cellScale);
 					}
 					System.out.println(startX.peek() + " " + startY.peek());
 					
@@ -227,7 +229,7 @@ public class AutomataPanel extends JPanel  {
 			for(int i=0; i<height; i++)
 				for(int j=0; j<width; j++)
 				{
-					if(bitmap[sX + i][sY + j])
+					if(bitmap[sY + i][sX + j])
 					{
 						int size = cellSize * cellScale;
 						g.setColor(Color.BLACK);
