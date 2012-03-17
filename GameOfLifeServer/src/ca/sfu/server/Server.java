@@ -197,6 +197,8 @@ public class Server{
 								toLeave.remove(0);
 							}
 							
+							infoPanel.setClientNum(regedClientSender.size());
+							
 							if((result=handleLeaving())!=-1){
 								//4, no client now, go to status 0 pls
 								if(result == 4){
