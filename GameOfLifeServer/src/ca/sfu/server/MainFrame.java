@@ -2,6 +2,7 @@ package ca.sfu.server;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +10,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -35,7 +38,7 @@ public class MainFrame extends JFrame {
 	public MainFrame(Board b, int height, int width)
 	{
 		super();
-		setSize(width, height + 50);
+		setSize(width, height + 70);
 		setJMenuBar(createMenuBar());
 		setBackground(new Color(0xeb, 0xeb, 0xeb));
 
@@ -46,11 +49,11 @@ public class MainFrame extends JFrame {
 		automataPanel = new AutomataPanel(height, width);
 		automataPanel.setBoard(board);
 		automataPanel.setBackground(new Color(0xeb, 0xeb, 0xeb));
-
-		//		add(createToolbar(), BorderLayout.NORTH);
-		add(automataPanel, BorderLayout.CENTER);
-
+		
 		setLayout(layout);
+		add(createToolBar(), BorderLayout.NORTH);
+		add(automataPanel, BorderLayout.CENTER);
+		
 		setVisible(true);
 		setTitle("Automata");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -96,12 +99,70 @@ public class MainFrame extends JFrame {
 	}
 
 	/**
-	 * Create JToolbar for the whole program
+	 * Create the tool bar component
+	 * @author	yla269
+	 * @return	new tool bar
 	 */
-	@SuppressWarnings("unused")
-	private JToolBar createToolbar()
-	{
-		return null;
+	private JToolBar createToolBar()
+	{		
+		JToolBar jToolBar = new JToolBar("ToolBar");
+		jToolBar.setFloatable(false);
+		jToolBar.setVisible(true);		
+		jToolBar.setSize(60, 20);
+		ImageIcon zoominButtonIcon = new ImageIcon("Images/zoomin.png");
+		ImageIcon zoomoutButtonIcon = new ImageIcon("Images/zoomout.png");
+		ImageIcon normalButtonIcon = new ImageIcon("Images/normal.png");
+
+		JButton zoomin = new JButton("",zoominButtonIcon);
+		zoomin.setSize(20, 20);
+		zoomin.setBorderPainted(false);
+		zoomin.setFocusable(false);
+		zoomin.setVisible(true);
+
+		JButton original = new JButton("",normalButtonIcon);
+		original.setSize(20, 20);
+		original.setBorderPainted(false);
+		original.setFocusable(false);
+		original.setVisible(true);
+
+		JButton zoomout = new JButton("",zoomoutButtonIcon);
+		zoomout.setSize(20, 20);
+		zoomout.setBorderPainted(false);
+		zoomout.setFocusable(false);
+		zoomout.setVisible(true);
+
+		jToolBar.add(zoomin);    
+		jToolBar.add(zoomout);
+		jToolBar.add(original);
+		
+		ActionListener a = new ActionListener(){
+			public void actionPerformed(ActionEvent event) {
+				automataPanel.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+				automataPanel.requestFocusInWindow();
+				automataPanel.setZoomIn();
+			}
+		};
+		zoomin.addActionListener(a);
+
+		ActionListener b = new ActionListener(){
+			public void actionPerformed(ActionEvent event) {
+				automataPanel.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+				automataPanel.requestFocusInWindow();
+				automataPanel.setZoomOut();
+			}
+		};		
+		zoomout.addActionListener(b);
+
+		ActionListener c = new ActionListener(){
+			public void actionPerformed(ActionEvent event) {
+				Cursor cursors = Cursor.getDefaultCursor();
+				automataPanel.setCursor(cursors);
+				automataPanel.requestFocusInWindow();
+				automataPanel.setNormal();
+			}
+		};		
+		original.addActionListener(c);
+		return jToolBar;
 	}
 
 	/**
@@ -151,7 +212,7 @@ public class MainFrame extends JFrame {
 				// html content
 				String text1 = "<html><body><p><strong><font size=\"5\" face=\"arial\" color=\"black\">Game of Life</font></strong></p>" +
 						"<p><i>Version 1.1</i></p><p><i>School of Computing Science, Simon Fraser University</i></p>"    													 +
-						"<p>Distributed cellular automaton simulation application, called world  of cell.</p>"       +  
+						"<p>Distributed cellular automaton simulation application, called World  of Cell</p>"       +  
 						"<p><b>Author:</b> Yuke Zhu, Luna Lu, Yang Liu, Yao Xie, Xiaying Peng</p>"                                       +
 						"<p>Sound interesting? <a href=\"https://github.com/leafpicker/LifeGameSim\">Get involved!</a></p></body></html>";
 				JEditorPane ep = new JEditorPane("text/html", text1);
@@ -164,7 +225,6 @@ public class MainFrame extends JFrame {
 					{
 						if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED))
 							openURL(e.getURL().toString());
-						//ProcessHandler.launchUrl(e.getURL().toString()); // roll your own link launcher or use Desktop if J6+
 					}
 				});
 

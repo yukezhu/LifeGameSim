@@ -45,6 +45,9 @@ public class AutomataPanel extends JPanel  {
 			public void mouseClicked(MouseEvent arg0) {
 				int mx = arg0.getY(), my = arg0.getX();
 				int sX = startX.peek(), sY = startY.peek();
+				
+				System.out.println(mx + " " + my);
+				
 				if(zoomIn && cellScale <= 16)
 				{
 					cellScale *= 2;
