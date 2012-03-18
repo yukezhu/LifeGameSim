@@ -41,8 +41,8 @@ public class Server{
 	private static final int LEAVE = 2;
 	
 	//for test!
-	private static final boolean TEST = true; //default: 2
-	private static final int lowerbound = 1; //default: 1
+	private static final boolean TEST = false; //default: 2
+	private static final int lowerbound = 5; //default: 1
 	private static int test_Cycle = 0;
 	
 	/* UI widgets */
@@ -172,7 +172,7 @@ public class Server{
 							
 							if(TEST){
 								test_Cycle++;
-								if(test_Cycle == 100)
+								if(test_Cycle == 10)
 								{
 									System.out.println(System.currentTimeMillis());
 									System.exit(0);
