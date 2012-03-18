@@ -29,7 +29,13 @@ public class BoardOperation {
 	{
 		IllegalArgumentException exception = new java.lang.IllegalArgumentException();
 		boolean leftBorder = false, rightBorder = false, upBorder = false, downBorder = false;
-		
+
+		int cnt = 0;
+		for(int k=0; k<1000; k++)
+			for(int i=0; i<b.height; i++)
+				for(int j=0; j<b.width; j++)
+					cnt ++;
+
 		if(left == null)
 		{
 			leftBorder = true;
@@ -58,7 +64,7 @@ public class BoardOperation {
 			for(int i=0; i<b.width; i++)
 				down[i] = false;
 		}
-		
+
 		if(up.length != b.width || down.length != b.width)
 		{
 			System.err.println("Up & down border lengths fail to match the board.");
@@ -169,7 +175,7 @@ public class BoardOperation {
 				bigBoard.bitmap[i][j] = smallBoard.bitmap[i-top][j-left];
 			}
 	}
-	
+
 	/**
 	 * Evenly vertical cut of the board
 	 * @param	Input the large board to be cut	
@@ -227,7 +233,7 @@ public class BoardOperation {
 		list.add(down);
 		return list;
 	}
-	
+
 	/**
 	 * Load life game pattern from file
 	 * @param	file name
@@ -242,7 +248,7 @@ public class BoardOperation {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			int height = Integer.valueOf(br.readLine());
 			int width = Integer.valueOf(br.readLine());
-			
+
 			Board board = new Board(height, width);
 			for(int i=0; i<height; i++)
 			{
@@ -254,7 +260,7 @@ public class BoardOperation {
 					else board.bitmap[i][j] = false;
 				}
 			}
-			
+
 			return board;
 		} catch(Exception e)
 		{
@@ -272,8 +278,8 @@ public class BoardOperation {
 	{
 		return null;
 	}
-	
-	
+
+
 	public static void main(String args[])
 	{
 		Board board = BoardOperation.LoadFile("/home/yukez/map.lg");
