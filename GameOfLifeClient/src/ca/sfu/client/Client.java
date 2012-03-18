@@ -1,7 +1,5 @@
 package ca.sfu.client;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -34,7 +32,7 @@ public class Client {
 	private Comrade  server;
 	
 	
-	private boolean TEST_MODE = true;
+	private boolean TEST_MODE = false;
 	
 	private int myPort;
 	private String myIp;
@@ -120,25 +118,28 @@ public class Client {
 							else
 								status = 4;
 						}
-						else if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
-							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
 						else if (msgType == MessageCodeDictionary.JOIN_SPLIT)
 							handleSplit((JoinSplitMsg) msg);
 						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 							handleBorderMessage((RegularBorderMsg) msg);
-						else if (msgType == MessageCodeDictionary.MERGE_LAST) {
-							passOutfitsToPair((MergeLastMsg)msg);
-							status = 7;
-						}
-						else if (msgType == MessageCodeDictionary.MERGE_OUTFIT) {
-							MergeOutfit mmsg = (MergeOutfit)msg;
-							handleMerge(mmsg.lastfit, mmsg.yourPair);
-							tmpmsg = mmsg;
-							if(neiUpdCount > 0)
-								status = 8;
-							else
-								finishMerge();
-						}
+						else 
+							handleAbnomorlSituation(msg);
+							
+//						if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
+//							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
+//						else if (msgType == MessageCodeDictionary.MERGE_LAST) {
+//							passOutfitsToPair((MergeLastMsg)msg);
+//							status = 7;
+//						}
+//						else if (msgType == MessageCodeDictionary.MERGE_OUTFIT) {
+//							MergeOutfit mmsg = (MergeOutfit)msg;
+//							handleMerge(mmsg.lastfit, mmsg.yourPair);
+//							tmpmsg = mmsg;
+//							if(neiUpdCount > 0)
+//								status = 8;
+//							else
+//								finishMerge();
+//						}
 						break;
 					case 4:
 						handleBorderMessage((RegularBorderMsg) msg);
@@ -152,26 +153,28 @@ public class Client {
 						break;
 					case 6:
 						int msgTp = msg.getMessageCode();
-						if (msgTp == MessageCodeDictionary.MERGE_OUTFIT) {
-							MergeOutfit mmsg = (MergeOutfit)msg;
-							handleMerge(mmsg.lastfit, mmsg.yourPair);
-							tmpmsg = mmsg;
-							if(neiUpdCount > 0)
-								status = 8;
-							else
-								finishMerge();
-						}
-						else if (msgTp == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
-							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
-						else if (msgTp == MessageCodeDictionary.MERGE_LAST) {
-							passOutfitsToPair((MergeLastMsg)msg);
-							status = 7;
-						}
-						else if(msgTp == MessageCodeDictionary.LEAVE_RECEIVER) {
+						if(msgTp == MessageCodeDictionary.LEAVE_RECEIVER) {
 							handleleaveReceiverMsg((LeaveReceiverMsg) msg);
 						}
-						else
-							System.out.println("Received unexpectd message.");
+						else 
+							handleAbnomorlSituation(msg);
+//						if (msgTp == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
+//							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
+//						else if (msgTp == MessageCodeDictionary.MERGE_LAST) {
+//							passOutfitsToPair((MergeLastMsg)msg);
+//							status = 7;
+//						}
+//						else if (msgTp == MessageCodeDictionary.MERGE_OUTFIT) {
+//							MergeOutfit mmsg = (MergeOutfit)msg;
+//							handleMerge(mmsg.lastfit, mmsg.yourPair);
+//							tmpmsg = mmsg;
+//							if(neiUpdCount > 0)
+//								status = 8;
+//							else
+//								finishMerge();
+//						}
+//						else
+//							System.out.println("Received unexpectd message.");
 						break;
 					case 7:
 						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
@@ -199,6 +202,29 @@ public class Client {
 				}
 			}
 		}
+	}
+	
+	private void handleAbnomorlSituation(Message msg) throws IOException {
+		int msgType = msg.getMessageCode();
+		if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
+			handleBorderMessage((RegularBorderMsg) msg);
+		else if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
+			handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
+		else if (msgType == MessageCodeDictionary.MERGE_LAST) {
+			passOutfitsToPair((MergeLastMsg)msg);
+			status = 7;
+		}
+		else if (msgType == MessageCodeDictionary.MERGE_OUTFIT) {
+			MergeOutfit mmsg = (MergeOutfit)msg;
+			handleMerge(mmsg.lastfit, mmsg.yourPair);
+			tmpmsg = mmsg;
+			if(neiUpdCount > 0)
+				status = 8;
+			else
+				finishMerge();
+		}
+		else
+			System.out.println("Received unexpectd message.");
 	}
 	
 	private void handleleaveReceiverMsg(LeaveReceiverMsg msg) throws IOException {
@@ -690,13 +716,13 @@ public class Client {
 		
 		if(!TEST_MODE) {
 //			whether to leave
-			System.out.println("Do you want to leave?\n0: no    1: yes");
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			String res = br.readLine();
-			if(Integer.parseInt(res) == 1)
-				isleaving = true;
-			else
-				isleaving = false;
+//			System.out.println("Do you want to leave?\n0: no    1: yes");
+//			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//			String res = br.readLine();
+//			if(Integer.parseInt(res) == 1)
+//				isleaving = true;
+//			else
+//				isleaving = false;
 			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		}
 		else {
