@@ -31,7 +31,7 @@ public class BoardOperation {
 		boolean leftBorder = false, rightBorder = false, upBorder = false, downBorder = false;
 
 		int cnt = 0;
-		for(int k=0; k<1000; k++)
+		for(int k=0; k<10000; k++)
 			for(int i=0; i<b.height; i++)
 				for(int j=0; j<b.width; j++)
 					if(cnt > 1732)
