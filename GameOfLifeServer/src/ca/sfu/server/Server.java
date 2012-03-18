@@ -41,8 +41,8 @@ public class Server{
 	private static final int LEAVE = 2;
 	
 	//for test!
-	private static final boolean TEST = false; //default: 2
-	private static final int lowerbound = 1; //default: 1
+	private static final boolean TEST = true; //default: 2
+	private static final int lowerbound = 2; //default: 1
 	private static int test_Cycle = 0;
 	
 	/* UI widgets */
@@ -56,8 +56,7 @@ public class Server{
 	
 	protected void startServer() throws IOException, ClassNotFoundException, InterruptedException
 	{
-		// UI
-
+		// UI		
 
 		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
 //		Board b = new Board(400, 400);
