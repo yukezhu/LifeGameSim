@@ -41,7 +41,7 @@ public class Server{
 	private static final int LEAVE = 2;
 	
 	//for test!
-	private static final boolean TEST = true; //default: 2
+	private static final boolean TEST = false; //default: 2
 	private static final int lowerbound = 1; //default: 1
 	private static int test_Cycle = 0;
 	
@@ -59,9 +59,9 @@ public class Server{
 		// UI
 
 
-//		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
-		Board b = new Board(3000, 3000);
-		b = BoardOperation.Randomize(b, 0.1);
+		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
+//		Board b = new Board(400, 400);
+//		b = BoardOperation.Randomize(b, 0.1);
 
 		
 		System.out.println("UI");
@@ -139,12 +139,8 @@ public class Server{
 							
 							System.out.println("sending start");
 							
-							if(TEST){
-								test_Cycle++;
-								frame.automataPanel.setCycle(test_Cycle);
-							}
-							
 							infoPanel.setCycleNum(frame.automataPanel.getCycle());
+							
 							for (Comrade var : regedClientSender) {
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
@@ -174,6 +170,17 @@ public class Server{
 //							Thread.sleep(50);
 							if(!TEST)
 								frame.repaint();
+							
+							if(TEST){
+								test_Cycle++;
+								if(test_Cycle == 100)
+								{
+									System.out.println(System.currentTimeMillis());
+									System.exit(0);
+								}
+								frame.automataPanel.setCycle(test_Cycle);
+							}
+							
 							infoPanel.setCellNum(frame.automataPanel.getCell());
 							infoPanel.setLifeNum(frame.automataPanel.getAlive());
 							
@@ -309,11 +316,6 @@ public class Server{
 										status = 1; //waiting for a new client
 										break;
 									}
-								}
-								
-								if(TEST){
-									test_Cycle++;
-									frame.automataPanel.setCycle(test_Cycle);
 								}
 								
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
