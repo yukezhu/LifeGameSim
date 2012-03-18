@@ -34,8 +34,11 @@ public class BoardOperation {
 		for(int k=0; k<1000; k++)
 			for(int i=0; i<b.height; i++)
 				for(int j=0; j<b.width; j++)
-					cnt ++;
-
+					if(cnt > 1732)
+						cnt = cnt + 2;
+					else 
+						cnt = cnt / 2;
+		System.out.println(cnt);
 		if(left == null)
 		{
 			leftBorder = true;
