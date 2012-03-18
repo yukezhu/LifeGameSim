@@ -31,8 +31,7 @@ public class Client {
 	private String SERVER_IP;
 	private Comrade  server;
 	
-	
-	private boolean TEST_MODE = false;
+	private boolean TEST_MODE = true;
 	
 	private int myPort;
 	private String myIp;
