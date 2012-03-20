@@ -84,7 +84,7 @@ public class Server{
 					case 0:
 						handleNewAddingLeaving(m,1);
 						
-						handlePending();
+						handlePending(2);
 						//send it the outfit
 						regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
 						waiting4confirm++;
@@ -98,9 +98,9 @@ public class Server{
 							if(regedClientSender.size()<lowerbound){
 								//waiting for more clients
 								if(!newClientSender.isEmpty()){
-									handlePending();
+									handlePending(2);
 								}
-								status = 2; //waiting for a confirm
+//								status = 2; //waiting for a confirm
 								break;
 							}
 						}
@@ -118,9 +118,9 @@ public class Server{
 						handleConfirm(m,3); //expect only one message responding for JoinOutfitsMsg
 						
 						if(!newClientSender.isEmpty()){
-							handlePending();
-							status = 2;
-							break;
+							if(handlePending(2))
+//							status = 2;
+								break;
 						}
 						
 						if(waiting4confirm == 0){
@@ -130,9 +130,9 @@ public class Server{
 								if(regedClientSender.size()<lowerbound){
 									//waiting for more clients
 									if(!newClientSender.isEmpty()){
-										handlePending();
-										status = 2;
-										break;
+										if(handlePending(2))
+//										status = 2;
+											break;
 									}
 									status = 1; //waiting for a new client
 									break;
@@ -178,7 +178,7 @@ public class Server{
 								if(test_Cycle%automation_cycle == 0)
 								{
 									System.out.println("Time "+test_Cycle+":"+System.currentTimeMillis());
-									if((upperbound-lowerbound+1)*automation_cycle<test_Cycle)
+									if((upperbound-lowerbound+1)*automation_cycle==test_Cycle)
 										System.exit(0);
 								}
 								frame.automataPanel.setCycle(test_Cycle);
@@ -309,7 +309,7 @@ public class Server{
 						
 						
 						//handle adding
-						if(handlePending()){
+						if(handlePending(2)){
 							status = 2;
 							break;
 						}
@@ -322,9 +322,9 @@ public class Server{
 									if(regedClientSender.size()<lowerbound){
 										//waiting for more clients
 										if(!newClientSender.isEmpty()){
-											handlePending();
-											status = 2;
-											break;
+											if(handlePending(2))
+//											status = 2;
+												break;
 										}
 										status = 1; //waiting for a new client
 										break;
@@ -484,13 +484,13 @@ public class Server{
 	
 	//deal with the pending adding request
 	//manage the heap
-	protected boolean handlePending() throws IOException{
+	protected boolean handlePending(int st) throws IOException{
 		
 		//if in automatin test
 		if(AUTOMATION && TEST){
 			int num_pc = test_Cycle/automation_cycle + lowerbound;
 			
-			if(num_pc>=upperbound)
+			if(num_pc>upperbound)
 				return false;
 			else if(regedClientSender.size()==num_pc){
 				return false;
@@ -538,6 +538,7 @@ public class Server{
 			
 			infoPanel.setClientNum(regedClientSender.size());
 			
+			status = st;
 			return true;
 		}
 		return false;

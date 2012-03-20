@@ -8,7 +8,7 @@ import java.util.zip.Inflater;
 
 public class MessageCompressor {
 	
-	public static final int BufferSize = 20485760;
+	public static final int BufferSize = 104857600;
 
 	public static byte[] compress(final byte[] input)
 	{
