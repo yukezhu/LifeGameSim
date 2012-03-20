@@ -114,6 +114,10 @@ public class Client {
 						int msgType = msg.getMessageCode();
 						if(msgType == MessageCodeDictionary.REGULAR_NEXTCLOCK) {
 							sendBorderToNeighbours();
+							
+							if(DEBUG_MODE)
+								t_start = System.currentTimeMillis();
+							
 							if(isBorderMessageComplete()) {
 								computeAndReport();
 								if(isleaving)
@@ -123,9 +127,6 @@ public class Client {
 							}
 							else
 								status = 4;
-							
-							if(DEBUG_MODE)
-								t_start = System.currentTimeMillis();
 						}
 						else if (msgType == MessageCodeDictionary.JOIN_SPLIT)
 							handleSplit((JoinSplitMsg) msg);
