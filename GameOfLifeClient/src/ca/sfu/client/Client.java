@@ -32,6 +32,13 @@ public class Client {
 	private Comrade  server;
 	
 	private boolean TEST_MODE = true;
+	private boolean DEBUG_MODE = true;
+	
+	private long t_lastend;
+	private long t_start;
+	private long t_bdfnsh;
+	private long t_cmptfnsh;
+	
 	
 	private int myPort;
 	private String myIp;
@@ -116,6 +123,9 @@ public class Client {
 							}
 							else
 								status = 4;
+							
+							if(DEBUG_MODE)
+								t_start = System.currentTimeMillis();
 						}
 						else if (msgType == MessageCodeDictionary.JOIN_SPLIT)
 							handleSplit((JoinSplitMsg) msg);
@@ -711,7 +721,15 @@ public class Client {
 	}
 	
 	private void computeAndReport() throws IOException {
+		if(DEBUG_MODE)
+			t_bdfnsh = System.currentTimeMillis();
+		
 		BoardOperation.NextMoment(outfit.myBoard, up, down, left, right, upperLeft, upperRight, lowerLeft, lowerRight);
+		
+		if(DEBUG_MODE) {
+			t_cmptfnsh = System.currentTimeMillis();
+			System.out.println("T_RcvStart: " + (t_start - t_lastend)/1000 + "T_BdrCPLT: " + (t_bdfnsh - t_lastend)/1000 + "T_CMPT: " + (t_cmptfnsh - t_bdfnsh)/1000);
+		}
 		
 		if(!TEST_MODE) {
 //			whether to leave
@@ -730,6 +748,9 @@ public class Client {
 		}
 		outfit.nextClock ++;
 		borderCount = 0;
+		
+		if(DEBUG_MODE)
+			t_lastend = System.currentTimeMillis();
 	}
 	
 	private void sendMsgToId(Message msg, int id) throws IOException {
