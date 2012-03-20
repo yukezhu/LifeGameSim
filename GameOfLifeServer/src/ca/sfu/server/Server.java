@@ -41,9 +41,13 @@ public class Server{
 	private static final int LEAVE = 2;
 	
 	//for test!
-	private static final boolean TEST = false; //default: 2
-	private static final int lowerbound = 5; //default: 1
+	private static final boolean TEST = true; //default: false
+	private static final int lowerbound = 1; //default: 1
 	private static int test_Cycle = 0;
+	
+	private static final boolean AUTOMATION = true;
+	private static final int automation_cycle = 20;
+	private static final int upperbound = 2;
 	
 	/* UI widgets */
 	MainFrame frame = null;
@@ -56,13 +60,12 @@ public class Server{
 	
 	protected void startServer() throws IOException, ClassNotFoundException, InterruptedException
 	{
-		// UI		
+		// UI
 
-		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
-//		Board b = new Board(400, 400);
-//		b = BoardOperation.Randomize(b, 0.1);
+//		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
+		Board b = new Board(10000, 10000);
+		b = BoardOperation.Randomize(b, 0.1);
 
-		
 		System.out.println("UI");
 		frame = new MainFrame(b, 800, 800);
 		infoPanel = new InformationPanel();
@@ -170,7 +173,17 @@ public class Server{
 							if(!TEST)
 								frame.repaint();
 							
-							if(TEST){
+							if(AUTOMATION){
+								test_Cycle++;
+								if(test_Cycle%automation_cycle == 0)
+								{
+									System.out.println("Time "+test_Cycle+":"+System.currentTimeMillis());
+									if((upperbound-lowerbound+1)*automation_cycle<test_Cycle)
+										System.exit(0);
+								}
+								frame.automataPanel.setCycle(test_Cycle);
+							}
+							else if(TEST){
 								test_Cycle++;
 								if(test_Cycle == 10)
 								{
@@ -179,6 +192,7 @@ public class Server{
 								}
 								frame.automataPanel.setCycle(test_Cycle);
 							}
+							
 							
 							infoPanel.setCellNum(frame.automataPanel.getCell());
 							infoPanel.setLifeNum(frame.automataPanel.getAlive());
@@ -471,7 +485,17 @@ public class Server{
 	//deal with the pending adding request
 	//manage the heap
 	protected boolean handlePending() throws IOException{
-		//you can add at most N new clients in a cycle, N is the number of all clients existing before
+		
+		//if in automatin test
+		if(AUTOMATION && TEST){
+			int num_pc = test_Cycle/automation_cycle + lowerbound;
+			
+			if(num_pc>=upperbound)
+				return false;
+			else if(regedClientSender.size()==num_pc){
+				return false;
+			}
+		}
 		
 		if(!newClientSender.isEmpty()){
 			int cid = regedClientSender.size();
