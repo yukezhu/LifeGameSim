@@ -728,7 +728,7 @@ public class Client {
 		
 		if(DEBUG_MODE) {
 			t_cmptfnsh = System.currentTimeMillis();
-			System.out.println("T_RcvStart: " + (t_start - t_lastend)/1000.0 + "T_BdrCPLT: " + (t_bdfnsh - t_lastend)/1000.0 + "T_CMPT: " + (t_cmptfnsh - t_bdfnsh)/1000.0);
+			System.out.println("T_RcvStart: " + (t_start - t_lastend)/1000.0 + "  T_BdrCPLT: " + (t_bdfnsh - t_lastend)/1000.0 + "  T_CMPT: " + (t_cmptfnsh - t_bdfnsh)/1000.0);
 		}
 		
 		if(!TEST_MODE) {

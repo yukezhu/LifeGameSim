@@ -10,7 +10,7 @@ import java.nio.channels.SocketChannel;
 
 public class MessageSender{
 
-	private static final int BufferSize = 104857600;
+	private static final int BufferSize = 20485760;
 	private static byte [] tmpbuf = new byte[BufferSize];
 	
 	private Selector selector = null;
