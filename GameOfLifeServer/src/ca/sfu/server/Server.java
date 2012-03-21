@@ -86,6 +86,7 @@ public class Server{
 						
 						handlePending(2);
 						//send it the outfit
+						
 						regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
 						waiting4confirm++;
 						status = 2;
