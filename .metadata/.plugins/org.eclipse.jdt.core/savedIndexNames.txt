@@ -10,6 +10,5 @@ INDEX VERSION 1.126+/home/xieyaox/sfuhome/SFU Courses/CMPT431/LifeGameSim/.metad
 294074556.index
 2360273183.index
 1393721363.index
-2702735630.index
 925624498.index
 516116778.index
