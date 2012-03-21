@@ -127,14 +127,14 @@ public class MessageReceiver {
 		int length = 0;
 		int bytesRead = 0;
 		
-		long ts, te;
+//		long ts, te;
 		
 		buffer.clear();
 		bytesRead = clientChannel.read(buffer);
 		if(bytesRead > 0) {
 			
-			ts = System.currentTimeMillis();
-			System.out.println("start receiving,");
+//			ts = System.currentTimeMillis();
+//			System.out.println("start receiving,");
 			
 			
 			buffer.flip();
@@ -161,15 +161,15 @@ public class MessageReceiver {
 		
 		try {
 			
-			te = System.currentTimeMillis();
-			System.out.println("receiving finished. used time:" + (te - ts) / 1000.0 + "  message size is:" + length);
-			ts = te;
-			System.out.println("start receiving,");
+//			te = System.currentTimeMillis();
+//			System.out.println("receiving finished. used time:" + (te - ts) / 1000.0 + "  message size is:" + length);
+//			ts = te;
+//			System.out.println("start receiving,");
 			
 			byte[] arr = MessageCompressor.decompress(tmpbuf);
 			
-			te = System.currentTimeMillis();
-			System.out.println("receiving finished. used time:" + (te - ts) / 1000.0 + "  message size is:" + length);
+//			te = System.currentTimeMillis();
+//			System.out.println("receiving finished. used time:" + (te - ts) / 1000.0 + "  message size is:" + length);
 			
 			
 			ByteArrayInputStream bi = new ByteArrayInputStream(arr);
