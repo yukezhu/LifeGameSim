@@ -736,12 +736,12 @@ public class Client {
 		
 		if(!TEST_MODE) {
 //			whether to leave
-//			System.out.println("Do you want to leave?\n0: no    1: yes");
-//			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//			String res = br.readLine();
-//			if(Integer.parseInt(res) == 1)
-//				isleaving = true;
-//			else
+			System.out.println("Do you want to leave?\n0: no    1: yes");
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			String res = br.readLine();
+			if(Integer.parseInt(res) == 1)
+				isleaving = true;
+			else
 				isleaving = false;
 			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		}
