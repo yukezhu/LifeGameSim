@@ -16,4 +16,8 @@ public class Board implements Serializable{
 		bitmap = new boolean[h][w];
 	}
 	
+	public Board(){
+		
+	}
+	
 }

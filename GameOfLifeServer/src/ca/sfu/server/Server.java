@@ -65,7 +65,8 @@ public class Server{
 		// UI
 
 //		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
-		Board b = new Board(4000, 4000);
+		Board b = new Board(10000, 10000);
+
 		b = BoardOperation.Randomize(b, 0.1);
 
 		System.out.println("UI");
@@ -89,8 +90,14 @@ public class Server{
 						handlePending(2);
 						//send it the outfit
 						
-						if(ClientRandom)
-							regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, new Outfits(0,nextClock,0,0,null)));
+						Outfits o;
+						if(ClientRandom){
+							o = new Outfits(0,nextClock,0,0,new Board());
+							o.myBoard.bitmap = null;
+							o.myBoard.height = b.height;
+							o.myBoard.width = b.width;
+							regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, o));
+						}
 						else
 							regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
 						waiting4confirm++;
