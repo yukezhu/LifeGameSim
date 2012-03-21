@@ -47,7 +47,7 @@ public class Server{
 	
 	private static final boolean AUTOMATION = true;
 	private static final int automation_cycle = 20;
-	private static final int upperbound = 2;
+	private static final int upperbound = 8;
 	
 	private static final boolean ClientRandom = true;
 	
@@ -80,7 +80,7 @@ public class Server{
 			if(!Receiver.isEmpty()) {
 				m = Receiver.getNextMessageWithIp();
 				
-				System.out.println(status);
+//				System.out.println(status);
 				
 				switch(status) {
 					//waiting for first client
