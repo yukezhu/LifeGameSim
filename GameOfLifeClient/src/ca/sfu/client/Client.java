@@ -34,6 +34,7 @@ public class Client {
 	private Comrade  server;
 	
 	private boolean TEST_MODE = true;
+	private boolean TEST_MODE_NULLBITMAP = true;
 	private boolean DEBUG_MODE = true;
 	
 	private long t_lastend;
@@ -293,6 +294,12 @@ public class Client {
 		down = new boolean[outfit.myBoard.width];
 		left = new boolean[outfit.myBoard.height];
 		right = new boolean[outfit.myBoard.height];
+		
+		if(outfit.myBoard.bitmap == null) {
+			outfit.myBoard.bitmap = new boolean[outfit.myBoard.height][outfit.myBoard.width];
+			BoardOperation.Randomize(outfit.myBoard, 0.1);
+		}
+		
 		System.out.println("received outfit:");
 		outiftInfo(outfit);
 	}
@@ -696,6 +703,9 @@ public class Client {
 		down = new boolean[outfit.myBoard.width];
 		left = new boolean[outfit.myBoard.height];
 		right = new boolean[outfit.myBoard.height];
+		
+		if(TEST_MODE_NULLBITMAP)
+			pout.myBoard.bitmap = null;
 		
 		System.out.println("My outfit after spliting:");
 		outiftInfo(outfit);
