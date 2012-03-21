@@ -47,7 +47,7 @@ public class Server{
 	
 	private static final boolean AUTOMATION = true;
 	private static final int automation_cycle = 20;
-	private static final int upperbound = 8;
+	private static final int upperbound = 4;
 	
 	private static final boolean ClientRandom = true;
 	
@@ -65,7 +65,7 @@ public class Server{
 		// UI
 
 //		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
-		Board b = new Board(10000, 10000);
+		Board b = new Board(7000, 7000);
 
 		b = BoardOperation.Randomize(b, 0.1);
 
@@ -152,7 +152,7 @@ public class Server{
 								}
 							}
 							
-							System.out.println("sending start");
+//							System.out.println("sending start");
 							
 							infoPanel.setCycleNum(frame.automataPanel.getCycle());
 							
@@ -214,7 +214,7 @@ public class Server{
 							
 							phase = LEAVE;
 //							BoardOperation.Print(b);
-							System.out.println("repaint");
+//							System.out.println("repaint");
 						}
 						
 						if(phase == LEAVE){
@@ -347,7 +347,7 @@ public class Server{
 								var.sender.sendMsg(new RegularNextClockMsg(nextClock));
 								waiting4confirm++;
 							}
-							System.out.println("sending start");
+//							System.out.println("sending start");
 							
 							infoPanel.setCycleNum(frame.automataPanel.getCycle());
 							phase = COMPUTE;
