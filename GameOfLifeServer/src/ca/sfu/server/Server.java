@@ -49,6 +49,8 @@ public class Server{
 	private static final int automation_cycle = 20;
 	private static final int upperbound = 2;
 	
+	private static final boolean ClientRandom = true;
+	
 	/* UI widgets */
 	MainFrame frame = null;
 	InformationPanel infoPanel = null;
@@ -87,7 +89,10 @@ public class Server{
 						handlePending(2);
 						//send it the outfit
 						
-						regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
+						if(ClientRandom)
+							regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, new Outfits(0,nextClock,0,0,null)));
+						else
+							regedClientSender.get(0).sender.sendMsg(new RegularOutfitMsg(-1, -1, new Outfits(0,nextClock,0,0,b)));
 						waiting4confirm++;
 						status = 2;
 						break;
