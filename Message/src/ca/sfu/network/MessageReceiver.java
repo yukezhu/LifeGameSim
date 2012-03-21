@@ -122,10 +122,14 @@ public class MessageReceiver {
 	private void handleRead(SelectionKey key) throws IOException {
 		SocketChannel clientChannel = (SocketChannel)key.channel();
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
-				
+		
 		int cursor = 0;
 		int length = 0;
 		int bytesRead = 0;
+		
+		long ts, te;
+		ts = System.currentTimeMillis();
+		System.out.println("start receiving,");
 		
 		buffer.clear();
 		bytesRead = clientChannel.read(buffer);
@@ -153,7 +157,18 @@ public class MessageReceiver {
 		}
 		
 		try {
+			
+			te = System.currentTimeMillis();
+			System.out.println("receiving finished. used time:" + (te - ts) / 1000.0 + "  message size is:" + length);
+			ts = te;
+			System.out.println("start receiving,");
+			
 			byte[] arr = MessageCompressor.decompress(tmpbuf);
+			
+			te = System.currentTimeMillis();
+			System.out.println("receiving finished. used time:" + (te - ts) / 1000.0 + "  message size is:" + length);
+			
+			
 			ByteArrayInputStream bi = new ByteArrayInputStream(arr);
 			ObjectInputStream oi = new ObjectInputStream(bi);
 			Object msg = oi.readObject();
