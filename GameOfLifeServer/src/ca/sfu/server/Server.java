@@ -41,7 +41,7 @@ public class Server{
 	private static final int LEAVE = 2;
 	
 	//for test!
-	private static final boolean TEST = false; //default: false
+	private static final boolean TEST = true; //default: false
 	private static final int lowerbound = 1; //default: 1
 	private static int test_Cycle = 0;
 	
@@ -62,9 +62,9 @@ public class Server{
 	{
 		// UI
 
-		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
-//		Board b = new Board(10000, 10000);
-//		b = BoardOperation.Randomize(b, 0.1);
+//		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
+		Board b = new Board(2000, 2000);
+		b = BoardOperation.Randomize(b, 0.1);
 
 		System.out.println("UI");
 		frame = new MainFrame(b, 800, 800);

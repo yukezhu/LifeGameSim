@@ -14,7 +14,7 @@ import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
 
 public class MessageReceiver {
 	
-	private static final int BufferSize = 65536;
+	private static final int BufferSize = 365536;
 	private static final int QueueSize  = 1024;
 	private static final int TimeOut    = 3000;
 	
@@ -122,14 +122,21 @@ public class MessageReceiver {
 	private void handleRead(SelectionKey key) throws IOException {
 		SocketChannel clientChannel = (SocketChannel)key.channel();
 		ByteBuffer buffer = (ByteBuffer)key.attachment();
-				
+		
 		int cursor = 0;
 		int length = 0;
 		int bytesRead = 0;
 		
+		long ts, te;
+		
 		buffer.clear();
 		bytesRead = clientChannel.read(buffer);
 		if(bytesRead > 0) {
+			
+			ts = System.currentTimeMillis();
+			System.out.println("start receiving,");
+			
+			
 			buffer.flip();
 			length = buffer.getInt();
 			cursor = bytesRead - 4;
@@ -153,7 +160,18 @@ public class MessageReceiver {
 		}
 		
 		try {
+			
+			te = System.currentTimeMillis();
+			System.out.println("receiving finished. used time:" + (te - ts) / 1000.0 + "  message size is:" + length);
+			ts = te;
+			System.out.println("start receiving,");
+			
 			byte[] arr = MessageCompressor.decompress(tmpbuf);
+			
+			te = System.currentTimeMillis();
+			System.out.println("receiving finished. used time:" + (te - ts) / 1000.0 + "  message size is:" + length);
+			
+			
 			ByteArrayInputStream bi = new ByteArrayInputStream(arr);
 			ObjectInputStream oi = new ObjectInputStream(bi);
 			Object msg = oi.readObject();

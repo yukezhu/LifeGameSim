@@ -10,7 +10,7 @@ import java.nio.channels.SocketChannel;
 
 public class MessageSender{
 
-	private static final int BufferSize = 65536;
+	private static final int BufferSize = 365536;
 	private static byte [] tmpbuf = new byte[BufferSize];
 	
 	private Selector selector = null;
@@ -38,7 +38,16 @@ public class MessageSender{
 		out.writeObject(msg);
 		out.flush();
 		
+		long ts, te;
+		ts = System.currentTimeMillis();
+		System.out.println("start compressing,");
+		
 		byte [] arr = MessageCompressor.compress(bOut.toByteArray());
+		
+		te = System.currentTimeMillis();
+		System.out.println("compression finished. used time:" + (te - ts) / 1000.0 + "  after compression size is:" + arr.length);
+		
+		
 		int len = arr.length;
 		for(int i = 0; i < 4; i++)
 			tmpbuf[i] = (byte) (len >> ((3 - i) * 8));
@@ -48,10 +57,16 @@ public class MessageSender{
 		
 		ByteBuffer bb = ByteBuffer.wrap(tmpbuf, 0, len + 4);
 		
+		ts = System.currentTimeMillis();
+		System.out.println("start sending,");
 		int written = 0;
 		while(written < len + 4) {
 			written += socketChannel.write(bb);
-		}		
+		}
+		
+		te = System.currentTimeMillis();
+		System.out.println("sending finished. used time:" + (te - ts) / 1000.0);
+		
 		out.close();
 	}
 	
