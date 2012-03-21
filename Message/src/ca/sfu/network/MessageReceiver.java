@@ -128,12 +128,15 @@ public class MessageReceiver {
 		int bytesRead = 0;
 		
 		long ts, te;
-		ts = System.currentTimeMillis();
-		System.out.println("start receiving,");
 		
 		buffer.clear();
 		bytesRead = clientChannel.read(buffer);
 		if(bytesRead > 0) {
+			
+			ts = System.currentTimeMillis();
+			System.out.println("start receiving,");
+			
+			
 			buffer.flip();
 			length = buffer.getInt();
 			cursor = bytesRead - 4;
