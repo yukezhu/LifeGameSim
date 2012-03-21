@@ -47,30 +47,32 @@ public class MessageCompressor {
 
 	public static byte[] decompress(final byte[] compressedData)
 	{
-		// Create the decompressor and give it the data to compress
-		Inflater decompressor = new Inflater();
-		decompressor.setInput(compressedData);
-
-		// Create an expandable byte array to hold the decompressed data
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(compressedData.length);
-
-		// Decompress the data
-		byte[] buf = new byte[65536];
-		while (!decompressor.finished()) {
-			try {
-				int count = decompressor.inflate(buf);
-				bos.write(buf, 0, count);
-			} catch (DataFormatException e) {
-			}
-		}
-		try {
-			bos.close();
-		} catch (IOException e) {
-		}
-
-		// Get the decompressed data
-		byte[] decompressedData = bos.toByteArray();
-		return decompressedData;
+//		// Create the decompressor and give it the data to compress
+//		Inflater decompressor = new Inflater();
+//		decompressor.setInput(compressedData);
+//
+//		// Create an expandable byte array to hold the decompressed data
+//		ByteArrayOutputStream bos = new ByteArrayOutputStream(compressedData.length);
+//
+//		// Decompress the data
+//		byte[] buf = new byte[65536];
+//		while (!decompressor.finished()) {
+//			try {
+//				int count = decompressor.inflate(buf);
+//				bos.write(buf, 0, count);
+//			} catch (DataFormatException e) {
+//			}
+//		}
+//		try {
+//			bos.close();
+//		} catch (IOException e) {
+//		}
+//
+//		// Get the decompressed data
+//		byte[] decompressedData = bos.toByteArray();
+//		return decompressedData;
+		
+		return compressedData;
 	}
 
 }
