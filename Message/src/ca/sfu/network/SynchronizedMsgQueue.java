@@ -28,15 +28,15 @@ public class SynchronizedMsgQueue {
 			size--;
 			if (head == elements.length)
 				head = 0;
-			notifyAll();
+//			notifyAll();
 			return msg;
 		}
 		return null;
 	}
 
 	public void push(Object msg, String ipAddress) throws InterruptedException {
-		while (size == elements.length)
-			wait();
+//		while (size == elements.length)
+//			wait();
 		elements[tail] = new MessageWithIp(msg, ipAddress);
 		tail ++;
 	    size ++;
