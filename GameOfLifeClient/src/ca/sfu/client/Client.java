@@ -93,7 +93,10 @@ public class Client {
 		status = 1;
 		while(true){
 			if(!Receiver.isEmpty()){
+				System.out.println("\nBefore fetching a message");
+				calcPower(10000000);
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
+				calcPower(10000000);
 				if(outfit != null)
 					System.out.println("status:" + status + "  messgetype:"+ msg.getMessageCode() + "  from: " + msg.getClientId());
 				calcPower(10000000);
@@ -117,8 +120,6 @@ public class Client {
 					case 3:
 						int msgType = msg.getMessageCode();
 						if(msgType == MessageCodeDictionary.REGULAR_NEXTCLOCK) {
-							System.out.println("Before sending border");
-							
 							sendBorderToNeighbours();
 							
 							if(DEBUG_MODE)
