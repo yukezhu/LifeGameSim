@@ -221,8 +221,13 @@ public class Client {
 		int msgType = msg.getMessageCode();
 		if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 			handleBorderMessage((RegularBorderMsg) msg);
-		else if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
+		else if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR) {
+			System.out.println("Before update neighour");
+			calcPower(1000000);
 			handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
+			System.out.println("Before update neighour");
+			calcPower(1000000);
+		}
 		else if (msgType == MessageCodeDictionary.MERGE_LAST) {
 			passOutfitsToPair((MergeLastMsg)msg);
 			status = 7;
@@ -1029,6 +1034,19 @@ public class Client {
 			}
 		}
 		
+	}
+	
+	public void calcPower(int n)
+	{
+		int cnt = 1;
+		long st = System.currentTimeMillis();
+		for(int i=0; i<n; i++)
+		{
+			if (cnt % 7 == 3) cnt += 2;
+			else cnt += 9;
+		}
+		long ed = System.currentTimeMillis();
+		System.out.println("calculate power:" + 1.0/(ed-st));
 	}
 	
 }
