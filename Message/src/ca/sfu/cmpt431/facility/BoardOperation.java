@@ -32,15 +32,7 @@ public class BoardOperation {
 		
 		IllegalArgumentException exception = new java.lang.IllegalArgumentException();
 		boolean leftBorder = false, rightBorder = false, upBorder = false, downBorder = false;
-//		int cnt = 0;
-//		for(int k=0; k<10000; k++)
-//			for(int i=0; i<b.height; i++)
-//				for(int j=0; j<b.width; j++)
-//					if(cnt > 1732)
-//						cnt = cnt + 2;
-//					else 
-//						cnt = cnt / 2;
-//		System.out.println(cnt);
+		
 		if(left == null)
 		{
 			leftBorder = true;
@@ -103,6 +95,9 @@ public class BoardOperation {
 		prebitmap[0][width+1] = upperRight;
 		prebitmap[height+1][0] = lowerLeft;
 		prebitmap[height+1][width+1] = lowerRight;
+		
+		long mid = System.currentTimeMillis();
+		System.out.println("Handle prebitmap:" + (mid - st)/1000.0);
 
 		for(int i=1; i<=height; i++)
 			for(int j=1; j<=width; j++)
@@ -131,6 +126,7 @@ public class BoardOperation {
 			}
 		
 		long ed = System.currentTimeMillis();
+		System.out.println("Calculate next moment:" + (ed - mid)/1000.0);
 		System.out.println("finish computing, using time:" + (ed - st)/1000.0);
 		
 		return b;
