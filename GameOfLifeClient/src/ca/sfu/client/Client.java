@@ -118,7 +118,7 @@ public class Client {
 					case 3:
 						int msgType = msg.getMessageCode();
 						if(msgType == MessageCodeDictionary.REGULAR_NEXTCLOCK) {
-//							sendBorderToNeighbours();
+							sendBorderToNeighbours();
 							
 							if(DEBUG_MODE)
 								t_start = System.currentTimeMillis();
@@ -260,14 +260,14 @@ public class Client {
 			outfit.pair = new Comrade(MessageCodeDictionary.ID_SERVER, SERVER_PORT, SERVER_IP, server.sender);
 		else
 			outfit.pair.sender = new MessageSender(outfit.pair.ip, outfit.pair.port);
-//		for(Neighbour nei: outfit.neighbour) {
-//			nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
-//			ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
-//			nei.comrade.sender.sendMsg(new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp, msg.getClientId()));
-//			neiUpdCount ++;
-//			if(nei.comrade.id == outfit.pair.id)
-//				nei.comrade.sender = outfit.pair.sender;
-//		}
+		for(Neighbour nei: outfit.neighbour) {
+			nei.comrade.sender = new MessageSender(nei.comrade.ip, nei.comrade.port);
+			ArrayList<Integer> mypos  = (ArrayList<Integer>) ClientHelper.ClientNeighbor(nei.position);
+			nei.comrade.sender.sendMsg(new RegularUpdateNeighbourMsg(outfit.myId, mypos, myPort, myIp, msg.getClientId()));
+			neiUpdCount ++;
+			if(nei.comrade.id == outfit.pair.id)
+				nei.comrade.sender = outfit.pair.sender;
+		}
 		
 		if(RANDOM && outfit.myBoard.bitmap == null)
 			outfit.myBoard.bitmap = new boolean[outfit.myBoard.height][outfit.myBoard.width];
@@ -705,8 +705,7 @@ public class Client {
 	private boolean isBorderMessageComplete() {
 		if(borderCount == outfit.neighbour.size())
 			return true;
-		return true;
-//		return false;
+		return false;
 	}
 	
 	private void computeAndReport() throws IOException {
