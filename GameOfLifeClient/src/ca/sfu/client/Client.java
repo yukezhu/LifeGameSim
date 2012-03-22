@@ -435,6 +435,10 @@ public class Client {
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
+		
+		System.out.println("AAA");
+		calcPower(10000000);
+		
 		boolean isOldFriend = false;
 		
 		for(int i = 0; i < outfit.neighbour.size(); i++) {
@@ -469,11 +473,17 @@ public class Client {
 			}
 		}
 		
+		System.out.println("BBB");
+		calcPower(10000000);
+		
 		if(!isOldFriend) {
 			Neighbour newnei = new Neighbour(msg.pos, 
 					new Comrade(msg.getClientId(), msg.port, msg.ip, new MessageSender(msg.ip, msg.port)));
 			outfit.neighbour.add(newnei);
 		}
+		
+		System.out.println("CCC");
+		calcPower(10000000);
 
 		System.out.println("After neighbour update");
 		outiftInfo(outfit);
@@ -493,7 +503,13 @@ public class Client {
 			outfit.pair = findNeiWithId(outfit, msg.getClientId()).comrade;
 		}
 		
+		System.out.println("DDD");
+		calcPower(10000000);
+		
 		sendMsgToId(myConfirmMessage, msg.getClientId());
+		
+		System.out.println("EEE");
+		calcPower(10000000);
 	}
 	
 	private void handleSplit(JoinSplitMsg msg) throws IOException {
