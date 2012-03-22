@@ -79,8 +79,8 @@ public class MessageReceiver {
 				}
 				Iterator<SelectionKey> keyIter = selector.selectedKeys().iterator();
 				while(keyIter.hasNext()){
-					System.out.println("\nIn 2nd Thread, before handling message");
-					calcPower(10000000);
+//					System.out.println("\nIn 2nd Thread, before handling message");
+//					calcPower(10000000);
 					
 					SelectionKey key=keyIter.next();
 					keyIter.remove();
@@ -96,8 +96,8 @@ public class MessageReceiver {
 						e.printStackTrace();
 					}
 					
-					System.out.println("After handling message");
-					calcPower(10000000);
+//					System.out.println("After handling message");
+//					calcPower(10000000);
 				}
 			}
 		}
