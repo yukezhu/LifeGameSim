@@ -223,10 +223,10 @@ public class Client {
 			handleBorderMessage((RegularBorderMsg) msg);
 		else if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR) {
 			System.out.println("Before update neighour");
-			calcPower(1000000);
+			calcPower(10000000);
 			handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
 			System.out.println("Before update neighour");
-			calcPower(1000000);
+			calcPower(10000000);
 		}
 		else if (msgType == MessageCodeDictionary.MERGE_LAST) {
 			passOutfitsToPair((MergeLastMsg)msg);
@@ -1046,7 +1046,7 @@ public class Client {
 			else cnt += 9;
 		}
 		long ed = System.currentTimeMillis();
-		System.out.println("calculate power:" + 1.0/(ed-st));
+		System.out.println("calculate power:" + 1000.0/(ed-st));
 	}
 	
 }
