@@ -13,30 +13,30 @@ public class SynchronizedMsgQueue {
 	    size = 0;
 	}
 	
-	public boolean isEmpty() {
+	public synchronized boolean isEmpty() {
 		return size == 0;
 	}
 	
-	public int getSize() {
+	public synchronized int getSize() {
 		return size;
 	}
 
-	public Object pop() throws InterruptedException {
+	public synchronized Object pop() throws InterruptedException {
 		if (size > 0) {
 			Object msg = (Object) elements[head];
 			head++;
 			size--;
 			if (head == elements.length)
 				head = 0;
-//			notifyAll();
+			notifyAll();
 			return msg;
 		}
 		return null;
 	}
 
-	public void push(Object msg, String ipAddress) throws InterruptedException {
-//		while (size == elements.length)
-//			wait();
+	public synchronized void push(Object msg, String ipAddress) throws InterruptedException {
+		while (size == elements.length)
+			wait();
 		elements[tail] = new MessageWithIp(msg, ipAddress);
 		tail ++;
 	    size ++;

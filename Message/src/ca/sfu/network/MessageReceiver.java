@@ -103,6 +103,9 @@ public class MessageReceiver {
 	}
 	
 	public void close() {
+		System.out.println("\nBefore closing a friend");
+		calcPower(10000000);
+		
 		try {
 			selector.close();
 		} catch (IOException e) {
@@ -111,12 +114,23 @@ public class MessageReceiver {
 			listenerChannel.close();
 		} catch (Exception e) {
 		}
+		
+		System.out.println("After closing the friend");
+		calcPower(10000000);
 	}
 	
 	private void handleAccept(SelectionKey key) throws IOException {
+		
+		System.out.println("\nBefore accepting a friend");
+		calcPower(10000000);
+		
 		SocketChannel clientChannel=((ServerSocketChannel)key.channel()).accept();
 		clientChannel.configureBlocking(false);
 		clientChannel.register(key.selector(), SelectionKey.OP_READ, ByteBuffer.allocate(BufferSize));
+		
+		System.out.println("After accept the friend");
+		calcPower(10000000);
+		
 	}
   
 	private void handleRead(SelectionKey key) throws IOException {
@@ -181,5 +195,18 @@ public class MessageReceiver {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void calcPower(int n)
+	{
+		int cnt = 1;
+		long st = System.currentTimeMillis();
+		for(int i=0; i<n; i++)
+		{
+			if (cnt % 7 == 3) cnt += 2;
+			else cnt += 9;
+		}
+		long ed = System.currentTimeMillis();
+		System.out.println("calculate power:" + 1000.0/(ed-st));
 	}
 }
