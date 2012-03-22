@@ -405,7 +405,6 @@ public class Server{
 		
 		if(newClientSender.size()!=0){
 			//ask a new client to replace it immediately
-			//TODO
 			regedClientSender.get(findClient(cid)).sender.sendMsg(new LeaveReceiverMsg(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp));
 			regedClientSender.get(findClient(cid)).sender.close();
 			regedClientSender.set(findClient(cid), new Comrade(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));

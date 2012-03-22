@@ -83,7 +83,7 @@ public class MainFrame extends JFrame {
 					}
 				} else 
 				{
-//					client.quit(); /* Add disconnect function here */ 
+					client.quit(); /* Add disconnect function here */ 
 					connectBtn.setText("Connect");
 				}
 				connected = !connected;
