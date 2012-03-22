@@ -34,8 +34,8 @@ public class Client {
 	private Comrade  server;
 	
 	private boolean TEST_MODE = false;
-	private boolean TEST_MODE_NULLBITMAP = false;
 	private boolean DEBUG_MODE = false;
+	private boolean RANDOM = false;
 	
 	private long t_lastend;
 	private long t_start;
@@ -290,16 +290,15 @@ public class Client {
 			if(nei.comrade.id == outfit.pair.id)
 				nei.comrade.sender = outfit.pair.sender;
 		}
+		
+		if(RANDOM && outfit.myBoard.bitmap == null)
+			outfit.myBoard.bitmap = new boolean[outfit.myBoard.height][outfit.myBoard.width];
+		
+		
 		up = new boolean[outfit.myBoard.width];
 		down = new boolean[outfit.myBoard.width];
 		left = new boolean[outfit.myBoard.height];
 		right = new boolean[outfit.myBoard.height];
-		
-		if(outfit.myBoard.bitmap == null) {
-			outfit.myBoard.bitmap = new boolean[outfit.myBoard.height][outfit.myBoard.width];
-			BoardOperation.Randomize(outfit.myBoard, 0.1);
-		}
-		
 		System.out.println("received outfit:");
 		outiftInfo(outfit);
 	}
@@ -502,7 +501,21 @@ public class Client {
 		}
 		
 		System.out.println("After neighbour update");
-		outiftInfo(outfit);
+		System.out.println("Neighbour size: " + outfit.neighbour.size());
+		int cnt = 1;
+		for(Neighbour nei: outfit.neighbour) {
+			System.out.print("Neighbour #" + cnt++ + "  id " + nei.comrade.id + "  position:");
+			for(Integer in: nei.position)
+				System.out.print(" " + in);
+			System.out.println("");
+		}
+		
+		if(msg.mypair == outfit.pair.id) {
+			System.out.println("Pair updated to " + msg.getClientId());
+			if(!hasNeighbour(outfit, outfit.pair.id))
+				outfit.pair.sender.close();
+			outfit.pair = findNeiWithId(outfit, msg.getClientId()).comrade;
+		}
 		
 		sendMsgToId(myConfirmMessage, msg.getClientId());
 	}
@@ -690,7 +703,7 @@ public class Client {
 		left = new boolean[outfit.myBoard.height];
 		right = new boolean[outfit.myBoard.height];
 		
-		if(TEST_MODE_NULLBITMAP)
+		if(RANDOM)
 			pout.myBoard.bitmap = null;
 		
 		System.out.println("My outfit after spliting:");
