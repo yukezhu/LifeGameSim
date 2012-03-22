@@ -133,8 +133,13 @@ public class Client {
 						}
 						else if (msgType == MessageCodeDictionary.JOIN_SPLIT)
 							handleSplit((JoinSplitMsg) msg);
-						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
+						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE) {
+							System.out.println("Before receiver border");
+							calcPower(10000000);
 							handleBorderMessage((RegularBorderMsg) msg);
+							System.out.println("After receiver border");
+							calcPower(10000000);
+						}
 						else 
 							handleAbnomorlSituation(msg);
 							
@@ -225,7 +230,7 @@ public class Client {
 			System.out.println("Before update neighour");
 			calcPower(10000000);
 			handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
-			System.out.println("Before update neighour");
+			System.out.println("After update neighour");
 			calcPower(10000000);
 		}
 		else if (msgType == MessageCodeDictionary.MERGE_LAST) {
