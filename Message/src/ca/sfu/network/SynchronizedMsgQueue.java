@@ -13,15 +13,15 @@ public class SynchronizedMsgQueue {
 	    size = 0;
 	}
 	
-	public synchronized boolean isEmpty() {
+	public boolean isEmpty() {
 		return size == 0;
 	}
 	
-	public synchronized int getSize() {
+	public int getSize() {
 		return size;
 	}
 
-	public synchronized Object pop() throws InterruptedException {
+	public Object pop() throws InterruptedException {
 		if (size > 0) {
 			Object msg = (Object) elements[head];
 			head++;
@@ -34,7 +34,7 @@ public class SynchronizedMsgQueue {
 		return null;
 	}
 
-	public synchronized void push(Object msg, String ipAddress) throws InterruptedException {
+	public void push(Object msg, String ipAddress) throws InterruptedException {
 		while (size == elements.length)
 			wait();
 		elements[tail] = new MessageWithIp(msg, ipAddress);
