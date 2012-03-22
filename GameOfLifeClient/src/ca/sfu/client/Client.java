@@ -474,16 +474,9 @@ public class Client {
 					new Comrade(msg.getClientId(), msg.port, msg.ip, new MessageSender(msg.ip, msg.port)));
 			outfit.neighbour.add(newnei);
 		}
-		
-		System.out.println("AAA");
-		calcPower(10000000);
 
-//		System.out.println("After neighbour update");
-//		outiftInfo(outfit);
-		
-		System.out.println("BBB");
-		calcPower(10000000);
-		
+		System.out.println("After neighbour update");
+		outiftInfo(outfit);
 //		System.out.println("Neighbour size: " + outfit.neighbour.size());
 //		int cnt = 1;
 //		for(Neighbour nei: outfit.neighbour) {
@@ -493,23 +486,12 @@ public class Client {
 //			System.out.println("");
 //		}
 		
-//		if(msg.mypair == outfit.pair.id) {
-//			System.out.println("Pair updated to " + msg.getClientId());
-//			
-//			System.out.println("CCC");
-//			calcPower(10000000);
-//			
-//			if(!hasNeighbour(outfit, outfit.pair.id))
-//				outfit.pair.sender.close();
-//			
-//			System.out.println("DDD");
-//			calcPower(10000000);
-//			
-//			outfit.pair = findNeiWithId(outfit, msg.getClientId()).comrade;
-//		}
-		
-		System.out.println("EEE");
-		calcPower(10000000);
+		if(msg.mypair == outfit.pair.id) {
+			System.out.println("Pair updated to " + msg.getClientId());
+			if(!hasNeighbour(outfit, outfit.pair.id))
+				outfit.pair.sender.close();
+			outfit.pair = findNeiWithId(outfit, msg.getClientId()).comrade;
+		}
 		
 		sendMsgToId(myConfirmMessage, msg.getClientId());
 	}
