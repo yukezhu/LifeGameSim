@@ -499,16 +499,17 @@ public class Client {
 					new Comrade(msg.getClientId(), msg.port, msg.ip, new MessageSender(msg.ip, msg.port)));
 			outfit.neighbour.add(newnei);
 		}
-		
+
 		System.out.println("After neighbour update");
-		System.out.println("Neighbour size: " + outfit.neighbour.size());
-		int cnt = 1;
-		for(Neighbour nei: outfit.neighbour) {
-			System.out.print("Neighbour #" + cnt++ + "  id " + nei.comrade.id + "  position:");
-			for(Integer in: nei.position)
-				System.out.print(" " + in);
-			System.out.println("");
-		}
+		outiftInfo(outfit);
+//		System.out.println("Neighbour size: " + outfit.neighbour.size());
+//		int cnt = 1;
+//		for(Neighbour nei: outfit.neighbour) {
+//			System.out.print("Neighbour #" + cnt++ + "  id " + nei.comrade.id + "  position:");
+//			for(Integer in: nei.position)
+//				System.out.print(" " + in);
+//			System.out.println("");
+//		}
 		
 		if(msg.mypair == outfit.pair.id) {
 			System.out.println("Pair updated to " + msg.getClientId());
