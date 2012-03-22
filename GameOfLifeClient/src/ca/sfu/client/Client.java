@@ -33,9 +33,9 @@ public class Client {
 	private String SERVER_IP;
 	private Comrade  server;
 	
-	private boolean TEST_MODE = false;
-	private boolean DEBUG_MODE = false;
-	private boolean RANDOM = false;
+	private boolean TEST_MODE = true;
+	private boolean DEBUG_MODE = true;
+	private boolean RANDOM = true;
 	
 	private long t_lastend;
 	private long t_start;
