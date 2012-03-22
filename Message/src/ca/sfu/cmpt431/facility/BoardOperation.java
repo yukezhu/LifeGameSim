@@ -27,8 +27,8 @@ public class BoardOperation {
 	 */
 	public static Board NextMoment(Board b, boolean[] up, boolean[] down, boolean[] left, boolean[] right, boolean upperLeft, boolean upperRight, boolean lowerLeft, boolean lowerRight) throws IllegalArgumentException
 	{
-		System.out.println("start computing, height:" + b.height + "  width:" + b.width);
-		long st = System.currentTimeMillis();
+//		System.out.println("start computing, height:" + b.height + "  width:" + b.width);
+//		long st = System.currentTimeMillis();
 		
 		IllegalArgumentException exception = new java.lang.IllegalArgumentException();
 		boolean leftBorder = false, rightBorder = false, upBorder = false, downBorder = false;
@@ -122,8 +122,8 @@ public class BoardOperation {
 				}
 			}
 		
-		long ed = System.currentTimeMillis();
-		System.out.println("finish computing, using time:" + (ed - st)/1000.0);
+//		long ed = System.currentTimeMillis();
+//		System.out.println("finish computing, using time:" + (ed - st)/1000.0);
 		
 		return b;
 	}
