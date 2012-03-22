@@ -41,15 +41,15 @@ public class Server{
 	private static final int LEAVE = 2;
 	
 	//for test!
-	private static final boolean TEST = true; //default: false
+	private static final boolean TEST = false; //default: false
 	private static final int lowerbound = 1; //default: 1
 	private static int test_Cycle = 0;
 	
-	private static final boolean AUTOMATION = true;
+	private static final boolean AUTOMATION = false;
 	private static final int automation_cycle = 20;
-	private static final int upperbound = 4;
+	private static final int upperbound = 16;
 	
-	private static final boolean ClientRandom = true;
+	private static final boolean ClientRandom = false;
 	
 	/* UI widgets */
 	MainFrame frame = null;
