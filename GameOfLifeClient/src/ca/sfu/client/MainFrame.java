@@ -19,7 +19,7 @@ public class MainFrame extends JFrame {
 	private Client client = new Client();
 	Thread clientThread;
 
-	private static final String SERVER_IP = "142.58.35.95";
+	private static final String SERVER_IP = "142.58.35.59";
 	private static final String CLIENT_IP = "";
 
 	/* New UI widgets */

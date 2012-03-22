@@ -31,9 +31,9 @@ public class Client {
 	private String SERVER_IP;
 	private Comrade  server;
 	
-	private boolean TEST_MODE = false;
-	private boolean TEST_MODE_NULLBITMAP = false;
-	private boolean DEBUG_MODE = false;
+	private boolean TEST_MODE = true;
+	private boolean TEST_MODE_NULLBITMAP = true;
+	private boolean DEBUG_MODE = true;
 	
 	private long t_lastend;
 	private long t_start;
