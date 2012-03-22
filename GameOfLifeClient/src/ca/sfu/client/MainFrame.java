@@ -94,7 +94,7 @@ public class MainFrame extends JFrame {
 				} else 
 				{
 //					client.quit(); /* Add disconnect function here */ 
-//					clientThread.interrupt();
+					clientThread.interrupt();
 					connectBtn.setText("Connect");
 				}
 				connected = !connected;
@@ -113,6 +113,12 @@ public class MainFrame extends JFrame {
 		setSize(300, 180);
 		setTitle("Client");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);    
-	}  
+	}
+	
+	public static void main(String[] argv)
+	{
+		MainFrame frame = new MainFrame();
+		frame.setVisible(true);
+	}
 
 }
