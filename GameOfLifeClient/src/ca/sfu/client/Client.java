@@ -31,9 +31,9 @@ public class Client {
 	private String SERVER_IP;
 	private Comrade  server;
 	
-	private boolean TEST_MODE = true;
-	private boolean TEST_MODE_NULLBITMAP = true;
-	private boolean DEBUG_MODE = true;
+	private boolean TEST_MODE = false;
+	private boolean TEST_MODE_NULLBITMAP = false;
+	private boolean DEBUG_MODE = false;
 	
 	private long t_lastend;
 	private long t_start;
@@ -240,7 +240,7 @@ public class Client {
 				finishMerge();
 		}
 		else
-			System.out.println("Received unexpectd message.");
+			System.out.println("Received unexpectd message. type:" + msg.getMessageCode());
 	}
 	
 	private void handleleaveReceiverMsg(LeaveReceiverMsg msg) throws IOException {
@@ -268,6 +268,9 @@ public class Client {
 		}
 		else
 			outfit.pair = null;
+
+		System.out.println("After merging:");
+		outiftInfo(outfit);
 	}
 	
 	private void passOutfitsToPair(MergeLastMsg msg) throws IOException {
@@ -458,9 +461,6 @@ public class Client {
 		down = new boolean[outfit.myBoard.width];
 		left = new boolean[outfit.myBoard.height];
 		right = new boolean[outfit.myBoard.height];
-		
-		System.out.println("After merging:");
-		outiftInfo(outfit);
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
@@ -732,14 +732,13 @@ public class Client {
 			t_cmptfnsh = System.currentTimeMillis();
 			System.out.println("T_RcvStart: " + (t_start - t_lastend)/1000.0 + "  T_BdrCPLT: " + (t_bdfnsh - t_lastend)/1000.0 + "  T_CMPT: " + (t_cmptfnsh - t_bdfnsh)/1000.0);
 		}
+		if(clickQuit)
+			isleaving = true;
 		
 		if(!TEST_MODE)
 			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		else
 			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, null));
-		
-		if(clickQuit)
-			isleaving = true;
 		
 		outfit.nextClock ++;
 		borderCount = 0;
