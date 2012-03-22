@@ -705,7 +705,8 @@ public class Client {
 	private boolean isBorderMessageComplete() {
 		if(borderCount == outfit.neighbour.size())
 			return true;
-		return false;
+		return true;
+//		return false;
 	}
 	
 	private void computeAndReport() throws IOException {
