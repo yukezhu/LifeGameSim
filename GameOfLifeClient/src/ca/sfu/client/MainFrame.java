@@ -93,7 +93,7 @@ public class MainFrame extends JFrame {
 
 				} else 
 				{
-					client.quit(); /* Add disconnect function here */ 
+//					client.quit(); /* Add disconnect function here */ 
 //					clientThread.interrupt();
 					connectBtn.setText("Connect");
 				}
