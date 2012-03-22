@@ -77,8 +77,6 @@ public class BoardOperation {
 		int height = b.height, width = b.width;
 		boolean[][] prebitmap = new boolean[height+2][width+2]; 
 		final int[][] move = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
-
-		System.out.println("height: " + height + " width: " + width);
 		
 		for(int i=1; i <= height; i++)
 			for(int j=1; j <= width; j++)
@@ -97,9 +95,6 @@ public class BoardOperation {
 		prebitmap[0][width+1] = upperRight;
 		prebitmap[height+1][0] = lowerLeft;
 		prebitmap[height+1][width+1] = lowerRight;
-		
-		long mid = System.currentTimeMillis();
-		System.out.println("Handle prebitmap:" + (mid - st)/1000.0);
 
 		for(int i=1; i<=height; i++)
 			for(int j=1; j<=width; j++)
@@ -128,7 +123,6 @@ public class BoardOperation {
 			}
 		
 		long ed = System.currentTimeMillis();
-		System.out.println("Calculate next moment:" + (ed - mid)/1000.0);
 		System.out.println("finish computing, using time:" + (ed - st)/1000.0);
 		
 		return b;
