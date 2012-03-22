@@ -116,7 +116,11 @@ public class Client {
 					case 3:
 						int msgType = msg.getMessageCode();
 						if(msgType == MessageCodeDictionary.REGULAR_NEXTCLOCK) {
+							System.out.println("Before sending border");
+							calcPower(10000000);
 							sendBorderToNeighbours();
+							System.out.println("After receiver border");
+							calcPower(10000000);
 							
 							if(DEBUG_MODE)
 								t_start = System.currentTimeMillis();
@@ -133,13 +137,8 @@ public class Client {
 						}
 						else if (msgType == MessageCodeDictionary.JOIN_SPLIT)
 							handleSplit((JoinSplitMsg) msg);
-						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE) {
-							System.out.println("Before receiver border");
-							calcPower(10000000);
+						else if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 							handleBorderMessage((RegularBorderMsg) msg);
-							System.out.println("After receiver border");
-							calcPower(10000000);
-						}
 						else 
 							handleAbnomorlSituation(msg);
 							
