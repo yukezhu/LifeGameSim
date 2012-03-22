@@ -493,20 +493,20 @@ public class Client {
 //			System.out.println("");
 //		}
 		
-		if(msg.mypair == outfit.pair.id) {
-			System.out.println("Pair updated to " + msg.getClientId());
-			
-			System.out.println("CCC");
-			calcPower(10000000);
-			
-			if(!hasNeighbour(outfit, outfit.pair.id))
-				outfit.pair.sender.close();
-			
-			System.out.println("DDD");
-			calcPower(10000000);
-			
-			outfit.pair = findNeiWithId(outfit, msg.getClientId()).comrade;
-		}
+//		if(msg.mypair == outfit.pair.id) {
+//			System.out.println("Pair updated to " + msg.getClientId());
+//			
+//			System.out.println("CCC");
+//			calcPower(10000000);
+//			
+//			if(!hasNeighbour(outfit, outfit.pair.id))
+//				outfit.pair.sender.close();
+//			
+//			System.out.println("DDD");
+//			calcPower(10000000);
+//			
+//			outfit.pair = findNeiWithId(outfit, msg.getClientId()).comrade;
+//		}
 		
 		System.out.println("EEE");
 		calcPower(10000000);
