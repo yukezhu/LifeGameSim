@@ -94,8 +94,9 @@ public class Client {
 		while(true){
 			if(!Receiver.isEmpty()){
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
-//				if(outfit != null)
-//					System.out.println("time:" + outfit.nextClock + "  status:" + status + "  messgetype:"+ msg.getMessageCode() + "  from: " + msg.getClientId());
+				if(outfit != null)
+					System.out.println("status:" + status + "  messgetype:"+ msg.getMessageCode() + "  from: " + msg.getClientId());
+				calcPower(10000000);
 				switch(status) {
 					case 1:
 						repairOutfit((RegularOutfitMsg) msg);
@@ -117,10 +118,8 @@ public class Client {
 						int msgType = msg.getMessageCode();
 						if(msgType == MessageCodeDictionary.REGULAR_NEXTCLOCK) {
 							System.out.println("Before sending border");
-							calcPower(10000000);
+							
 							sendBorderToNeighbours();
-							System.out.println("After receiver border");
-							calcPower(10000000);
 							
 							if(DEBUG_MODE)
 								t_start = System.currentTimeMillis();
@@ -141,22 +140,7 @@ public class Client {
 							handleBorderMessage((RegularBorderMsg) msg);
 						else 
 							handleAbnomorlSituation(msg);
-							
-//						if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
-//							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
-//						else if (msgType == MessageCodeDictionary.MERGE_LAST) {
-//							passOutfitsToPair((MergeLastMsg)msg);
-//							status = 7;
-//						}
-//						else if (msgType == MessageCodeDictionary.MERGE_OUTFIT) {
-//							MergeOutfit mmsg = (MergeOutfit)msg;
-//							handleMerge(mmsg.lastfit, mmsg.yourPair);
-//							tmpmsg = mmsg;
-//							if(neiUpdCount > 0)
-//								status = 8;
-//							else
-//								finishMerge();
-//						}
+						
 						break;
 					case 4:
 						handleBorderMessage((RegularBorderMsg) msg);
@@ -175,23 +159,7 @@ public class Client {
 						}
 						else 
 							handleAbnomorlSituation(msg);
-//						if (msgTp == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR)
-//							handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
-//						else if (msgTp == MessageCodeDictionary.MERGE_LAST) {
-//							passOutfitsToPair((MergeLastMsg)msg);
-//							status = 7;
-//						}
-//						else if (msgTp == MessageCodeDictionary.MERGE_OUTFIT) {
-//							MergeOutfit mmsg = (MergeOutfit)msg;
-//							handleMerge(mmsg.lastfit, mmsg.yourPair);
-//							tmpmsg = mmsg;
-//							if(neiUpdCount > 0)
-//								status = 8;
-//							else
-//								finishMerge();
-//						}
-//						else
-//							System.out.println("Received unexpectd message.");
+						
 						break;
 					case 7:
 						if(msg.getMessageCode() != MessageCodeDictionary.REGULAR_CONFIRM)
@@ -217,6 +185,9 @@ public class Client {
 						System.out.println("Received unexpectd message.");
 						break;
 				}
+				
+				System.out.println("After handling the message");
+				calcPower(10000000);
 			}
 		}
 	}
@@ -226,11 +197,7 @@ public class Client {
 		if (msgType == MessageCodeDictionary.REGULAR_BORDER_EXCHANGE)
 			handleBorderMessage((RegularBorderMsg) msg);
 		else if (msgType == MessageCodeDictionary.REGULAR_UPDATE_NEIGHBOUR) {
-			System.out.println("Before update neighour");
-			calcPower(10000000);
 			handleNeighbourUpdate((RegularUpdateNeighbourMsg)msg);
-			System.out.println("After update neighour");
-			calcPower(10000000);
 		}
 		else if (msgType == MessageCodeDictionary.MERGE_LAST) {
 			passOutfitsToPair((MergeLastMsg)msg);
