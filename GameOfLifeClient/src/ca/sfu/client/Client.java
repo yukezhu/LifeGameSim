@@ -265,6 +265,9 @@ public class Client {
 		}
 		else
 			outfit.pair = null;
+		
+		System.out.println("After merging:");
+		outiftInfo(outfit);
 	}
 	
 	private void passOutfitsToPair(MergeLastMsg msg) throws IOException {
@@ -455,9 +458,6 @@ public class Client {
 		down = new boolean[outfit.myBoard.width];
 		left = new boolean[outfit.myBoard.height];
 		right = new boolean[outfit.myBoard.height];
-		
-		System.out.println("After merging:");
-		outiftInfo(outfit);
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
