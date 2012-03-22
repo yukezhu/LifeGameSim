@@ -46,7 +46,7 @@ public class Server{
 	private static int test_Cycle = 0;
 	
 	private static final boolean AUTOMATION = true;
-	private static final int automation_cycle = 20;
+	private static final int automation_cycle = 10;
 	private static final int upperbound = 16;
 	
 	private static final boolean ClientRandom = true;

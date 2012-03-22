@@ -79,6 +79,9 @@ public class MessageReceiver {
 				}
 				Iterator<SelectionKey> keyIter = selector.selectedKeys().iterator();
 				while(keyIter.hasNext()){
+					System.out.println("\nIn 2nd Thread, before handling message");
+					calcPower(10000000);
+					
 					SelectionKey key=keyIter.next();
 					keyIter.remove();
 					try{
@@ -92,6 +95,9 @@ public class MessageReceiver {
 					} catch(IOException e){
 						e.printStackTrace();
 					}
+					
+					System.out.println("After handling message");
+					calcPower(10000000);
 				}
 			}
 		}
@@ -103,9 +109,6 @@ public class MessageReceiver {
 	}
 	
 	public void close() {
-		System.out.println("\nBefore closing a friend");
-		calcPower(10000000);
-		
 		try {
 			selector.close();
 		} catch (IOException e) {
@@ -114,23 +117,12 @@ public class MessageReceiver {
 			listenerChannel.close();
 		} catch (Exception e) {
 		}
-		
-		System.out.println("After closing the friend");
-		calcPower(10000000);
 	}
 	
 	private void handleAccept(SelectionKey key) throws IOException {
-		
-		System.out.println("\nBefore accepting a friend");
-		calcPower(10000000);
-		
 		SocketChannel clientChannel=((ServerSocketChannel)key.channel()).accept();
 		clientChannel.configureBlocking(false);
 		clientChannel.register(key.selector(), SelectionKey.OP_READ, ByteBuffer.allocate(BufferSize));
-		
-		System.out.println("After accept the friend");
-		calcPower(10000000);
-		
 	}
   
 	private void handleRead(SelectionKey key) throws IOException {
