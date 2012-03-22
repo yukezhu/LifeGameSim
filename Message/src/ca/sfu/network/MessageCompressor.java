@@ -4,7 +4,7 @@ package ca.sfu.network;
 public class MessageCompressor {
 	
 //	public static final int BufferSize = 54857600;
-	public static final int BufferSize = 65536;
+	public static final int BufferSize = 165536;
 
 	public static byte[] compress(final byte[] input)
 	{
