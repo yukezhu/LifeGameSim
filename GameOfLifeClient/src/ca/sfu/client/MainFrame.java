@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
 	JLabel clientIpLabel = new JLabel("Client IP");
 	JTextField clientIp = new JTextField(15);
 	JLabel serverIpLabel = new JLabel("Server IP");
-	JTextField serverIp = new JTextField(15);
+	JTextField serverIp = new JTextField("142.58.35.59");
 	JButton connectBtn = new JButton("Connect");
 	
 	boolean connected;
@@ -77,7 +77,7 @@ public class MainFrame extends JFrame {
 					}
 				} else 
 				{
-//					client.disconnect(); /* Add disconnect function here */ 
+					client.quit(); /* Add disconnect function here */ 
 					connectBtn.setText("Connect");
 				}
 				connected = !connected;
@@ -97,12 +97,5 @@ public class MainFrame extends JFrame {
 		setTitle("Client");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);    
 	}  
-
-	public static void main(String[] argv)
-	{
-		@SuppressWarnings("unused")
-		MainFrame frame = new MainFrame();
-
-	}
 
 }
