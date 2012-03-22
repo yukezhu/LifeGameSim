@@ -17,11 +17,14 @@ public class MainFrame extends JFrame {
 	/* Client object */
 	private Client client = new Client();
 	
+	private static final String SERVER_IP = "142.58.35.59";
+	private static final String CLIENT_IP = "";
+	
 	/* New UI widgets */
 	JLabel clientIpLabel = new JLabel("Client IP");
 	JTextField clientIp = new JTextField(15);
 	JLabel serverIpLabel = new JLabel("Server IP");
-	JTextField serverIp = new JTextField("142.58.35.59");
+	JTextField serverIp = new JTextField(15);
 	JButton connectBtn = new JButton("Connect");
 	
 	boolean connected;
@@ -30,6 +33,9 @@ public class MainFrame extends JFrame {
 
 		Container contentPane = getContentPane();
 
+		serverIp.setText(SERVER_IP);
+		clientIp.setText(CLIENT_IP);
+		
 		SpringLayout layout = new SpringLayout();
 		contentPane.setLayout(layout);
 
@@ -57,7 +63,7 @@ public class MainFrame extends JFrame {
 		layout.putConstraint(SpringLayout.NORTH, serverIp, 30, SpringLayout.NORTH, clientIp);
 		layout.putConstraint(SpringLayout.WEST, serverIp, 80, SpringLayout.WEST, serverIpLabel);
 
-		layout.putConstraint(SpringLayout.NORTH, connectBtn, 30, SpringLayout.NORTH, serverIpLabel);
+		layout.putConstraint(SpringLayout.NORTH, connectBtn, 40, SpringLayout.NORTH, serverIpLabel);
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, connectBtn, 0, SpringLayout.HORIZONTAL_CENTER, contentPane);
 		
 		/* Set listener */
@@ -77,7 +83,7 @@ public class MainFrame extends JFrame {
 					}
 				} else 
 				{
-					client.quit(); /* Add disconnect function here */ 
+//					client.quit(); /* Add disconnect function here */ 
 					connectBtn.setText("Connect");
 				}
 				connected = !connected;
