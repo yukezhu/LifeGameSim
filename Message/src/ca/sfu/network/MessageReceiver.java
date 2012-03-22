@@ -14,7 +14,7 @@ import ca.sfu.network.SynchronizedMsgQueue.MessageWithIp;
 
 public class MessageReceiver {
 	
-	private static final int BufferSize = 165536;
+	private static final int BufferSize = 65536;
 	private static final int QueueSize  = 1024;
 	private static final int TimeOut    = 3000;
 	
