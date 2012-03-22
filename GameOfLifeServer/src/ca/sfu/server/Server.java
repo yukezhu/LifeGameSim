@@ -41,15 +41,15 @@ public class Server{
 	private static final int LEAVE = 2;
 	
 	//for test!
-	private static final boolean TEST = true; //default: false
+	private static final boolean TEST = false; //default: false
 	private static final int lowerbound = 1; //default: 1
 	private static int test_Cycle = 0;
 	
-	private static final boolean AUTOMATION = true;
+	private static final boolean AUTOMATION = false;
 	private static final int automation_cycle = 20;
 	private static final int upperbound = 4;
 	
-	private static final boolean ClientRandom = true;
+	private static final boolean ClientRandom = false;
 	
 	/* UI widgets */
 	MainFrame frame = null;
@@ -64,10 +64,9 @@ public class Server{
 	{
 		// UI
 
-//		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
-		Board b = new Board(7000, 7000);
-
-		b = BoardOperation.Randomize(b, 0.1);
+		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop.lg");
+//		Board b = new Board(7000, 7000);
+//		b = BoardOperation.Randomize(b, 0.1);
 
 		System.out.println("UI");
 		frame = new MainFrame(b, 800, 800);
@@ -405,7 +404,6 @@ public class Server{
 		
 		if(newClientSender.size()!=0){
 			//ask a new client to replace it immediately
-			//TODO
 			regedClientSender.get(findClient(cid)).sender.sendMsg(new LeaveReceiverMsg(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp));
 			regedClientSender.get(findClient(cid)).sender.close();
 			regedClientSender.set(findClient(cid), new Comrade(cid, newClientSender.get(0).hostListenningPort, newClientSender.get(0).hostIp, newClientSender.get(0)));

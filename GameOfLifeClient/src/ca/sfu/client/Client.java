@@ -1,7 +1,5 @@
 package ca.sfu.client;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -53,6 +51,7 @@ public class Client {
 	
 	private int neiUpdCount;
 	private int borderCount = 0;
+	private boolean clickQuit = false;
 	private boolean isleaving = false;
 	
 	private Message tmpmsg;
@@ -81,6 +80,10 @@ public class Client {
 				System.out.println("port " + myPort + " is occupied");
 			}
 		}
+	}
+	
+	public void quit() {
+		clickQuit = true;
 	}
 	
 	public void startClient(String sip, String myip) throws IOException, InterruptedException {
@@ -237,7 +240,7 @@ public class Client {
 				finishMerge();
 		}
 		else
-			System.out.println("Received unexpectd message.");
+			System.out.println("Received unexpectd message. type:" + msg.getMessageCode());
 	}
 	
 	private void handleleaveReceiverMsg(LeaveReceiverMsg msg) throws IOException {
@@ -265,6 +268,9 @@ public class Client {
 		}
 		else
 			outfit.pair = null;
+
+		System.out.println("After merging:");
+		outiftInfo(outfit);
 	}
 	
 	private void passOutfitsToPair(MergeLastMsg msg) throws IOException {
@@ -455,9 +461,6 @@ public class Client {
 		down = new boolean[outfit.myBoard.width];
 		left = new boolean[outfit.myBoard.height];
 		right = new boolean[outfit.myBoard.height];
-		
-		System.out.println("After merging:");
-		outiftInfo(outfit);
 	}
 	
 	private void handleNeighbourUpdate(RegularUpdateNeighbourMsg msg) throws IOException {
@@ -729,22 +732,14 @@ public class Client {
 			t_cmptfnsh = System.currentTimeMillis();
 			System.out.println("T_RcvStart: " + (t_start - t_lastend)/1000.0 + "  T_BdrCPLT: " + (t_bdfnsh - t_lastend)/1000.0 + "  T_CMPT: " + (t_cmptfnsh - t_bdfnsh)/1000.0);
 		}
+		if(clickQuit)
+			isleaving = true;
 		
-		if(!TEST_MODE) {
-//			whether to leave
-			System.out.println("Do you want to leave?\n0: no    1: yes");
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			String res = br.readLine();
-			if(Integer.parseInt(res) == 1)
-				isleaving = true;
-			else
-				isleaving = false;
+		if(!TEST_MODE)
 			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
-		}
-		else {
+		else
 			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, null));
-//			server.sender.sendMsg(myConfirmMessage);
-		}
+		
 		outfit.nextClock ++;
 		borderCount = 0;
 		

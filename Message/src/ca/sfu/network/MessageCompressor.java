@@ -1,15 +1,10 @@
 package ca.sfu.network;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.zip.DataFormatException;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
 
 public class MessageCompressor {
 	
 //	public static final int BufferSize = 54857600;
-	public static final int BufferSize = 65536;
+	public static final int BufferSize = 165536;
 
 	public static byte[] compress(final byte[] input)
 	{
