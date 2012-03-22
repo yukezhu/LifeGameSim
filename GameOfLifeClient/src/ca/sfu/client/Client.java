@@ -94,7 +94,6 @@ public class Client {
 		while(true){
 			if(!Receiver.isEmpty()){
 				System.out.println("\nBefore fetching a message");
-				System.out.println("Timestamp: " + System.currentTimeMillis());
 				calcPower(10000000);
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
 				if(outfit != null)
@@ -188,7 +187,6 @@ public class Client {
 				
 				System.out.println("After handling the message");
 				calcPower(10000000);
-				System.out.println("Timestamp: " + System.currentTimeMillis());
 			}
 		}
 	}

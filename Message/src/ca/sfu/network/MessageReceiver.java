@@ -152,7 +152,7 @@ public class MessageReceiver {
 		else {
 			return ;
 		}
-		
+		int n = 0;
 		while(key.isReadable() && cursor < length) {
 			buffer.clear();
 			bytesRead = clientChannel.read(buffer);
@@ -163,6 +163,12 @@ public class MessageReceiver {
 					tmpbuf[cursor + i] = data[i];
 				cursor += bytesRead;
 			}
+			n ++;
+		}
+		
+		if(n > 1)
+		{
+			System.out.println("Timestamp: " + System.currentTimeMillis());
 		}
 		
 		try {
