@@ -478,8 +478,8 @@ public class Client {
 		System.out.println("AAA");
 		calcPower(10000000);
 
-		System.out.println("After neighbour update");
-		outiftInfo(outfit);
+//		System.out.println("After neighbour update");
+//		outiftInfo(outfit);
 		
 		System.out.println("BBB");
 		calcPower(10000000);
