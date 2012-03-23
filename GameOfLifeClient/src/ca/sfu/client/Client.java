@@ -93,13 +93,9 @@ public class Client {
 		status = 1;
 		while(true){
 			if(!Receiver.isEmpty()){
-				System.out.println("\nBefore fetching a message");
-				calcPower(10000000);
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
-				calcPower(10000000);
-				if(outfit != null)
-					System.out.println("status:" + status + "  messgetype:"+ msg.getMessageCode() + "  from: " + msg.getClientId());
-				calcPower(10000000);
+//				if(outfit != null)
+//					System.out.println("status:" + status + "  messgetype:"+ msg.getMessageCode() + "  from: " + msg.getClientId());
 				switch(status) {
 					case 1:
 						repairOutfit((RegularOutfitMsg) msg);
@@ -186,9 +182,6 @@ public class Client {
 						System.out.println("Received unexpectd message.");
 						break;
 				}
-				
-				System.out.println("After handling the message");
-				calcPower(10000000);
 			}
 		}
 	}
@@ -1006,19 +999,6 @@ public class Client {
 			}
 		}
 		
-	}
-	
-	public void calcPower(int n)
-	{
-		int cnt = 1;
-		long st = System.currentTimeMillis();
-		for(int i=0; i<n; i++)
-		{
-			if (cnt % 7 == 3) cnt += 2;
-			else cnt += 9;
-		}
-		long ed = System.currentTimeMillis();
-		System.out.println("calculate power:" + 1000.0/(ed-st));
 	}
 	
 }

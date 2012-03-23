@@ -15,6 +15,8 @@ import java.util.Random;
 
 public class BoardOperation {
 
+	final static int[][] move = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+	
 	/**
 	 * Return the next state of the cellular automata
 	 * @param up, down		Upper border, Lower border
@@ -26,10 +28,7 @@ public class BoardOperation {
 	 * @return the automata with next state
 	 */
 	public static Board NextMoment(Board b, boolean[] up, boolean[] down, boolean[] left, boolean[] right, boolean upperLeft, boolean upperRight, boolean lowerLeft, boolean lowerRight) throws IllegalArgumentException
-	{
-//		System.out.println("start computing, height:" + b.height + "  width:" + b.width);
-//		long st = System.currentTimeMillis();
-		
+	{		
 		IllegalArgumentException exception = new java.lang.IllegalArgumentException();
 		boolean leftBorder = false, rightBorder = false, upBorder = false, downBorder = false;
 		
@@ -76,7 +75,7 @@ public class BoardOperation {
 
 		int height = b.height, width = b.width;
 		boolean[][] prebitmap = new boolean[height+2][width+2]; 
-		final int[][] move = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+		
 		
 		for(int i=1; i <= height; i++)
 			for(int j=1; j <= width; j++)
