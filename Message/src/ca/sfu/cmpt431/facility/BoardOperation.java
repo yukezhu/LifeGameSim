@@ -9,27 +9,58 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author	Yuke Zhu
- * @since	2012/03/07
+ * @author Yuke Zhu
+ * @since 2012/03/07
  */
 
 public class BoardOperation {
 
-	final static int[][] move = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
-	
 	/**
-	 * Return the next state of the cellular automata (Border is guaranteed to be not null
-	 * @param up, down		Upper border, Lower border
-	 * @param left, right	Left border, Right border
-	 * @param upperLeft		b[0][0]
-	 * @param upperRight	b[0][width+1]
-	 * @param lowerLeft		b[height+1][0]
-	 * @param lowerRight	b[height+1][width+1]
+	 * Return the next state of the cellular automata
+	 * @param up, down Upper border, Lower border
+	 * @param left, right Left border, Right border
+	 * @param upperLeft b[0][0]
+	 * @param upperRight b[0][width+1]
+	 * @param lowerLeft b[height+1][0]
+	 * @param lowerRight b[height+1][width+1]
 	 * @return the automata with next state
 	 */
 	public static Board NextMoment(Board b, boolean[] up, boolean[] down, boolean[] left, boolean[] right, boolean upperLeft, boolean upperRight, boolean lowerLeft, boolean lowerRight) throws IllegalArgumentException
-	{		
+	{
+		System.out.println("start computing, height:" + b.height + " width:" + b.width);
+		long st = System.currentTimeMillis();
+
 		IllegalArgumentException exception = new java.lang.IllegalArgumentException();
+		boolean leftBorder = false, rightBorder = false, upBorder = false, downBorder = false;
+
+		if(left == null)
+		{
+			leftBorder = true;
+			left = new boolean[b.height];
+			for(int i=0; i<b.height; i++)
+				left[i] = false;
+		}
+		if(right == null)
+		{
+			rightBorder = true;
+			right = new boolean[b.height];
+			for(int i=0; i<b.height; i++)
+				right[i] = false;
+		}
+		if(up == null)
+		{
+			upBorder = true;
+			up = new boolean[b.width];
+			for(int i=0; i<b.width; i++)
+				up[i] = false;
+		}
+		if(down == null)
+		{
+			downBorder = true;
+			down = new boolean[b.width];
+			for(int i=0; i<b.width; i++)
+				down[i] = false;
+		}
 
 		if(up.length != b.width || down.length != b.width)
 		{
@@ -44,64 +75,63 @@ public class BoardOperation {
 		}
 
 		int height = b.height, width = b.width;
-		boolean[] prebitmap = new boolean[width+2];
-		boolean[] tempbitmap = new boolean[width+2];
-		
-		for(int i=1; i<=height; i++)
+		boolean[][] prebitmap = new boolean[height+2][width+2];
+		final int[][] move = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+
+		for(int i=1; i <= height; i++)
+			for(int j=1; j <= width; j++)
+				prebitmap[i][j] = b.bitmap[i-1][j-1];
+		for(int j=1; j <= width; j++)
 		{
+			prebitmap[0][j] = up[j-1];
+			prebitmap[height+1][j] = down[j-1];
+		}
+		for(int i=1; i <= height; i++)
+		{
+			prebitmap[i][0] = left[i-1];
+			prebitmap[i][width+1] = right[i-1];
+		}
+		prebitmap[0][0] = upperLeft;
+		prebitmap[0][width+1] = upperRight;
+		prebitmap[height+1][0] = lowerLeft;
+		prebitmap[height+1][width+1] = lowerRight;
+
+		for(int i=1; i<=height; i++)
 			for(int j=1; j<=width; j++)
 			{
+				if((j == 1 && leftBorder) || (j == width && rightBorder) || (i == 1 && upBorder) || (i == height && downBorder))
+				{
+					b.bitmap[i-1][j-1] = false;
+					continue;
+				}
 				int counter = 0;
 				for(int k=0; k<8; k++)
 				{
 					int x = i + move[k][0], y = j + move[k][1];
-					boolean flag = false;
-					
-					if (x == 0 && y == 0)
-						flag = upperLeft;
-					else if (x == 0 && y == width + 1)
-						flag = upperRight;
-					else if (x == height + 1 && y == 0)
-						flag = lowerLeft;
-					else if (x == height + 1 && y == width + 1)
-						flag = lowerRight;
-					else if (y == 0)
-						flag = left[x-1];
-					else if (y == width + 1)
-						flag = right[x-1];
-					else if (x == 0)
-						flag = up[y-1];
-					else if (x == height + 1)
-						flag = down[y-1];
-					else if (move[k][0] == -1)
-						flag = prebitmap[y];
-					else
-						flag = b.bitmap[x-1][y-1];
-						
-					if(flag) counter ++;
+					if(prebitmap[x][y])
+					{
+						counter ++;
+					}
 				}
 				if(counter == 3)
 				{
-					tempbitmap[j] = true;
+					b.bitmap[i-1][j-1] = true;
 				}else if(counter != 2)
 				{
-					tempbitmap[j] = false;
-				} else 
-				{
-					tempbitmap[j] = b.bitmap[i-1][j-1];
+					b.bitmap[i-1][j-1] = false;
 				}
 			}
-			System.arraycopy(b.bitmap[i-1], 0, prebitmap, 1, width);
-			System.arraycopy(tempbitmap, 1, b.bitmap[i-1], 0, width);
-		}
-		
+
+		long ed = System.currentTimeMillis();
+		System.out.println("finish computing, using time:" + (ed - st)/1000.0);
+
 		return b;
 	}
 
 	/**
-	 * @param 	Input board
-	 * @param 	Dense factor ranged from [0, 1) --> More dense, More cells
-	 * @return	Randomly filled board
+	 * @param Input board
+	 * @param Dense factor ranged from [0, 1) --> More dense, More cells
+	 * @return Randomly filled board
 	 */
 	public static Board Randomize(Board b, double dense)
 	{
@@ -149,8 +179,8 @@ public class BoardOperation {
 
 	/**
 	 * Evenly vertical cut of the board
-	 * @param	Input the large board to be cut	
-	 * @return	A pair of vertically cut board (first left, then right) 
+	 * @param Input the large board to be cut
+	 * @return A pair of vertically cut board (first left, then right)
 	 */
 	public static List<Board> VerticalCut(final Board b)
 	{
@@ -178,8 +208,8 @@ public class BoardOperation {
 
 	/**
 	 * Evenly horizontal cut of the board
-	 * @param	Input the large board to be cut	
-	 * @return	A pair of vertically cut board (first up, then down) 
+	 * @param Input the large board to be cut
+	 * @return A pair of vertically cut board (first up, then down)
 	 */
 	public static List<Board> HorizontalCut(final Board b)
 	{
@@ -207,8 +237,8 @@ public class BoardOperation {
 
 	/**
 	 * Load life game pattern from file
-	 * @param	file name
-	 * @return	Board instance
+	 * @param file name
+	 * @return Board instance
 	 */
 	public static Board LoadFile(String s)
 	{
@@ -242,8 +272,8 @@ public class BoardOperation {
 
 	/**
 	 * Compress the board bitmap
-	 * @param 	Board to be compressed
-	 * @return	Compressed data
+	 * @param Board to be compressed
+	 * @return Compressed data
 	 */
 	public static Board CompressBoard(Board b)
 	{

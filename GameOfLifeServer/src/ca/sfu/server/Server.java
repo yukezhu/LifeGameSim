@@ -41,12 +41,12 @@ public class Server{
 	private static final int LEAVE = 2;
 	
 	//for test!
-	private static final boolean TEST = true; //default: false
+	private static boolean TEST = true; //default: false
 	private static final int lowerbound = 1; //default: 1
 	private static int test_Cycle = 0;
 	
 	private static final boolean AUTOMATION = true;
-	private static final int automation_cycle = 10;
+	private static final int automation_cycle = 20;
 	private static final int upperbound = Integer.MAX_VALUE;
 	
 	private static final boolean ClientRandom = true;
@@ -562,7 +562,7 @@ public class Server{
 		if(waiting4confirm==0)
 			status = nextStatus;
 		
-		if(TEST){
+		if(TEST) {
 			return;
 		}
 		
