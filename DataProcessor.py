@@ -26,4 +26,8 @@ for line in sys.stdin:
 		continue
 
 pylab.plot(x, y)
+pylab.title('Performance Test Result')
+pylab.xlabel('Number of Clients')
+pylab.ylabel('Cycles / Sec')
+pylab.savefig('result.png')
 pylab.show()
