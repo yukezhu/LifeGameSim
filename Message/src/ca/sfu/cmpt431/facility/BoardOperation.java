@@ -18,7 +18,7 @@ public class BoardOperation {
 	final static int[][] move = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 	
 	/**
-	 * Return the next state of the cellular automata
+	 * Return the next state of the cellular automata (Border is guaranteed to be not null
 	 * @param up, down		Upper border, Lower border
 	 * @param left, right	Left border, Right border
 	 * @param upperLeft		b[0][0]
@@ -30,36 +30,6 @@ public class BoardOperation {
 	public static Board NextMoment(Board b, boolean[] up, boolean[] down, boolean[] left, boolean[] right, boolean upperLeft, boolean upperRight, boolean lowerLeft, boolean lowerRight) throws IllegalArgumentException
 	{		
 		IllegalArgumentException exception = new java.lang.IllegalArgumentException();
-		boolean leftBorder = false, rightBorder = false, upBorder = false, downBorder = false;
-		
-		if(left == null)
-		{
-			leftBorder = true;
-			left = new boolean[b.height];
-			for(int i=0; i<b.height; i++)
-				left[i] = false;
-		}
-		if(right == null)
-		{
-			rightBorder = true;
-			right = new boolean[b.height];
-			for(int i=0; i<b.height; i++)
-				right[i] = false;
-		}
-		if(up == null)
-		{
-			upBorder = true;
-			up = new boolean[b.width];
-			for(int i=0; i<b.width; i++)
-				up[i] = false;
-		}
-		if(down == null)
-		{
-			downBorder = true;
-			down = new boolean[b.width];
-			for(int i=0; i<b.width; i++)
-				down[i] = false;
-		}
 
 		if(up.length != b.width || down.length != b.width)
 		{
@@ -74,51 +44,56 @@ public class BoardOperation {
 		}
 
 		int height = b.height, width = b.width;
-		boolean[][] prebitmap = new boolean[height+2][width+2]; 
+		boolean[] prebitmap = new boolean[width+2];
+		boolean[] tempbitmap = new boolean[width+2];
 		
-		for(int i=1; i <= height; i++)
-			for(int j=1; j <= width; j++)
-				prebitmap[i][j] = b.bitmap[i-1][j-1];
-		for(int j=1; j <= width; j++)
-		{
-			prebitmap[0][j] = up[j-1];
-			prebitmap[height+1][j] = down[j-1];
-		}
-		for(int i=1; i <= height; i++)
-		{
-			prebitmap[i][0] = left[i-1];
-			prebitmap[i][width+1] = right[i-1];
-		}
-		prebitmap[0][0] = upperLeft;
-		prebitmap[0][width+1] = upperRight;
-		prebitmap[height+1][0] = lowerLeft;
-		prebitmap[height+1][width+1] = lowerRight;
-
 		for(int i=1; i<=height; i++)
+		{
 			for(int j=1; j<=width; j++)
 			{
-				if((j == 1 && leftBorder) || (j == width && rightBorder) || (i == 1 && upBorder) || (i == height && downBorder))
-				{
-					b.bitmap[i-1][j-1] = false;
-					continue;
-				}
 				int counter = 0;
 				for(int k=0; k<8; k++)
 				{
 					int x = i + move[k][0], y = j + move[k][1];
-					if(prebitmap[x][y])
-					{
-						counter ++;
-					}
+					boolean flag = false;
+					
+					if (x == 0 && y == 0)
+						flag = upperLeft;
+					else if (x == 0 && y == width + 1)
+						flag = upperRight;
+					else if (x == height + 1 && y == 0)
+						flag = lowerLeft;
+					else if (x == height + 1 && y == width + 1)
+						flag = lowerRight;
+					else if (y == 0)
+						flag = left[x-1];
+					else if (y == width + 1)
+						flag = right[x-1];
+					else if (x == 0)
+						flag = up[y-1];
+					else if (x == height + 1)
+						flag = down[y-1];
+					else if (move[k][0] == -1)
+						flag = prebitmap[y];
+					else
+						flag = b.bitmap[x-1][y-1];
+						
+					if(flag) counter ++;
 				}
 				if(counter == 3)
 				{
-					b.bitmap[i-1][j-1] = true;
+					tempbitmap[j] = true;
 				}else if(counter != 2)
 				{
-					b.bitmap[i-1][j-1] = false;
+					tempbitmap[j] = false;
+				} else 
+				{
+					tempbitmap[j] = b.bitmap[i-1][j-1];
 				}
 			}
+			System.arraycopy(b.bitmap[i-1], 0, prebitmap, 1, width);
+			System.arraycopy(tempbitmap, 1, b.bitmap[i-1], 0, width);
+		}
 		
 		return b;
 	}
