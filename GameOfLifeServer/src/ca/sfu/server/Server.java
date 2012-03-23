@@ -41,15 +41,15 @@ public class Server{
 	private static final int LEAVE = 2;
 	
 	//for test!
-	private static final boolean TEST = false; //default: false
+	private static final boolean TEST = true; //default: false
 	private static final int lowerbound = 1; //default: 1
 	private static int test_Cycle = 0;
 	
-	private static final boolean AUTOMATION = false;
+	private static final boolean AUTOMATION = true;
 	private static final int automation_cycle = 10;
-	private static final int upperbound = 16;
+	private static final int upperbound = Integer.MAX_VALUE;
 	
-	private static final boolean ClientRandom = false;
+	private static final boolean ClientRandom = true;
 	
 	/* UI widgets */
 	MainFrame frame = null;
@@ -64,9 +64,9 @@ public class Server{
 	{
 		// UI
 
-		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop2.lg");
-//		Board b = new Board(7000, 7000);
-//		b = BoardOperation.Randomize(b, 0.1);
+//		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop2.lg");
+		Board b = new Board(7000, 7000);
+		b = BoardOperation.Randomize(b, 0.1);
 
 		System.out.println("UI");
 		frame = new MainFrame(b, 800, 800);

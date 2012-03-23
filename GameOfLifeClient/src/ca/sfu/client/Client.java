@@ -1,7 +1,5 @@
 package ca.sfu.client;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,9 +31,9 @@ public class Client {
 	private String SERVER_IP;
 	private Comrade  server;
 	
-	private boolean TEST_MODE = false;
-	private boolean DEBUG_MODE = false;
-	private boolean RANDOM = false;
+	private boolean TEST_MODE = true;
+	private boolean DEBUG_MODE = true;
+	private boolean RANDOM = true;
 	
 	private long t_lastend;
 	private long t_start;
