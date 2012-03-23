@@ -70,6 +70,10 @@ public class MessageSender{
 		out.close();
 	}
 	
+	public boolean isConnected() {
+		return socketChannel.isConnected();
+	}
+	
 	public boolean isOpen() {
 		if(socketChannel == null) return false;
 		return socketChannel.isOpen();
