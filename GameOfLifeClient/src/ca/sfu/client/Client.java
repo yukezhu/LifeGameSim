@@ -96,8 +96,10 @@ public class Client {
 				System.out.println("\nBefore fetching a message");
 				calcPower(10000000);
 				Message msg = (Message) Receiver.getNextMessageWithIp().extracMessage();
+				calcPower(10000000);
 				if(outfit != null)
 					System.out.println("status:" + status + "  messgetype:"+ msg.getMessageCode() + "  from: " + msg.getClientId());
+				calcPower(10000000);
 				switch(status) {
 					case 1:
 						repairOutfit((RegularOutfitMsg) msg);

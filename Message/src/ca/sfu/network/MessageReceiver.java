@@ -182,17 +182,4 @@ public class MessageReceiver {
 			e.printStackTrace();
 		}
 	}
-	
-	public void calcPower(int n)
-	{
-		int cnt = 1;
-		long st = System.currentTimeMillis();
-		for(int i=0; i<n; i++)
-		{
-			if (cnt % 7 == 3) cnt += 2;
-			else cnt += 9;
-		}
-		long ed = System.currentTimeMillis();
-		System.out.println("calculate power:" + 1000.0/(ed-st));
-	}
 }
