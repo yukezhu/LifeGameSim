@@ -1,4 +1,4 @@
-package ca.sfu.cmpt431.message.merge;
+package ca.sfu.cmpt431.message.recover;
 
 import java.util.ArrayList;
 
