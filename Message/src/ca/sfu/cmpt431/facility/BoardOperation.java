@@ -121,9 +121,6 @@ public class BoardOperation {
 				}
 			}
 		
-//		long ed = System.currentTimeMillis();
-//		System.out.println("finish computing, using time:" + (ed - st)/1000.0);
-		
 		return b;
 	}
 
