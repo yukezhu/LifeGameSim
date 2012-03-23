@@ -21,6 +21,10 @@ public class MessageCodeDictionary {
 	public final  static int MERGE_LAST = 41;
 	public final  static int MERGE_OUTFIT = 42;
 	
+	public final static int RECOVER_STOP = 51;
+	public final static int RECOVER_REPORT = 52;
+	
+	
 	public final static int SPLIT_MODE_VERTICAL = 0;
 	public final static int SPLIT_MODE_HORIZONTAL = 1;
 	
