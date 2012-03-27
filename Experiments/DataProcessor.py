@@ -1,7 +1,7 @@
 from __future__ import division
 import pylab
 import sys
-
+import datetime
 
 st = 0
 ed = 0
@@ -9,6 +9,8 @@ ed = 0
 cnt = 1
 x = []
 y = []
+
+now = datetime.datetime.now()
 
 for line in sys.stdin:
 	if line.startswith('Time'):
