@@ -32,7 +32,7 @@ public class Client {
 	private Comrade  server;
 	
 	private boolean TEST_MODE = true;
-	private boolean DEBUG_MODE = true;
+	private boolean DEBUG_MODE = false;
 	private boolean RANDOM = true;
 	
 	private long t_lastend;
