@@ -6,7 +6,6 @@ import ca.sfu.network.NetworkHelper;
 public class LifeGameClient extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-//	private static final String serverIp = "127.0.0.1";
 	private static final String serverIp = "142.58.35.179";
 
 	public static void main(String[] args)
