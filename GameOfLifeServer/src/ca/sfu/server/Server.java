@@ -42,7 +42,7 @@ public class Server{
 	
 	//for test!
 	private static boolean TEST = true; //default: false
-	private static final int lowerbound = 1; //default: 1
+	private static final int lowerbound = 8; //default: 1
 	private static int test_Cycle = 0;
 	
 	private static final boolean AUTOMATION = true;
