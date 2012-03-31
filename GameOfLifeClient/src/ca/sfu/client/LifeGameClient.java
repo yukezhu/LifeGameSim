@@ -14,14 +14,9 @@ public class LifeGameClient extends JFrame {
 		Client c = new Client();
 		try {
 			if(args.length < 2)
-			{
-				System.out.println(NetworkHelper.getHostStaticIp());
 				c.startClient(serverIp, NetworkHelper.getHostStaticIp());
-//				System.out.println("Usage: client.jar [server ip] [host ip]");
-			} else
-			{
+			else
 				c.startClient(args[0], args[1]);
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

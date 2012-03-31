@@ -43,7 +43,7 @@ public class Client {
 	private long t_cmptfnsh;
 	private long t_cmpt_total;
 	private String cmptLog;
-	private int endClock = 101;
+	private int endClock = 2001;
 	
 	private int myPort;
 	private String myIp;
