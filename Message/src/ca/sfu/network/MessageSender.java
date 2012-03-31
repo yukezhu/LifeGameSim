@@ -12,6 +12,7 @@ public class MessageSender{
 
 	private static final int BufferSize = 165536;
 	private static byte [] tmpbuf = new byte[BufferSize];
+	public static String os;
 	
 	private Selector selector = null;
 
@@ -30,6 +31,10 @@ public class MessageSender{
 
 		selector = Selector.open();
 		socketChannel.register(selector, SelectionKey.OP_READ);
+	}
+	
+	public static void newRound() throws IOException {
+		os += "new round\n";
 	}
 
 	public void sendMsg (Object msg) throws IOException{
@@ -68,6 +73,7 @@ public class MessageSender{
 //		System.out.println("sending finished. used time:" + (te - ts) / 1000.0);
 		
 		out.close();
+		os += "send: " + written + "\n";
 	}
 	
 	public boolean isConnected() {

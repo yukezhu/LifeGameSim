@@ -65,7 +65,7 @@ public class Server{
 		// UI
 
 //		Board b = BoardOperation.LoadFile("Patterns/HerschelLoop2.lg");
-		Board b = new Board(7000, 7000);
+		Board b = new Board(700, 700);
 		b = BoardOperation.Randomize(b, 0.1);
 
 		System.out.println("UI");
