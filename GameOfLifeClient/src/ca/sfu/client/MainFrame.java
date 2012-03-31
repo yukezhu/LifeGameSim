@@ -3,6 +3,8 @@ package ca.sfu.client;
 import java.awt.Container;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -19,7 +21,7 @@ public class MainFrame extends JFrame {
 	private Client client = new Client();
 	Thread clientThread;
 
-	private static final String SERVER_IP = "142.58.35.59";
+	private static final String SERVER_IP = "142.58.35.179";
 	private static final String CLIENT_IP = "";
 
 	/* New UI widgets */
@@ -93,9 +95,7 @@ public class MainFrame extends JFrame {
 
 				} else 
 				{
-//					client.quit(); /* Add disconnect function here */ 
-					clientThread.interrupt();
-					connectBtn.setText("Connect");
+					client.quit(); /* Add disconnect function here */ 
 				}
 				connected = !connected;
 			}
@@ -108,11 +108,42 @@ public class MainFrame extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {}
 		});
+		
+		this.addWindowListener(new WindowListener() {
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				client.quit();
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+			}
+			
+		});
 
 		connected = false;
 		setSize(300, 180);
 		setTitle("Client");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);    
 	}
 	
 	public static void main(String[] argv)

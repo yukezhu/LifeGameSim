@@ -1,24 +1,23 @@
 package ca.sfu.client;
 import javax.swing.JFrame;
 
-import ca.sfu.network.NetworkHelper;
-
 public class LifeGameClient extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static final String serverIp = "142.58.35.179";
 
 	public static void main(String[] args)
 	{
-		Client c = new Client();
-		try {
-			if(args.length < 2)
-				c.startClient(serverIp, NetworkHelper.getHostStaticIp());
-			else
-				c.startClient(args[0], args[1]);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		Client c = new Client();
+//		try {
+//			if(args.length < 2)
+//				c.startClient(serverIp, NetworkHelper.getHostStaticIp());
+//			else
+//				c.startClient(args[0], args[1]);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+		MainFrame frame = new MainFrame();
+		frame.setVisible(true);
 	}
 
 }

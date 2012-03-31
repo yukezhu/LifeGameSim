@@ -56,6 +56,7 @@ public class Client {
 	private int neiUpdCount;
 	private int borderCount = 0;
 	private boolean isleaving = false;
+	private boolean clickquit = false;
 	
 	private Message tmpmsg;
 
@@ -191,6 +192,10 @@ public class Client {
 				}
 			}
 		}
+	}
+	
+	public void quit() {
+		clickquit = true;
 	}
 	
 	private void handleAbnomorlSituation(Message msg) throws IOException {
@@ -766,6 +771,8 @@ public class Client {
 //				isleaving = true;
 //			else
 //				isleaving = false;
+			if(clickquit)
+				isleaving = true;
 			server.sender.sendMsg(new RegularBoardReturnMsg(isleaving, outfit.myId, outfit.top, outfit.left, outfit.myBoard));
 		}
 		else {
