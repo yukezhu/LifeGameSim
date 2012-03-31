@@ -17,6 +17,7 @@ public class MessageReceiver {
 	private static final int BufferSize = 165536;
 	private static final int QueueSize  = 1024;
 	private static final int TimeOut    = 3000;
+	public static String os;
 	
 	private Selector selector;
 	private ServerSocketChannel listenerChannel;
@@ -34,6 +35,10 @@ public class MessageReceiver {
 				System.out.println(msg);
 			}
 		}
+	}
+	
+	public static void newRound() throws IOException {
+		os += "new round\n";
 	}
 	
 	public MessageReceiver(int ListenPort) throws IOException {
@@ -181,5 +186,7 @@ public class MessageReceiver {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		os += "send: " + length + "\n";
 	}
 }

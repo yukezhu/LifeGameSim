@@ -1,4 +1,6 @@
 package ca.sfu.client;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,9 @@ public class Client {
 	private long t_start;
 	private long t_bdfnsh;
 	private long t_cmptfnsh;
-	
+	private long t_cmpt_total;
+	private String cmptLog;
+	private int endClock = 101;
 	
 	private int myPort;
 	private String myIp;
@@ -82,6 +86,11 @@ public class Client {
 	}
 	
 	public void startClient(String sip, String myip) throws IOException, InterruptedException {
+		cmptLog = new String();
+		MessageSender.os = new String();
+		MessageReceiver.os = new String();
+		
+		
 		SERVER_IP = sip;
 		myIp = myip;
 		MessageSender svsdr = new MessageSender(SERVER_IP, SERVER_PORT);
@@ -705,7 +714,43 @@ public class Client {
 		if(DEBUG_MODE)
 			t_bdfnsh = System.currentTimeMillis();
 		
+		if(TEST_MODE) {
+			if(endClock == outfit.nextClock) {
+				File tmp = new File("test");
+				String path = tmp.getPath();
+				
+				File sf = new File(path.replaceFirst("test", "sender_log_" + outfit.myId + ".log"));
+				File rf = new File(path.replaceFirst("test", "receiver_log_" + outfit.myId + ".log"));
+				File cf = new File(path.replaceFirst("test", "compute_log_" + outfit.myId + ".log"));
+				sf.createNewFile();
+				rf.createNewFile();
+				cf.createNewFile();
+				FileOutputStream sos = new FileOutputStream(sf);
+				FileOutputStream ros = new FileOutputStream(rf);
+				FileOutputStream cos = new FileOutputStream(cf);
+				sos.write(MessageSender.os.getBytes());
+				ros.write(MessageReceiver.os.getBytes());
+				cos.write(cmptLog.getBytes());
+				sos.close();
+				ros.close();
+				cos.close();
+			}
+			if(outfit.nextClock % 20 == 0) {
+				if(outfit.nextClock != 0)
+					cmptLog += "cmpt time this round: " + t_cmpt_total + "\n";
+				t_cmpt_total = 0;
+				MessageSender.newRound();
+				MessageReceiver.newRound();
+			}
+			t_bdfnsh = System.currentTimeMillis();
+		}
+		
 		BoardOperation.NextMoment(outfit.myBoard, up, down, left, right, upperLeft, upperRight, lowerLeft, lowerRight);
+		
+		if(TEST_MODE) {
+			t_cmptfnsh = System.currentTimeMillis();
+			t_cmpt_total += t_cmptfnsh - t_bdfnsh;
+		}
 		
 		if(DEBUG_MODE) {
 			t_cmptfnsh = System.currentTimeMillis();
