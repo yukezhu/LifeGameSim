@@ -15,7 +15,7 @@ public class NetworkHelper {
 
 	/**
 	 * Get static Ip for local host
-	 * The function only works in Linux/Unix system with ifconfig
+	 * The function only works in Linux system with ifconfig
 	 * It will return null in other operating systems 
 	 * @return	static ip in string format
 	 */
@@ -23,17 +23,17 @@ public class NetworkHelper {
 	{
 		boolean en0 = false;
 		try {
-			Process p = Runtime.getRuntime().exec("ifconfig");
+			Process p = Runtime.getRuntime().exec("/sbin/ifconfig");
 			BufferedInputStream in = new BufferedInputStream(p.getInputStream());  
 			BufferedReader inBr = new BufferedReader(new InputStreamReader(in));
 			String lineStr, ipAddr = null;
 			// get command line output
 			while ((lineStr = inBr.readLine()) != null)  
 			{
-				if(lineStr.startsWith("en0")) en0 = true;
+				if(lineStr.startsWith("eth0")) en0 = true;
 				if(lineStr.trim().startsWith("inet ") && en0)
 				{
-					ipAddr = lineStr.trim().substring(5);
+					ipAddr = lineStr.trim().substring(10);
 					ipAddr = ipAddr.substring(0, ipAddr.indexOf(' ')).trim();
 				}
 			}
