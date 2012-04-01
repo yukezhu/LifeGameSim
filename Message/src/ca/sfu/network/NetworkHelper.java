@@ -35,10 +35,11 @@ public class NetworkHelper {
 				{
 					ipAddr = lineStr.trim().substring(10);
 					ipAddr = ipAddr.substring(0, ipAddr.indexOf(' ')).trim();
+					break;
 				}
 			}
 			if (p.waitFor() != 0) {  
-				if (p.exitValue() == 1) // p.exitValue() == 0 success, 1£ºexception  
+				if (p.exitValue() == 1) // p.exitValue() == 0 success, 1ï¿½ï¿½exception  
 					throw new java.lang.RuntimeException();
 			}  
 			inBr.close();  
