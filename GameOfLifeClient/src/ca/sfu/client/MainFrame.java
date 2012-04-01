@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import ca.sfu.network.NetworkHelper;
+
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -21,8 +23,8 @@ public class MainFrame extends JFrame {
 	private Client client = new Client();
 	Thread clientThread;
 
-	private static final String SERVER_IP = "142.58.35.179";
-	private static final String CLIENT_IP = "";
+	private static final String SERVER_IP = "142.58.35.79";
+	private static final String CLIENT_IP = "142.58.35.";
 
 	/* New UI widgets */
 	JLabel clientIpLabel = new JLabel("Client IP");
@@ -37,8 +39,13 @@ public class MainFrame extends JFrame {
 
 		Container contentPane = getContentPane();
 
+		String clientIpAddr = NetworkHelper.getHostStaticIp();
+		
 		serverIp.setText(SERVER_IP);
-		clientIp.setText(CLIENT_IP);
+		if(clientIp != null)
+			clientIp.setText(clientIpAddr);
+		else
+			clientIp.setText(CLIENT_IP);
 
 		SpringLayout layout = new SpringLayout();
 		contentPane.setLayout(layout);
