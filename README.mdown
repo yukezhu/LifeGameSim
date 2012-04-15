@@ -1,9 +1,11 @@
 Distributed Conway's Game of Life Simulation
 ============================================
 
+Distributed Conway's Game of Life Simulation
+
 Language
 --------
-Java
+Java, Python, C/C++
 
 Authors
 -------
