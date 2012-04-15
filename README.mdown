@@ -1,7 +1,7 @@
 Distributed Conway's Game of Life Simulation
 ============================================
 
-Distributed Conway's Game of Life Simulation is a J2SE based distributed computing system, designed to simulate the Conway's Game of Life cellular automata. The key technique used in the project is Java Non-blocking I/O facilities. This system has been tested on more than one hundred Linux machines in SFU CSIL Lab; it shows a strong scalability in the performance tests. Additional documentations can be found in our technical report (report.pdf).
+Distributed Conway's Game of Life Simulation is a J2SE based distributed computing system, designed to simulate the Conway's Game of Life cellular automata. The key technique used in the project is Java Non-blocking I/O facilities. This system has been tested on more than one hundred Linux machines in SFU CSIL Lab; it shows a strong scalability in the performance tests. Additional documentations can be found in our technical report "report.pdf".
 
 Languages
 ---------
@@ -15,3 +15,6 @@ Version & Dates
 --------
 1.0 (April 14, 2012)
 
+License
+-------
+The license for this project is contained in the "License.txt" file.
