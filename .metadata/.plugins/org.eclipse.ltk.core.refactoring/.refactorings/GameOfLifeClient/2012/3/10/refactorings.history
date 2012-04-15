@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Copy 1 package(s) to &apos;Message/src&apos;&#x0A;- Original project: &apos;GameOfLifeClient&apos;&#x0A;- Destination element: &apos;Message/src&apos;&#x0A;- Original element: &apos;GameOfLifeClient/src/ca.sfu.network&apos;" description="Copy package" destination="=Message/src" element1="/src&lt;ca.sfu.network" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1331162913402" version="1.0"/>
-</session>

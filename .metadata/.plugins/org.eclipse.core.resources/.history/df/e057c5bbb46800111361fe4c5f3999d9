@@ -1,7 +1,0 @@
-package ca.sfu.cmpt431.message.regular;
-
-import ca.sfu.cmpt431.message.Message;
-
-public class NewClockMsg extends Message {
-
-}
