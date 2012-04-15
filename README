@@ -1,6 +1,9 @@
-Distributed Version of Life Game Simulator
+Distributed Conway's Game of Life Simulation
+============================================
 
-@ Language:	Java
+Language
+--------
+Java
 
 @ Author:	Yuke Zhu
 @ Author:	Luna Lu
