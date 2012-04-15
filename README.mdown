@@ -9,10 +9,7 @@ Authors
 -------
 Yuke Zhu, Luna Lu, Yao Xie, Yang Liu, Xiaying Peng
 
-Version
-_______
-Version:	1.0
+Version & Dates
+--------
+1.0 (April 14, 2012)
 
-Update Date
-___________
-2012/4/14
